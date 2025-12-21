@@ -1,0 +1,252 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const { title, description, image = "/open-graph.jpg" } = Astro.props;
+
+// import { ViewTransitions } from  "astro:transitions"
+import CursorEffect from "@components/page_effects/CursorHoverEffect.astro";
+import PageAnimations from "@components/page_effects/CustomAnimations.astro";
+---
+
+<!-- Preconnect -->
+ <link rel="preconnect" href="https://challenges.cloudflare.com">
+<link rel="preconnect" href="https://nikostuff.com" crossorigin />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.webp" />
+
+<meta name="generator" content={Astro.generator} />
+
+<link
+  rel="preload"
+  href="/fonts/atkinson-regular.woff"
+  as="font"
+  type="font/woff"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/atkinson-bold.woff"
+  as="font"
+  type="font/woff"
+  crossorigin
+/>
+
+<!-- Global Scripts -->
+<script is:inline data-cfasync="false" src="/js/theme.js"></script>
+<script defer is:inline src="/js/scroll.js"></script>
+<script defer is:inline src="/js/copy.js"></script>
+<script
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer
+></script>
+
+
+<PageAnimations />
+<CursorEffect />
+<!--<script is:inline async src="/js/bg.js"/>-->
+<!--<script is:inline data-astro-rerun async src="/js/typewriter.js"/>-->
+
+<!--<ViewTransitions  />-->
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.url)} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<!-- Sitemap -->
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- RSS Feed -->
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={title}
+  href={`${Astro.site}rss.xml`}
+/>
+
+<!-- SPOOKYMONTH -->
+<!-- <audio id="spooky-audio" src="/spooktober.ogg" loop></audio>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const ignore_pages = ["kosztorys"];
+    const currentPath = window.location.pathname.replace(/^\/|\/$/g, "");
+
+    const audio = document.getElementById("spooky-audio");
+    if (!(audio instanceof HTMLAudioElement)) return;
+
+    const muteButtons: (HTMLElement | null)[] = [
+      document.getElementById("mute_music"),
+      document.getElementById("drawer-mute_music"),
+    ];
+
+    const apod_image = document.getElementById("apod-image");
+
+    if (ignore_pages.includes(currentPath)) {
+      audio.remove();
+      muteButtons.forEach((button) => button?.remove());
+      return;
+    }
+
+    let isMuted: boolean =
+      sessionStorage.getItem("spooky-audio-muted") === "true";
+    let fadeInterval: number | null = null;
+    const targetVolume = 0.3;
+
+    const updateMuteButtons = (): void => {
+      muteButtons.forEach((button) => {
+        if (!button) return;
+        if (isMuted) {
+          button.classList.add("opacity-50");
+          button.classList.remove("opacity-100");
+
+          if (apod_image) {
+            setTimeout(() => {
+              apod_image.classList.add("opacity-0");
+              apod_image.classList.remove("opacity-100");
+            }, 500);
+          }
+        } else {
+          button.classList.remove("opacity-50");
+          button.classList.add("opacity-100");
+
+          if (apod_image) {
+            setTimeout(() => {
+              apod_image.classList.remove("opacity-0");
+              apod_image.classList.add("opacity-100");
+            }, 500);
+          }
+        }
+      });
+    };
+
+    updateMuteButtons();
+
+    const toggleMute = (): void => {
+      isMuted = !isMuted;
+      audio.muted = isMuted;
+      sessionStorage.setItem("spooky-audio-muted", isMuted.toString());
+      updateMuteButtons();
+    };
+
+    muteButtons.forEach((button) => {
+      button?.addEventListener("click", toggleMute);
+    });
+
+    audio.muted = isMuted;
+    audio.volume = targetVolume;
+
+    const savedTime = sessionStorage.getItem("spooky-audio-time");
+    if (savedTime) {
+      audio.currentTime = parseFloat(savedTime);
+
+      // Fade in on resume
+      audio.volume = 0;
+      fadeInterval = window.setInterval(() => {
+        if (audio.volume < targetVolume) {
+          audio.volume = Math.min(audio.volume + 0.01, targetVolume);
+        } else {
+          if (fadeInterval) clearInterval(fadeInterval);
+        }
+      }, 100);
+    }
+
+    audio.play().catch(() => {
+      console.log("Autoplay blocked – will play after user interaction.");
+      document.addEventListener(
+        "click",
+        () => {
+          audio.play();
+        },
+        { once: true }
+      );
+    });
+
+    setInterval(() => {
+      sessionStorage.setItem("spooky-audio-time", audio.currentTime.toString());
+    }, 1000);
+
+    const fadeAudio = (fadeOut: boolean, callback?: () => void): void => {
+      if (fadeInterval) clearInterval(fadeInterval);
+
+      const step = 0.03;
+      const interval = 50;
+
+      fadeInterval = window.setInterval(() => {
+        if (fadeOut) {
+          if (audio.volume > 0) {
+            audio.volume = Math.max(audio.volume - step, 0);
+          } else {
+            if (fadeInterval) clearInterval(fadeInterval);
+            if (callback) callback();
+          }
+        } else {
+          if (audio.volume < targetVolume) {
+            audio.volume = Math.min(audio.volume + step, targetVolume);
+          } else {
+            if (fadeInterval) clearInterval(fadeInterval);
+            if (callback) callback();
+          }
+        }
+      }, interval);
+    };
+
+    window.addEventListener("blur", () => {
+      fadeAudio(true, () => {
+        audio.pause();
+      });
+    });
+
+    window.addEventListener("focus", () => {
+      audio.play().then(() => {
+        fadeAudio(false);
+      });
+    });
+  });
+</script> -->
+
+<!-- END OF SPOOKYMONTH -->
+
+<!-- AdSense - Nonsense -->
+<script is:inline data-astro-rerun async src="/js/adsense.js"></script>
+
+<script>
+  import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
+  document.addEventListener("astro:before-swap", (e) =>
+    [
+      ...(e as TransitionBeforeSwapEvent).newDocument.head.querySelectorAll(
+        'link[as="font"]'
+      ),
+    ].forEach((link) => link.remove())
+  );
+</script>

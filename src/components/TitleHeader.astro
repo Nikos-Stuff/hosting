@@ -1,0 +1,156 @@
+---
+const { text, sub, buttons, typewriter } = Astro.props;
+---
+
+<div
+  id="animate"
+  class="fixed top-0 left-0 w-svw h-svh flex items-center justify-center bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.4)_0%,transparent_40%)] dark:bg-none"
+>
+  <div
+    id="centerContent"
+    class="relative w-svw h-svh flex items-center justify-center slide-in-top"
+  >
+    <div id="contentWrapper" class="p-5 text-center">
+      <p
+        id="subtitle"
+        class="text-lg md:text-xl lg:text-2xl font-semibold opacity-75"
+      >
+        {sub}
+      </p>
+      <p
+        id="title"
+        class="text-2xl md:text-3xl lg:text-7xl font-bold uppercase text-black dark:text-white"
+      >
+        {text}
+      </p>
+
+      {
+        typewriter == true && (
+          <div id="typewriter-text">
+            <p class="typewriter w-full" />
+          </div>
+        )
+      }
+
+      <!-- If buttons = true then we show the buttons if not we hide them  -->
+      <div id="ctaButtons" class="flex flex-wrap gap-4 justify-center mt-5">
+        {
+          buttons == true && (
+            <>
+              <a
+                href="#whyus"
+                class="py-2 px-4 rounded truncate text-xs md:text-sm lg:text-base bg-black dark:bg-white text-white dark:text-black hover:bg-neutral-800 hover:dark:bg-white/85 hover:scale-110 hover:shadow-xl inset-shadow-sm dark:shadow-white/20 shadow-black/50 blend"
+              >
+                Dlaczego My?
+              </a>
+              <a
+                href="#features"
+                class="backdrop-blur-xl backdrop-brightness-200 py-2 px-4 truncate rounded text-xs md:text-sm lg:text-base border border-black/25 dark:border-white/25 hover:bg-black/5 hover:dark:bg-white/15 hover:scale-110 hover:shadow-xl inset-shadow-sm dark:shadow-white/20 shadow-black/50 blend"
+              >
+                Funkcje & Korzyści
+              </a>
+              <a
+                href="#calculator"
+                class="backdrop-blur-xl backdrop-brightness-200 py-2 px-4 truncate rounded text-xs md:text-sm lg:text-base border border-black/25 dark:border-white/25 hover:bg-black/5 hover:dark:bg-white/15 hover:scale-110 hover:shadow-xl inset-shadow-sm dark:shadow-white/20 shadow-black/50 blend"
+              >
+                Kalkulator Cen
+              </a>
+            </>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline defer data-astro-rerun async src="/js/headeranimation.js"
+></script>
+<!-- <script is:inline defer data-astro-rerun async src="/js/typewriter.js"></script> -->
+
+<script>
+  import { gsap } from "gsap";
+
+  function run() {
+    const texts = [
+      "Proste Rozwiązania",
+      "Szybka Obsługa",
+      "Niezawodny Hosting",
+      "Wsparcie 24/7",
+      "Elastyczne Plany",
+      "Bezpieczeństwo Danych",
+      "Optymalna Wydajność",
+      "Łatwa Skalowalność",
+      "Innowacyjne Technologie",
+      "Zadowoleni Klienci",
+    ];
+
+    const typewriterElement = document.querySelector(
+      "#typewriter-text .typewriter"
+    );
+    if (!typewriterElement) return;
+
+    let index = 0;
+
+    function showNextText() {
+      const currentText = texts[index];
+
+      if (!typewriterElement) return;
+
+      typewriterElement.innerHTML = currentText
+        .split("")
+        .map(
+          (char) =>
+            `<span class="char transform inline-block">${
+              char === " " ? "&nbsp;" : char
+            }</span>`
+        )
+        .join("");
+
+      const chars = typewriterElement.querySelectorAll<HTMLElement>(".char");
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          fadeOut(chars, () => {
+            index = (index + 1) % texts.length;
+            showNextText();
+          });
+        },
+      });
+
+      // Fade in with scale + rotation pop
+      tl.from(chars, {
+        opacity: 0,
+        scale: 0.5,
+        rotation: () => gsap.utils.random(-60, 60),
+        y: 20,
+        stagger: { amount: 0.5, from: "start" },
+        duration: 0.5,
+        ease: "back.out(1.7)",
+      });
+
+      // Hold for 2 seconds
+      tl.to({}, { duration: 2 });
+    }
+
+    function fadeOut(chars: NodeListOf<HTMLElement>, onComplete: () => void) {
+      gsap.to(chars, {
+        opacity: 0,
+        scale: 0.5,
+        rotation: () => gsap.utils.random(-60, 60),
+        y: -20,
+        stagger: { amount: 0.5, from: "start" },
+        duration: 0.4,
+        ease: "back.in(1.7)",
+        onComplete,
+      });
+    }
+
+    showNextText();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run);
+  } else {
+    run();
+  }
+</script>

@@ -1,0 +1,85 @@
+---
+import { Image } from "astro:assets";
+import { NASA_API } from "astro:env/server";
+const apiUrl = `https://api.nasa.gov/planetary/apod?api_key=${NASA_API}`;
+let apodData = null;
+let isLoaded = false;
+
+try {
+  const response = await fetch(apiUrl);
+  apodData = await response.json();
+} catch (error) {
+  console.error("Error fetching NASA APOD:", error);
+}
+
+let finalUrl = apodData?.url;
+
+if (finalUrl && finalUrl.includes("/embed/")) {
+  const [baseUrl] = finalUrl.split("?");
+  const videoId = baseUrl.split("/embed/")[1];
+  finalUrl = `${baseUrl}?autoplay=1&mute=1&loop=1&playlist=${videoId}`;
+}
+
+console.log(" APOD will use URL:", finalUrl);
+---
+
+<div
+  id="pod-container"
+  class="fixed inset-0 w-svw h-svh bg-white dark:bg-black"
+  style={`opacity: ${isLoaded ? 1 : 0};`}
+>
+
+  <div
+    id="pod-wrapper"
+    class="w-full h-full will-change-transform transform-gpu transition-all duration-1000 ease-out"
+    style="transform-origin: center;"
+  >
+
+    <div id="pod" class="w-full h-full">
+
+      {
+        apodData ? (
+          apodData.media_type === "image" ? (
+            <Image
+              id="apod-image"
+              inferSize={true}
+              quality="low"
+              src={`https://api.nikostuff.com/v1/web/live_optimize?target=${apodData.url}&compression=5`}
+              alt={apodData.title}
+              class="w-svw h-svh object-cover brightness-[1.5] dark:brightness-[0.3] blur-md saturate-[0.4] contrast-70 dark:contrast-100 duration-500 opacity-0 transform scale-[1.5] transition-all"
+              onload={`document.getElementById('apod-image').classList.add('opacity-100'); document.getElementById('apod-image').classList.remove('opacity-0'); document.getElementById('pod-container').style.opacity = 1;`}
+              decoding="async"
+              loading="eager"
+            />
+          ) : apodData.media_type === "video" &&
+            apodData.url.includes("youtube.com/embed") ? (
+            <iframe
+              id="apod-image"
+              title={apodData.title || "APOD Video"}
+              src={finalUrl}
+              class="w-svw h-svh object-cover blur-xs dark:blur-sm brightness-[1.3] dark:brightness-[0.3] saturate-[0.4] duration-500 opacity-0 transform scale-[1.5] transition-all"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="eager"
+              onload={`document.getElementById('apod-image').classList.add('opacity-100'); document.getElementById('apod-image').classList.remove('opacity-0'); document.getElementById('pod-container').style.opacity = 1;`}
+            />
+          ) : apodData.media_type === "video" ? (
+            <video
+              id="apod-image"
+              class="w-svw h-svh object-cover blur-xs dark:blur-sm brightness-[1.3] dark:brightness-[0.3] saturate-[0.4] duration-500 opacity-0 transform scale-[1.5] transition-all"
+              controls
+              autoplay
+              loop
+              onloadeddata={`document.getElementById('apod-image').classList.add('opacity-100'); document.getElementById('apod-image').classList.remove('opacity-0'); document.getElementById('pod-container').style.opacity = 1;`}
+            >
+              <source src={apodData.url} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          ) : null
+        ) : null
+      }
+
+    </div>
+  </div>
+</div>
+

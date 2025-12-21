@@ -1,0 +1,68 @@
+name: Deploy To SFTP
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+
+      - name: Show runner public IP
+        run: |
+          echo "Public IPv4:"
+          curl -4 https://ifconfig.me
+          echo ""
+          echo "Public IPv6:"
+          curl -6 https://ifconfig.me || echo "IPv6 not available"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          cache: pnpm
+
+      - name: Install Dependencies
+        run: pnpm i
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_NASA_API: ${{ secrets.NASA_API }}
+          envkey_AZURE_API: ${{ secrets.AZURE_API }}
+
+      - name: Build Astro Website
+        run: pnpm build
+
+      - name: Sync
+        uses: burnett01/rsync-deployments@7.0.2
+        with:
+          switches: -avzr --delete --progress
+          path: dist/
+          remote_path: /web/pages/hosting.nikostuff.com
+          remote_host: ${{ secrets.FTP_HOST }}
+          remote_user: ${{ secrets.FTP_LOGIN }}
+          remote_key: ${{ secrets.FTP_KEY }}

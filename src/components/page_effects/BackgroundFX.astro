@@ -1,0 +1,158 @@
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    let mouseX = 0, mouseY = 0;
+    let scrollY = 0;
+
+    let targetMouseX = 0, targetMouseY = 0;
+    let targetScrollY = 0;
+
+    const easing = 0.075;
+
+    // amazing mobile detection 100% no scam
+    const isMobile =
+      /Android|iPhone|iPad|iPod|Opera Mini|SKIBIDI_TOILET|IEMobile/i.test(navigator.userAgent) ||
+      window.innerWidth < 768;
+
+    // dims
+    let docHeight = document.body.scrollHeight;
+    let winHeight = window.innerHeight;
+    let winScrollY = window.scrollY;
+
+    window.addEventListener("resize", () => {
+      docHeight = document.body.scrollHeight;
+      winHeight = window.innerHeight;
+      winScrollY = window.scrollY;
+    });
+
+    // multipliers
+    const multipliers: Record<string, { mouse: number; scroll: number }> = {
+      particles1: { mouse: 3, scroll: 0.05 },
+      particles2: { mouse: 5, scroll: 0.1 },
+      particles3: { mouse: 2, scroll: 0.15 },
+      stars1: { mouse: 3, scroll: 0.05 },
+      stars2: { mouse: 5, scroll: 0.1 },
+      stars3: { mouse: 2, scroll: 0.15 },
+      "pod-wrapper": { mouse: 1, scroll: 0.05 },
+    };
+
+    // mouse input
+    document.addEventListener("mousemove", (e) => {
+      targetMouseX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+      targetMouseY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+    });
+
+    // scroll input
+    window.addEventListener("scroll", () => {
+      winScrollY = window.scrollY;
+      targetScrollY = winScrollY;
+    });
+
+    const ease = (current: number, target: number, factor: number) =>
+      current + (target - current) * factor;
+
+    function updateParallax() {
+      mouseX = ease(mouseX, targetMouseX, easing);
+      mouseY = ease(mouseY, targetMouseY, easing);
+      scrollY = ease(scrollY, targetScrollY, easing);
+
+      const ids = [
+        "particles1",
+        "particles2",
+        "particles3",
+        "stars1",
+        "stars2",
+        "stars3",
+        "pod-wrapper",
+      ];
+
+      for (const id of ids) {
+        const elem = document.getElementById(id);
+        if (!elem) continue;
+
+        const { mouse, scroll } = multipliers[id];
+
+        // POD special-case: disable animations on mobile
+        if (id === "pod-wrapper") {
+          if (isMobile) {
+            // no transforms, no will-change spam
+            elem.style.transform = "none";
+            continue;
+          }
+
+          const scrollFraction = Math.min(1, winScrollY / (docHeight - winHeight));
+          const maxScale = 1.3;
+          const maxRotation = 10;
+          const podScale = 1 + (maxScale - 1) * scrollFraction;
+
+          elem.style.transform =
+            `translate(${mouseX * mouse}px, ${mouseY * mouse}px)
+             scale(${podScale})
+             rotate(${maxRotation * scrollFraction}deg)`;
+
+          continue;
+        }
+
+        // default parallax
+        elem.style.transform =
+          `translate(${mouseX * mouse}px, ${mouseY * mouse}px)
+           translateY(-${scrollY * scroll}px)`;
+      }
+
+      requestAnimationFrame(updateParallax);
+    }
+
+    // ------------ background particle generation ------------ //
+
+    const getRandom = (max: number) => Math.floor(Math.random() * max);
+
+    function generateParticles(n: number, color: string) {
+      const positions = [];
+      for (let i = 0; i < n; i++) {
+        positions.push(`${getRandom(2560)}px ${getRandom(2560)}px ${color}`);
+      }
+      return positions.join(", ");
+    }
+
+    // Applies GPU promotion ONCE — no per-frame writes
+    function applyStyles(element: HTMLElement, size: string | number, boxShadow: string | number, animation: string | number) {
+      element.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        border-radius: 50%;
+        box-shadow: ${boxShadow};
+        animation: ${animation};
+        will-change: transform;
+      `;
+    }
+
+    function initBG() {
+      console.log("BG Loaded");
+
+      const particlesSmall = generateParticles(150, "#000");
+      const particlesMedium = generateParticles(100, "#000");
+      const particlesLarge = generateParticles(50, "#000");
+
+      const starsSmall = generateParticles(150, "#fff");
+      const starsMedium = generateParticles(100, "#fff");
+      const starsLarge = generateParticles(50, "#fff");
+
+      const map = {
+        particles1: [1, particlesSmall, "animStar 50s linear infinite"],
+        particles2: [1.5, particlesMedium, "animateParticle 100s linear infinite"],
+        particles3: [2, particlesLarge, "animateParticle 150s linear infinite"],
+        stars1: [1, starsSmall, ""],
+        stars2: [1.5, starsMedium, ""],
+        stars3: [2, starsLarge, ""],
+      };
+
+      for (const [id, [size, shadow, anim]] of Object.entries(map)) {
+        const elem = document.getElementById(id);
+        if (elem) applyStyles(elem, size, shadow, anim);
+      }
+    }
+
+    document.addEventListener("astro:after-swap", initBG);
+    initBG();
+    updateParallax();
+  });
+</script>
