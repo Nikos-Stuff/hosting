@@ -11,7 +11,7 @@ export const SITE: Site = {
 // Links
 export const LINKS: Links = [
   { 
-    TEXT: "Wroć do strony głównej", 
+    TEXT: "Go back to main page", 
     HREF: "https://nikostuff.com", 
   }
 ]
