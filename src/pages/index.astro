@@ -235,8 +235,47 @@ import WhyUs from "@components/WhyUs.astro";
       </section>
     </FancyDiv>
 
+    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="10">
+      <section class="relative animate">
+        <p
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+        >
+          Support Us! Leave a tip :)
+        </p>
+        <p class="font-bold text-sm mb-2 animate">
+          If you like what we do and want to support the project, consider
+          leaving a tip. Every little bit helps us maintain and improve our free
+          hosting services.
+        </p>
+
+        <button
+          id="tip_website_btn"
+          class="rainbow_button group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg dark:bg-black bg-white hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-all duration-300 ease-in-out"
+          onclick="window.open('https://ko-fi.com/niko96758', '_blank')"
+        >
+          <span
+            class="w-full z-10 relative group-hover:text-black group-hover:dark:text-white text-center transition-color duration-300"
+          >
+            Visit Ko-fi Page
+          </span>
+        </button>
+      </section>
+    </FancyDiv>
+
     <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
       <section class="relative animate">
+        <!-- OPEN BETA NOTICE -->
+        <div
+          class="w-full p-4 mb-5 gap-3 flex items-center border rounded-lg bg-yellow-100/50 border-yellow-300 dark:bg-yellow-900/30 dark:border-yellow-700 transition-all duration-300 ease-in-out"
+        >
+          <p>
+            You can now hop in and create your free server!<br />
+            Notice that we are currently in open beta testing phase - so we are using
+            a little bit slower and less powerful hardware than usual.<br />
+            Full launch with better hardware is coming soon! Thank you for your patience
+            and support!
+          </p>
+        </div>
         <p
           class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
         >
@@ -309,7 +348,6 @@ import WhyUs from "@components/WhyUs.astro";
             title="Is the hosting really free?"
             details="Yes, our hosting services are completely free forever. There are no hidden fees or charges. We believe in providing reliable hosting without any cost to our users."
           />
-
 
           <Accordion
             title="How do I change my egg/package?"

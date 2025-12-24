@@ -401,3 +401,63 @@ article img {
   opacity: 0;
   transform: translateY(50px);
 }
+
+.rainbow_button {
+  position: relative;
+  /* default inverse-scale var (override from group on hover if needed) */
+  --group-scale: 1;
+}
+
+.rainbow_button::before {
+  --vibrance: 50%;
+  content: "";
+  position: absolute;
+  inset: 10px 10px -10px;
+  pointer-events: none;
+  background: linear-gradient(
+    to right in oklch longer hue,
+    oklch(95% var(--vibrance) 0) 0 100%
+  );
+  filter: blur(20px) saturate(120%);
+  border-radius: inherit;
+  z-index: -1;
+
+  /* animation */
+  background-size: 200% 100%;
+  animation: rainbow-glow 4s ease-in-out infinite;
+
+  /* try to reduce visual jitter when parent scales */
+  backface-visibility: hidden;
+  will-change: opacity, transform, filter, background-position;
+
+  /* counter-scale so the glow visually resists parent's scale (set --group-scale on the group) */
+  transform-origin: center;
+  transform: scale(calc(1 / var(--group-scale)));
+}
+
+/* simple pulsing / sliding gradient */
+@keyframes rainbow-glow {
+  0% {
+    opacity: 0.6;
+    filter: blur(18px) saturate(100%);
+    background-position: 0% 50%;
+    transform: scale(calc(1 / var(--group-scale))) translateZ(0);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(26px) saturate(140%);
+    background-position: 100% 50%;
+    transform: scale(calc(1.02 / var(--group-scale))) translateZ(0);
+  }
+  100% {
+    opacity: 0.6;
+    filter: blur(18px) saturate(100%);
+    background-position: 0% 50%;
+    transform: scale(calc(1 / var(--group-scale))) translateZ(0);
+  }
+}
+
+/* Example: when using Tailwind's group scale on hover, set the inverse variable on the parent group:
+   .group:hover { --group-scale: 1.05; }
+   or with Tailwind: group-hover:[--group-scale:1.05]
+*/
