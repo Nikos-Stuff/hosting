@@ -108,6 +108,13 @@
           Get My Server!
         </span>
       </button>
+      <a href="/legal">
+        <small>
+          By creating a server, you agree to our <strong
+            >Terms of Service</strong
+          > & <strong>Privacy Policy</strong>.
+        </small>
+      </a>
     </div>
   </div>
 </div>
@@ -329,9 +336,7 @@
         }, 3000);
       } else {
         if (order_blocker) order_blocker.setAttribute("hidden", "true");
-        alert(
-          "Oops. Something went wrong. Please try again later."
-        );
+        alert("Oops. Something went wrong. Please try again later.");
       }
     } catch (err) {
       console.error(err);
@@ -340,10 +345,7 @@
         err && typeof err === "object" && "message" in err
           ? (err as any).message
           : String(err);
-      alert(
-        "Oops. Something went wrong. API returned: " +
-          errMsg
-      );
+      alert("Oops. Something went wrong. API returned: " + errMsg);
     }
 
     // Refresh Turnstile

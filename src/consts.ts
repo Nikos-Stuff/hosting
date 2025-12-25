@@ -1,4 +1,4 @@
-import type { Site, Page, Links, Socials } from "@types"
+import type { Site, Links, Socials } from "@types"
 
 // Global
 export const SITE: Site = {
@@ -7,6 +7,11 @@ export const SITE: Site = {
   AUTHOR: "Niko's Stuff",
 }
 
+export const LEGAL: Site = {
+  TITLE: "Niko's Stuff",
+  DESCRIPTION: "Randomness since 2018.",
+  AUTHOR: "Niko's Stuff",
+}
 
 // Links
 export const LINKS: Links = [

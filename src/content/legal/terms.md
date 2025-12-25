@@ -1,168 +1,146 @@
 ---
-title: "Regulamin Świadczenia Usług Hostingowych"
-date: "11/23/2025"
+title: "Terms of Service for Free Hosting Service"
+date: "12/26/2025"
 ---
 
-# UWAGA: WERSJA ROBOCZA  
-Niniejszy Regulamin jest wstępnym projektem i może ulec zmianie przed uruchomieniem płatności komercyjnych. Ostateczna wersja zostanie opublikowana po zakończeniu procesu formalnego oraz uzyskaniu pełnych danych firmy.
+## ⚠️ Beta Version
 
----
-
-# Definicje
-
-**Usługodawca / Administrator:**  
-Maciej Frączek, prowadzący działalność gospodarczą pod firmą Niko’s Stuff,  
-adres: *[adres zostanie uzupełniony]*  
-NIP: *[do uzupełnienia]*  
-REGON: *[do uzupełnienia]*  
-zarejestrowany w CEIDG.  
-
-**Serwis:**  
-Strona internetowa **nikostuff.com** oraz wszystkie powiązane systemy, w tym Panel Klienta i Panel Serwerów.
-
-**Usługa:**  
-Udostępnienie zasobów serwerowych (CPU, RAM, przestrzeń dyskowa, przepustowość sieci) umożliwiających uruchamianie aplikacji lub serwerów gier w środowiskach dostarczonych przez Usługodawcę („jajkach”).
-
-**Klient / Użytkownik:**  
-Osoba fizyczna lub prawna korzystająca z Usług.
+These Terms of Service apply to the beta version of our free hosting service. The service is experimental, and these terms may be updated as the project develops. By using the service, you agree to these terms.
 
 ---
 
-# 1. Akceptacja Regulaminu
+# 1) Definitions
 
-Korzystając z Serwisu lub opłacając dowolną Usługę, Klient potwierdza, że zapoznał się z Regulaminem, rozumie jego treść i akceptuje wszystkie postanowienia.
+- **Service Provider / Administrator:** Maciej Frączek, operating under **Niko’s Stuff**.  
+  Contact: **help@nikostuff.com**
 
----
+- **Service / Platform:** The website **hosting.nikostuff.com**, including the User Panel and Server Panel.
 
-# 2. Zakres i Charakter Usług
+- **Service:** Provision of server resources (CPU, RAM, storage, network bandwidth) to run applications or game servers provided as pre-configured “eggs.”
 
-1. Usługodawca udostępnia zasoby serwerowe umożliwiające uruchamianie wyłącznie aplikacji dostępnych w formie **jajek** przygotowanych przez Usługodawcę.
-2. Klient **nie może** dodawać własnych jajek, obrazów Docker ani modyfikować środowisk uruchomieniowych poza dostępną konfiguracją.
-3. Klient może modyfikować pliki oraz konfigurację jedynie w obrębie środowisk oferowanych w Panelu.
-4. Usługodawca działa jako **pośrednik (reseller)** infrastruktury zewnętrznych dostawców (np. OVH, Hetzner, Contabo).
-5. Usługi są świadczone w modelu współdzielonym (overselling), z zachowaniem zasad stabilności i bezpieczeństwa.
+- **User / Client:** Any individual or entity using the Service.
 
 ---
 
-# 3. Dopuszczalne Użytkowanie (AUP)
+# 2) Acceptance of Terms
 
-Klient zobowiązuje się korzystać z Usług zgodnie z prawem oraz zasadami bezpieczeństwa.
-
-## 3.1. Zabronione działania
-
-Zakazane jest m.in.:
-
-- hostowanie treści nielegalnych lub naruszających prawa osób trzecich (pirackie oprogramowanie, malware, exploity, cheat’y),
-- działania zakłócające pracę Serwisu lub infrastruktury osób trzecich (DDoS, botnety, skanowanie portów, spam, phishing),
-- kopanie kryptowalut (mining),
-- nadmierne lub ciągłe obciążanie zasobów, wpływające na innych użytkowników,
-- odsprzedaż lub udostępnianie Usługi osobom trzecim bez zgody Usługodawcy.
-
-## 3.2. Ograniczenia zasobów (Overselling)
-
-W przypadku nadmiernego obciążenia systemu przez Klienta, Usługodawca może zastosować ograniczenia wydajności, tymczasowe zawieszenie instancji lub inne środki niezbędne do ochrony stabilności Serwisu.
+Using the Service indicates that you have read, understood, and accepted these Terms.
 
 ---
 
-# 4. Realizacja Usługi i Odpowiedzialność
+# 3) Scope and Nature of the Service
 
-## 4.1. Rola Usługodawcy
-
-Usługodawca:
-- udostępnia zasoby serwerowe i środowiska uruchomieniowe,
-- zapewnia wsparcie techniczne dotyczące Panelu i jajek,
-- pośredniczy w kontaktach z dostawcami infrastruktury, jeśli wystąpią problemy niezależne od niego.
-
-## 4.2. Odpowiedzialność Klienta
-
-Klient ponosi pełną odpowiedzialność za:
-- treści i pliki wgrywane na serwer,
-- konfigurację instancji,
-- działania użytkowników korzystających z uruchomionych przez niego aplikacji,
-- szkody wyrządzone osobom trzecim.
-
-Usługodawca nie odpowiada za:
-- treści hostowane przez Klienta,
-- awarie wynikające z błędnej konfiguracji,
-- działania aplikacji uruchomionych przez Klienta.
-
-## 4.3. Dostępność Usług (SLA)
-
-Usługodawca dokłada starań, aby zapewnić wysoką dostępność, lecz nie gwarantuje nieprzerwanego działania systemu.  
-Awaria infrastruktury partnerów zewnętrznych stanowi zdarzenie niezależne od Usługodawcy.
+1. Users can only run applications provided as **official eggs** by the Service Provider.  
+2. Users **cannot** upload custom eggs, Docker images, or modify environments outside the panel-provided configuration.  
+3. Users may modify files and configuration **only within the provided environment**.  
+4. The Service Provider acts as a **reseller** of external infrastructure (e.g., OVH, Hetzner, Contabo).  
+5. Services are provided in a **shared hosting model**; overselling may occur, but stability and security are prioritized.
 
 ---
 
-# 5. Kopie Zapasowe
+# 4) Acceptable Use Policy (AUP)
 
-1. Usługodawca co do zasady **nie zapewnia automatycznych kopii zapasowych**, chyba że dana oferta stanowi inaczej.
-2. Klient odpowiada za samodzielne wykonywanie i przechowywanie kopii zapasowych.
-3. Po usunięciu Serwera wszystkie dane (w tym kopie) są bezpowrotnie usuwane.
+Users must use the Service lawfully and responsibly.
 
----
+### 4.1. Prohibited Actions
 
-# 6. Płatności i Odnawianie Usług
+Including but not limited to:
+- Hosting illegal content or content violating third-party rights (pirated software, malware, cheats)  
+- Attacks or disruption of the service or third-party networks (DDoS, spam, phishing, port scanning)  
+- Cryptocurrency mining  
+- Excessive or continuous resource usage that affects other users  
+- Reselling or sharing the Service without consent  
 
-1. Usługi są rozliczane w cyklach 30-dniowych (lub innych, jeśli podano w ofercie).
-2. Operatorem płatności jest **Stripe**. Usługodawca nie przetwarza danych kart płatniczych.
-3. Usługi **nie odnawiają się automatycznie**. Po zakończeniu opłaconego okresu Klient musi dokonać manualnej opłaty.
-4. Przedłużenie Usługi następuje po zaksięgowaniu płatności — **również o wartości 0 PLN**, jeżeli spełnione są warunki z punktu 6.5.
-5. **Zasada odnawiania za 0 PLN (kredyt):**
-    - W przypadku zmiany konfiguracji (downgrade), niewykorzystany czas przekształcany jest w **kredyt**.
-    - Jeśli cena przedłużenia wynosi 0 PLN:
-        - przedłużenie o nowy cykl 30 dni nastąpi **tylko wtedy, gdy do końca ważności usługi pozostało mniej niż 5 dni**,  
-        - w przeciwnym razie data wygaśnięcia **pozostaje bez zmian**, a aktualizowane są wyłącznie zasoby serwera.
-6. Brak opłaty po upływie terminu skutkuje zawieszeniem usługi zgodnie z sekcją 8.
+### 4.2. Resource Limits
+
+The Service Provider may limit performance, suspend servers temporarily, or take other actions if a user overloads the system.
 
 ---
 
-# 7. Rezygnacja i Zwroty
+# 5) Service Operation and Responsibility
 
-1. Klient może zrezygnować z usługi w dowolnym momencie.
-2. Po zakończeniu opłaconego okresu usługa pozostaje aktywna jeszcze przez **7 dni** (okres karencji). Po tym czasie jest usuwana.
-3. Usługodawca nie udziela zwrotów za niewykorzystany czas trwania usługi.
-4. Zwroty mogą być przyznane wyłącznie w szczególnych przypadkach według uznania Usługodawcy.
-5. Usługi bezpłatne (testowe, promocyjne) wygasają automatycznie i nie podlegają wznowieniu. Po wygaśnięciu dane są usuwane.
+### 5.1. Role of the Service Provider
 
----
+- Provides server resources and environments  
+- Offers technical support for the Panel and eggs  
+- Coordinates with infrastructure providers if issues arise beyond the provider’s control
 
-# 8. Zawieszenie i Usunięcie Usługi
+### 5.2. User Responsibility
 
-1. Usługa zostaje **zawieszona** w ciągu 24 godzin od upływu terminu płatności.
-2. Jeśli płatność nie zostanie uregulowana w ciągu **7 dni od zawieszenia**, serwer oraz wszystkie dane zostaną trwale usunięte.
-3. Usługodawca może zakończyć świadczenie Usługi natychmiast, bez zwrotu środków, w szczególności w przypadku:
-    - naruszenia prawa,
-    - naruszenia zasad z sekcji 3.1,
-    - nadużywania zasobów,
-    - działań zagrażających stabilności Serwisu.
+Users are responsible for:
+- Content and files uploaded to their servers  
+- Configuration of their instances  
+- Actions of anyone using their applications  
+- Any damages caused to third parties  
 
----
+The Service Provider is **not liable** for:
+- Hosted content  
+- Failures due to misconfiguration  
+- Application behavior on user servers
 
-# 9. Reklamacje
+### 5.3. Service Availability (SLA)
 
-1. Klient może zgłaszać reklamacje na adres e-mail: **[adres do uzupełnienia]**.
-2. Reklamacje rozpatrywane są w terminie do **14 dni roboczych**.
-3. Odpowiedź udzielana jest w formie elektronicznej.
+- The Service Provider strives for high uptime but **does not guarantee continuous availability**.  
+- Third-party infrastructure failures are outside the provider’s control.
 
 ---
 
-# 10. Ochrona Danych Osobowych (RODO)
+# 6) Backups
 
-1. Zasady przetwarzania danych osobowych określa **Polityka Prywatności**, dostępna w Serwisie.
-2. Korzystanie z Usług oznacza akceptację Polityki Prywatności.
-
----
-
-# 11. Siła Wyższa
-
-Usługodawca nie odpowiada za niewykonanie lub nienależyte wykonanie Usługi spowodowane działaniem siły wyższej, w tym m.in.: awariami infrastruktury, katastrofami naturalnymi, konfliktami zbrojnymi, przerwami w dostawach prądu lub Internetu.
+- Automatic backups are **not guaranteed** unless stated otherwise.  
+- Users are responsible for making and storing their own backups.  
+- Deletion of a server permanently removes all data, including backups.
 
 ---
 
-# 12. Postanowienia Końcowe
+# 7) Payments and Renewal
 
-1. Usługodawca może wprowadzać zmiany w Regulaminie. Zmiany obowiązują od chwili publikacji w Serwisie.
-2. Do korzystania z Usług stosuje się prawo Rzeczypospolitej Polskiej.
-3. W sprawach nieuregulowanych zastosowanie mają odpowiednie przepisy prawa polskiego.
+- Free service: no payment required; billing cycles do not apply.  
+- Beta testing: no recurring payments or charges.  
+- Paid tiers (if introduced later) will follow separate terms.
 
 ---
+
+# 8) Cancellation and Deletion
+
+- Users may delete servers or accounts at any time.  
+- Once deleted, servers and data are **permanently removed**.  
+- Free service cannot be reinstated once data is deleted.  
+
+---
+
+# 9) Suspension and Termination
+
+The Service may be suspended or terminated immediately without notice for:
+- Violation of law or AUP  
+- Abuse of resources  
+- Threats to platform stability or security  
+
+---
+
+# 10) Complaints
+
+- Users may send complaints to **help@nikostuff.com**.  
+- Complaints are reviewed within **14 business days**.  
+- Responses are provided electronically.
+
+---
+
+# 11) Privacy
+
+- Data processing follows the **Privacy Policy**, available on the platform.  
+- Using the service constitutes acceptance of the Privacy Policy.
+
+---
+
+# 12) Force Majeure
+
+The Service Provider is not liable for service interruptions caused by force majeure, including infrastructure failures, natural disasters, conflicts, or internet/power outages.
+
+---
+
+# 13) Final Provisions
+
+- Terms may be updated; changes take effect upon posting.  
+- Polish law applies to all aspects of the Service.  
+- Matters not covered are governed by applicable Polish law.
