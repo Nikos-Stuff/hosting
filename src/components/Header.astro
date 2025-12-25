@@ -47,21 +47,12 @@ import HeaderIcon from "@components/web_icon.astro";
       </div>
 
       <div class="buttons absolute right-0 top-1/2 -translate-y-1/2 flex gap-1">
-
-        <!-- <button
-          id="mute_music"
-          aria-label={`Mute spooky music on ${SITE.TITLE}`}
-          class="hidden lg:flex
-            size-9 rounded-full p-2 items-center justify-center
-            bg-transparent hover:bg-black/5 dark:hover:bg-white/20
-            stroke-current hover:stroke-black hover:dark:stroke-white
-            border border-black/10 dark:border-white/25
-            transition-all duration-300 ease-in-out"
+        <div
+          id="active-users-pill"
+          class="hidden lg:flex items-center justify-center bg-green-500/20 border border-black/10 dark:border-white/25 text-sm font-medium px-3 py-1 rounded-full transition-all duration-300"
         >
-          <svg class="size-full">
-            <use href="/ui.svg#mute_speaker"></use>
-          </svg>
-        </button> -->
+          Active Users: <span id="active-users-count" class="ml-1">0</span>
+        </div>
 
         <button
           id="header-theme-button"
@@ -141,3 +132,51 @@ import HeaderIcon from "@components/web_icon.astro";
   document.addEventListener("astro:after-swap", initializeDrawerButton);
   initializeDrawerButton();
 </script>
+
+<script>
+  const pill = document.getElementById("active-users-count");
+  if (!pill) throw new Error("Active Users pill not found");
+
+  let currentValue: number = parseInt(pill.textContent || "0") || 0;
+
+  async function updateActiveUsers() {
+    try {
+      const res = await fetch("https://api.nikostuff.com/v2/hosting/pelican_data?active_users");
+      const data = await res.json();
+      const newValue: number = data.active_users;
+
+      if (newValue !== currentValue) {
+        animateNumber(currentValue, newValue, 500);
+        currentValue = newValue;
+      }
+
+    } catch (err) {
+      console.error("Failed to fetch active users:", err);
+    }
+  }
+
+  function animateNumber(start: number, end: number, duration: number) {
+    const range = end - start;
+    if (range === 0) return;
+
+    const stepTime = Math.max(Math.floor(duration / Math.abs(range)), 20);
+    let current = start;
+    const step = range > 0 ? 1 : -1;
+
+    const timer = setInterval(() => {
+      current += step;
+      if (!pill) return;
+      pill.textContent = String(current);
+      if ((step > 0 && current >= end) || (step < 0 && current <= end)) {
+        pill.textContent = String(end);
+        clearInterval(timer);
+      }
+    }, stepTime);
+  }
+
+  updateActiveUsers();
+
+  // Update every 60 seconds
+  setInterval(updateActiveUsers, 60000);
+</script>
+
