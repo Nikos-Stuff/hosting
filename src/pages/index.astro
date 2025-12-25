@@ -248,6 +248,20 @@ import WhyUs from "@components/WhyUs.astro";
           hosting services.
         </p>
 
+        <!-- Progress bar of the tip -->
+        <div class="flex items-center mb-4">
+          <span id="tip_value" class="text-sm text-muted mr-3">0$</span>
+          <div class="flex-1 bg-black/10 dark:bg-white/10 rounded-full h-2">
+            <div
+              id="tip_progress_bar"
+              class="bg-black dark:bg-white h-2 rounded-full transition-all duration-500 ease-in-out"
+              style="width: 0%;"
+            >
+            </div>
+          </div>
+          <span class="text-sm text-muted ml-3">60$</span>
+        </div>
+
         <button
           id="tip_website_btn"
           class="rainbow_button group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg dark:bg-black bg-white hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-all duration-300 ease-in-out"
@@ -348,7 +362,7 @@ import WhyUs from "@components/WhyUs.astro";
             title="Why 'free forever'?"
             details="We believe that everyone should have access to reliable game server hosting without financial barriers. Our mission is to provide free hosting services to gamers and communities, allowing them to create and enjoy game servers without worrying about costs."
           />
-          
+
           <Accordion
             title="Is the hosting really free?"
             details="Yes, our hosting services are completely free forever. There are no hidden fees or charges. We believe in providing reliable hosting without any cost to our users."
@@ -383,3 +397,76 @@ import WhyUs from "@components/WhyUs.astro";
     </FancyDiv>
   </div>
 </PageLayout>
+
+<script>
+  // Tip progress bar
+  async function fetchTipData() {
+    try {
+      const response = await fetch("https://api.nikostuff.com/v2/hosting/kofi"); // Returns {"total":41.95}
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      return { current_amount: data.total, goal_amount: 60 };
+    } catch (error) {
+      console.error("Error fetching tip data:", error);
+      return null;
+    }
+  }
+
+  let lastTipAmount: number = 0;
+
+  async function updateTipProgress() {
+    const tipData = await fetchTipData();
+    if (tipData) {
+      const { current_amount, goal_amount } = tipData;
+      const progressBar = document.getElementById("tip_progress_bar");
+      const progressPercent = Math.min(
+        (current_amount / goal_amount) * 100,
+        100
+      );
+      if (!progressBar) return;
+      const end = Math.floor(current_amount);
+
+      // If amount didn't change, do nothing
+      if (lastTipAmount === end) return;
+
+      progressBar.style.width = `${progressPercent}%`;
+
+      const tipValueElement = document.getElementById("tip_value");
+      if (tipValueElement) {
+        const duration = 500;
+        const start = lastTipAmount !== null ? lastTipAmount : 0;
+        // If no change (caught above) or end equals start, just set and return
+        if (end === start) {
+          tipValueElement.textContent = `${end}$`;
+          lastTipAmount = end;
+          return;
+        }
+
+        const delta = end - start;
+        const steps = Math.abs(delta);
+        const stepTime = Math.max(1, Math.floor(duration / steps));
+        let current = start;
+
+        const timer = setInterval(() => {
+          current += delta > 0 ? 1 : -1;
+          tipValueElement.textContent = `${current}$`;
+          if ((delta > 0 && current >= end) || (delta < 0 && current <= end)) {
+            clearInterval(timer);
+            tipValueElement.textContent = `${end}$`;
+            lastTipAmount = end;
+          }
+        }, stepTime);
+      } else {
+        lastTipAmount = end;
+      }
+    }
+  }
+
+  // Initial update
+  updateTipProgress();
+
+  // Update every 5 seconds
+  setInterval(updateTipProgress, 5000);
+</script>
