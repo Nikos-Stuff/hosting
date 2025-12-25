@@ -49,7 +49,7 @@ import HeaderIcon from "@components/web_icon.astro";
       <div class="buttons absolute right-0 top-1/2 -translate-y-1/2 flex gap-1">
         <div
           id="active-users-pill"
-          class="hidden lg:flex items-center justify-center bg-green-500/20 border border-black/10 dark:border-white/25 text-sm font-medium px-3 py-1 rounded-full transition-all duration-300"
+          class="flex items-center justify-center bg-green-500/20 border border-black/10 dark:border-white/25 text-sm font-medium px-3 py-1 rounded-full transition-all duration-300"
         >
           Active Users: <span id="active-users-count" class="ml-1">0</span>
         </div>
@@ -58,7 +58,7 @@ import HeaderIcon from "@components/web_icon.astro";
           id="header-theme-button"
           aria-label={`Toggle light and dark theme`}
           class={cn(
-            "hidden lg:flex",
+            "flex",
             "size-9 rounded-full p-2 items-center justify-center",
             "bg-transparent hover:bg-black/5 dark:hover:bg-white/20",
             "stroke-current hover:stroke-black hover:dark:stroke-white",
@@ -74,25 +74,6 @@ import HeaderIcon from "@components/web_icon.astro";
           </svg>
         </button>
 
-        <button
-          id="header-drawer-button"
-          aria-label={`Toggle drawer open and closed`}
-          class={cn(
-            "flex lg:hidden",
-            "size-9 rounded-full p-2 items-center justify-center",
-            "bg-transparent hover:bg-black/5 dark:hover:bg-white/20",
-            "stroke-current hover:stroke-black hover:dark:stroke-white",
-            "border border-black/10 dark:border-white/25",
-            "transition-all duration-300 ease-in-out"
-          )}
-        >
-          <svg id="drawer-open" class="size-full">
-            <use href="/ui.svg#menu"></use>
-          </svg>
-          <svg id="drawer-close" class="size-full">
-            <use href="/ui.svg#x"></use>
-          </svg>
-        </button>
       </div>
     </div>
   </Container>
@@ -115,23 +96,6 @@ import HeaderIcon from "@components/web_icon.astro";
     @apply block;
   }
 </style>
-
-<script is:inline>
-  function toggleDrawer() {
-    const drawer = document.getElementById("drawer");
-    const drawerButton = document.getElementById("header-drawer-button");
-    drawer?.classList.toggle("open");
-    drawerButton?.classList.toggle("open");
-  }
-
-  function initializeDrawerButton() {
-    const drawerButton = document.getElementById("header-drawer-button");
-    drawerButton?.addEventListener("click", toggleDrawer);
-  }
-
-  document.addEventListener("astro:after-swap", initializeDrawerButton);
-  initializeDrawerButton();
-</script>
 
 <script>
   const pill = document.getElementById("active-users-count");

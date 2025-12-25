@@ -217,6 +217,145 @@ import WhyUs from "@components/WhyUs.astro";
       </section>
     </FancyDiv>
 
+    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="24">
+      <section class="relative animate">
+        <p
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+        >
+          Our hosting vs Other solutions
+        </p>
+        <p class="font-bold text-sm mb-2 animate">Quick summary of stuff</p>
+
+        <div class="overflow-x-auto mt-6 animate rounded-lg">
+          <table class="min-w-full border border-zinc-200 dark:border-zinc-800">
+            <thead class="bg-zinc-100 dark:bg-zinc-900">
+              <tr>
+                <th
+                  class="px-4 py-3 text-left text-sm font-bold text-zinc-700 dark:text-zinc-300"
+                >
+                  Feature
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-sm font-bold text-green-600"
+                >
+                  Our Hosting
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-sm font-bold text-zinc-600 dark:text-zinc-400"
+                >
+                  Aternos.org
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-sm font-bold text-zinc-600 dark:text-zinc-400"
+                >
+                  Playit.gg
+                </th>
+                <th
+                  class="px-4 py-3 text-left text-sm font-bold text-zinc-600 dark:text-zinc-400"
+                >
+                  Other Free Hosting
+                </th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tr>
+                <td
+                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                >
+                  Ads
+                </td>
+                <td class="px-4 py-3 text-green-600 font-semibold">No ads</td>
+                <td class="px-4 py-3">Heavy ads</td>
+                <td class="px-4 py-3">No ads</td>
+                <td class="px-4 py-3">Usually yes</td>
+              </tr>
+
+              <tr>
+                <td
+                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                >
+                  Uptime
+                </td>
+                <td class="px-4 py-3 text-green-600 font-semibold">24/7</td>
+                <td class="px-4 py-3">Session-based</td>
+                <td class="px-4 py-3">Requires PC online</td>
+                <td class="px-4 py-3">Limited</td>
+              </tr>
+
+              <tr>
+                <td
+                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                >
+                  CPU
+                </td>
+                <td class="px-4 py-3 text-green-600 font-semibold">
+                  Ryzen 5 / 7 / 9
+                </td>
+                <td class="px-4 py-3">Shared / limited</td>
+                <td class="px-4 py-3">Your own PC</td>
+                <td class="px-4 py-3">Low-end VPS</td>
+              </tr>
+
+              <tr>
+                <td
+                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                >
+                  Cost
+                </td>
+                <td class="px-4 py-3 text-green-600 font-semibold">
+                  Free forever
+                </td>
+                <td class="px-4 py-3">Free</td>
+                <td class="px-4 py-3">Free</td>
+                <td class="px-4 py-3">Free / upsells</td>
+              </tr>
+
+              <tr>
+                <td
+                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                >
+                  Business model
+                </td>
+                <td class="px-4 py-3 text-green-600 font-semibold">
+                  100% non-profit (donations)
+                </td>
+                <td class="px-4 py-3">Ad-driven</td>
+                <td class="px-4 py-3">Tunnels & limits</td>
+                <td class="px-4 py-3">Ads / paid tiers</td>
+              </tr>
+
+              <tr>
+                <td
+                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                >
+                  Panel
+                </td>
+                <td class="px-4 py-3 text-green-600 font-semibold">
+                  Pelican Panel
+                </td>
+                <td class="px-4 py-3">Custom</td>
+                <td class="px-4 py-3">None</td>
+                <td class="px-4 py-3">Basic / custom</td>
+              </tr>
+
+              <tr>
+                <td
+                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                >
+                  Community support
+                </td>
+                <td class="px-4 py-3 text-green-600 font-semibold">Yes</td>
+                <td class="px-4 py-3">Limited</td>
+                <td class="px-4 py-3">Yes</td>
+                <td class="px-4 py-3">Varies</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </FancyDiv>
+
     <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
       <section id="features" class="relative animate">
         <p
@@ -353,9 +492,7 @@ import WhyUs from "@components/WhyUs.astro";
         >
           Other cool solutions
         </h2>
-        <p>
-          Check out some interesting tools and projects!
-        </p>
+        <p>Check out some interesting tools and projects!</p>
 
         <div
           class="relative w-full h-52 mt-6 overflow-hidden rounded-lg animate"
@@ -419,11 +556,7 @@ import WhyUs from "@components/WhyUs.astro";
 
     <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
       <section class="relative animate">
-        <h2
-          class="font-bold text-3xl mb-8 text-black dark:text-white"
-        >
-          FAQ
-        </h2>
+        <h2 class="font-bold text-3xl mb-8 text-black dark:text-white">FAQ</h2>
 
         <div>
           <Accordion
