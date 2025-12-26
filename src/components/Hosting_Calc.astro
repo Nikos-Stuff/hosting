@@ -286,7 +286,6 @@
   // ------------------------------
   // LOCATION OPTION SELECT
   // ------------------------------
-  let selectedLocation = "";
   locationOptions
     ?.querySelectorAll("[data-location_name]")
     ?.forEach((option) => {
@@ -296,8 +295,6 @@
         // store selected location for cost calc
         const selected = option.getAttribute("data-location_name") || "";
         locationOptions.classList.remove("max-h-60");
-        // trigger cost recalculation (function defined below)
-        selectedLocation = selected;
         // add to data storage for ordering
         data_storage.location = selected;
       });
