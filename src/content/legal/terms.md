@@ -12,7 +12,7 @@ These Terms of Service apply to the beta version of our free hosting service. Th
 # 1) Definitions
 
 - **Service Provider / Administrator:** Maciej Frączek, operating under **Niko’s Stuff**.  
-  Contact: **help@nikostuff.com**
+  Contact: **team@nikostuff.com**
 
 - **Service / Platform:** The website **hosting.nikostuff.com**, including the User Panel and Server Panel.
 
