@@ -35,12 +35,6 @@ export const SOCIALS: Socials = [
   //   TEXT: "",
   //   HREF: ""
   // },
-  {
-    NAME: "LinkedIn",
-    ICON: "linkedin",
-    TEXT: "Maciej F.",
-    HREF: "https://www.linkedin.com/in/maciej-fr%C4%85czek-087578345",
-  },
   // {
   //   NAME: "Twitter",
   //   ICON: "twitter-x",
