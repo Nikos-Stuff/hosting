@@ -53,7 +53,11 @@ Including but not limited to:
 
 ### 4.2. Resource Limits
 
-The Service Provider may limit performance, suspend servers temporarily, or take other actions if a user overloads the system.
+### 4.2. Resource Limits
+
+The Service Provider may limit performance, suspend servers temporarily, or take other actions if a user overloads the system.  
+
+Resource allocations (RAM, CPU, disk) vary depending on the selected egg.
 
 ---
 
