@@ -317,7 +317,8 @@
         body: JSON.stringify(data_storage),
       });
 
-      if (!res.ok) throw new Error("Błąd składania zamówienia");
+      if (!res.ok)
+        throw new Error("Unknown error... (Can't reach the target URL)");
 
       const data = await res.json();
 
