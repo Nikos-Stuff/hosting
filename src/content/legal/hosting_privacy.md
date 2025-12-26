@@ -22,7 +22,7 @@ We process personal data in compliance with:
 ### Data Collected
 We collect minimal personal data necessary for service operation:
 - Email addresses
-- IP addresses and server logs
+- IP addresses and minimal server logs
 - Account usage data
 
 ### Purposes of Data Processing
@@ -30,7 +30,6 @@ We collect minimal personal data necessary for service operation:
 - Server provisioning and maintenance
 - Security and abuse prevention
 - Optional Ko-fi support management
-- Statistical analysis for service improvement
 
 ---
 
@@ -39,9 +38,9 @@ We collect minimal personal data necessary for service operation:
 - All transmissions are secured with **SSL/TLS**.
 - Passwords are stored as **hashed values**.
 - Optional **two-factor authentication (2FA)** is available.
-- Encrypted backups are created for server data.
 - Software (panel and server) is regularly updated.
 - Access to personal data is limited to authorized personnel only.
+- Minimal logs are retained temporarily for operational and security purposes; no tracking or analytics are performed.
 
 ---
 
@@ -55,27 +54,27 @@ You have the right to:
 - Withdraw consent for optional processing at any time
 - Lodge a complaint with the relevant supervisory authority (e.g., President of UODO in Poland)
 
-**Note:** Deleting a server or account may permanently remove associated data.
+**Note:** Users cannot delete accounts directly. To remove your account and all associated data, submit a ticket or email us. Once all servers are deleted, your related personal data (email, IP, etc.) will be permanently removed.
 
 ---
 
 # 4) Data Sharing
 
 Your data may be shared only with service providers essential for operation:
-- **Ko-fi** – managing donations and perks
+- **Ko-fi** – managing donations and perks (only receives necessary donation information)
 - Hosting infrastructure providers – physical or virtual servers
 - Email delivery services – sending verification or notification emails
-- Security providers (e.g., CrowdSec) – abuse prevention
+- Security providers (e.g., CrowdSec) – abuse prevention (only receives anonymized IPs)
 
 Data may also be disclosed to public authorities only as required by law.
 
-**No other third-party marketing services are used.**
+**No other third-party marketing or analytics services are used.**
 
 ---
 
 # 5) Cookies
 
-- The service may use cookies for:
+- The service uses only essential cookies for:
   - Maintaining session and login
   - Panel functionality
   - Security purposes
@@ -93,9 +92,10 @@ Data may also be disclosed to public authorities only as required by law.
 
 # 6) Data Retention
 
-- Data is stored as long as your account exists and is active.
-- Server data may be deleted if accounts are inactive or voluntarily deleted.
-- Minimal logs may be retained for security and operational purposes.
+- Personal data is stored only as long as your account is active.
+- Server data is deleted when accounts are voluntarily deleted or inactive.
+- Minimal logs are retained temporarily for operational and security purposes.
+- Once all servers are deleted and an account removal request is processed, all related personal data is permanently deleted.
 
 ---
 

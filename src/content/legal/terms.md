@@ -87,9 +87,9 @@ The Service Provider is **not liable** for:
 
 # 6) Backups
 
-- Automatic backups are **not guaranteed** unless stated otherwise.  
+- Automatic backups are **not provided**.  
 - Users are responsible for making and storing their own backups.  
-- Deletion of a server permanently removes all data, including backups.
+- Deletion of a server permanently removes all data.
 
 ---
 
@@ -103,9 +103,10 @@ The Service Provider is **not liable** for:
 
 # 8) Cancellation and Deletion
 
-- Users may delete servers or accounts at any time.  
-- Once deleted, servers and data are **permanently removed**.  
-- Free service cannot be reinstated once data is deleted.  
+- Users may delete servers at any time via the panel.  
+- Accounts cannot be deleted directly; to remove an account and all associated data, users must submit a ticket or email the Service Provider.  
+- Once deleted, servers and associated account data are **permanently removed**.  
+- Free service cannot be reinstated once data is deleted.
 
 ---
 
