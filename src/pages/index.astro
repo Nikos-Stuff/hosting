@@ -1,6 +1,7 @@
 ---
 import PageLayout from "@layouts/PageLayout.astro";
 import { SITE } from "@consts";
+import { getCollection } from "astro:content";
 import MeteorShower from "@components/MeteorShower.astro";
 import TwinklingStars from "@components/TwinklingStars.astro";
 import BackgroundFX from "@components/page_effects/BackgroundFX.astro";
@@ -14,6 +15,25 @@ import { Image } from "astro:assets";
 
 import squid_servers from "@assets/hosting/squid_servers.png";
 import WhyUs from "@components/WhyUs.astro";
+
+import BlogSummary from "@components/BlogSummary";
+
+const posts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => {
+    // Sort by date and time
+    const dateA = new Date(a.data.date);
+    const dateB = new Date(b.data.date);
+
+    const timeA = a.data.time || "00:00";
+    const timeB = b.data.time || "00:00";
+
+    const dateTimeA = new Date(`${dateA.toDateString()} ${timeA}`);
+    const dateTimeB = new Date(`${dateB.toDateString()} ${timeB}`);
+
+    return dateTimeB.getTime() - dateTimeA.getTime();
+  })
+  .slice(0, 2);
 ---
 
 <PageLayout title="Hosting" description={SITE.DESCRIPTION}>
@@ -593,6 +613,30 @@ import WhyUs from "@components/WhyUs.astro";
             title="What does supporting on Ko-fi provide?"
             details="Supporting us on Ko-fi helps us maintain and improve our hosting services. As a token of appreciation, Ko-fi supporters gain access to enhanced server specifications, early acess to new nodes, and priority support."
           />
+        </div>
+      </section>
+    </FancyDiv>
+
+    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
+      <section id="features" class="relative animate">
+        <p
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+        >
+          Changelog
+        </p>
+
+        <p class="font-bold text-sm mb-2 animate">What's new?</p>
+
+        <div>
+          <ul class="space-y-4">
+            {
+              posts.map((post) => (
+                <li>
+                  <BlogSummary entry={post} />
+                </li>
+              ))
+            }
+          </ul>
         </div>
       </section>
     </FancyDiv>
