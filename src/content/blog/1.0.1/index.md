@@ -14,7 +14,7 @@ tags:
 
 ### New: Discord linking
 
-You can now link your account with Discord via Settings → Integrations. Benefits:
+You can now link your account with Discord via Profile → OAuth. Benefits:
 
 - Faster login using Discord OAuth.
 - Option to unlink anytime from the same settings page.
