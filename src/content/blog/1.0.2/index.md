@@ -1,6 +1,7 @@
 ---
 title: "v1.0.2"
 date: "December 27, 2025"
+time: 13:30
 draft: false
 tags:
   - News
