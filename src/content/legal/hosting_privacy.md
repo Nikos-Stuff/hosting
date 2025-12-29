@@ -1,6 +1,6 @@
 ---
 title: "Privacy Policy for Free Hosting Service"
-date: "12/26/2025"
+date: "12/29/2025"
 ---
 
 ## ⚠️ Beta Version
@@ -11,25 +11,38 @@ This Privacy Policy covers the early beta version of our free hosting service. T
 
 # 1) General Information
 
-- The data controller is **Maciej Frączek**, operating under **Niko's Stuff**.  
-- Contact regarding personal data: **rodo@nikostuff.com**  
+- The data controller is **Maciej Frączek**, operating under **Niko's Stuff**.
+- Contact regarding personal data: **rodo@nikostuff.com**
 
 ### Data Processing Basis
+
 We process personal data in compliance with:
+
 - EU Regulation 2016/679 (GDPR)
 - Polish data protection laws
 
 ### Data Collected
+
 We collect minimal personal data necessary for service operation:
+
 - Email addresses
 - IP addresses and minimal server logs
 - Account usage data
 
 ### Purposes of Data Processing
+
 - Account creation and management
 - Server provisioning and maintenance
 - Security and abuse prevention
 - Optional Ko-fi support management
+
+### 1.1) AI Log Analyzer (Special Provisions)
+
+When you use the Log Analyzer tool, you voluntarily submit server logs for automated analysis.
+
+- **Third-Party Processing:** These logs are processed by **Google Gemini AI**.
+- **Data Content:** You are responsible for ensuring that logs do not contain sensitive personal data you are not authorized to share.
+- **Data Retention:** Logs sent to the AI are processed in real-time. We do not store the content of these logs on our permanent databases after the analysis is complete.
 
 ---
 
@@ -47,6 +60,7 @@ We collect minimal personal data necessary for service operation:
 # 3) User Rights
 
 You have the right to:
+
 - Access your personal data
 - Request corrections
 - Request deletion (“right to be forgotten”)
@@ -61,10 +75,12 @@ You have the right to:
 # 4) Data Sharing
 
 Your data may be shared only with service providers essential for operation:
+
 - **Ko-fi** – managing donations and perks (only receives necessary donation information)
 - Hosting infrastructure providers – physical or virtual servers
 - Email delivery services – sending verification or notification emails
 - Security providers (e.g., CrowdSec) – abuse prevention (only receives anonymized IPs)
+- Google Cloud / Alphabet Inc. – Provision of AI analysis services via the Gemini API.
 
 Data may also be disclosed to public authorities only as required by law.
 
@@ -75,11 +91,13 @@ Data may also be disclosed to public authorities only as required by law.
 # 5) Cookies
 
 - The service uses only essential cookies for:
+
   - Maintaining session and login
   - Panel functionality
   - Security purposes
 
 - Types of cookies used:
+
   - **Session cookies** – deleted after closing the browser
   - **Persistent cookies** – stored longer for usability
 
