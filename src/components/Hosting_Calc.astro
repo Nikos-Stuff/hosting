@@ -327,11 +327,11 @@
       // Redirect to payment / order page
       if (data.status === "task_created") {
         order_status.textContent =
-          "Action completed successfully! Redirecting...";
+          "Action completed successfully! Redirecting in 7 sec...";
         setTimeout(() => {
           if (order_blocker) order_blocker.setAttribute("hidden", "true");
           window.location.href = "https://panel.nikostuff.com";
-        }, 3000);
+        }, 7000);
       } else {
         if (order_blocker) order_blocker.setAttribute("hidden", "true");
         alert("Oops. Something went wrong. Please try again later.");
