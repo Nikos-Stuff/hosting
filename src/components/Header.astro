@@ -36,7 +36,7 @@ import HeaderIcon from "@components/web_icon.astro";
                   "transition-colors duration-300 ease-in-out",
                   pathname === LINK.HREF || "/" + subpath?.[0] === LINK.HREF
                     ? "bg-black dark:bg-white text-white dark:text-black hover:bg-[#737373] transition-all duration-300 ease-in-out"
-                    : "hover:bg-black/5 dark:hover:bg-white/20 hover:text-black dark:hover:text-white"
+                    : "hover:bg-black/5 dark:hover:bg-white/20 hover:text-black dark:hover:text-white",
                 )}
               >
                 {LINK.TEXT}
@@ -47,6 +47,13 @@ import HeaderIcon from "@components/web_icon.astro";
       </div>
 
       <div class="buttons absolute right-0 top-1/2 -translate-y-1/2 flex gap-1">
+        <div
+          id="active-users-pill"
+          class="flex items-center justify-center bg-blue-500/20 border border-black/10 dark:border-white/25 text-sm font-medium px-3 py-1 rounded-full transition-all duration-300"
+        >
+          Ping: <span id="avreage-ping" class="ml-1">0.00</span> ms
+        </div>
+
         <div
           id="active-users-pill"
           class="flex items-center justify-center bg-green-500/20 border border-black/10 dark:border-white/25 text-sm font-medium px-3 py-1 rounded-full transition-all duration-300"
@@ -63,7 +70,7 @@ import HeaderIcon from "@components/web_icon.astro";
             "bg-transparent hover:bg-black/5 dark:hover:bg-white/20",
             "stroke-current hover:stroke-black hover:dark:stroke-white",
             "border border-black/10 dark:border-white/25",
-            "transition-all duration-300 ease-in-out"
+            "transition-all duration-300 ease-in-out",
           )}
         >
           <svg class="size-full block dark:hidden">
@@ -73,7 +80,6 @@ import HeaderIcon from "@components/web_icon.astro";
             <use href="/ui.svg#moon"></use>
           </svg>
         </button>
-
       </div>
     </div>
   </Container>
@@ -99,48 +105,66 @@ import HeaderIcon from "@components/web_icon.astro";
 
 <script>
   const pill = document.getElementById("active-users-count");
-  if (!pill) throw new Error("Active Users pill not found");
+  const pingSpan = document.getElementById("avreage-ping");
 
-  let currentValue: number = parseInt(pill.textContent || "0") || 0;
+  if (!pill || !pingSpan) throw new Error("Required elements not found");
 
-  async function updateActiveUsers() {
+  let currentUsers = Number(pill.textContent) || 0;
+  let currentPing = Number(pingSpan.textContent) || 0;
+
+  const animateValue = (el: HTMLElement, start: number, end: number, duration: number, decimals = 0) => {
+    const startTime = performance.now();
+
+    const tick = (now: number) => {
+      const progress = Math.min((now - startTime) / duration, 1);
+      const value = start + (end - start) * progress;
+
+      el.textContent = value.toFixed(decimals);
+
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+  };
+
+  const fetchJSON = async (url: string | URL | Request) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Fetch failed");
+    return res.json();
+  };
+
+  const updateActiveUsers = async () => {
     try {
-      const res = await fetch("https://api.nikostuff.com/v2/hosting/pelican_data?active_users");
-      const data = await res.json();
-      const newValue: number = data.active_users;
+      const { active_users } = await fetchJSON(
+        "https://api.nikostuff.com/v2/hosting/pelican_data?active_users"
+      );
 
-      if (newValue !== currentValue) {
-        animateNumber(currentValue, newValue, 500);
-        currentValue = newValue;
+      if (active_users !== currentUsers) {
+        animateValue(pill, currentUsers, active_users, 500);
+        currentUsers = active_users;
       }
-
-    } catch (err) {
-      console.error("Failed to fetch active users:", err);
+    } catch (e) {
+      console.error("Active users update failed:", e);
     }
-  }
+  };
 
-  function animateNumber(start: number, end: number, duration: number) {
-    const range = end - start;
-    if (range === 0) return;
+  const updatePing = async () => {
+    try {
+      const { full_avreage } = await fetchJSON(
+        "https://api.nikostuff.com/v2/hosting/ping"
+      );
 
-    const stepTime = Math.max(Math.floor(duration / Math.abs(range)), 20);
-    let current = start;
-    const step = range > 0 ? 1 : -1;
-
-    const timer = setInterval(() => {
-      current += step;
-      if (!pill) return;
-      pill.textContent = String(current);
-      if ((step > 0 && current >= end) || (step < 0 && current <= end)) {
-        pill.textContent = String(end);
-        clearInterval(timer);
-      }
-    }, stepTime);
-  }
+      animateValue(pingSpan, currentPing, full_avreage, 500, 2);
+      currentPing = full_avreage;
+    } catch (e) {
+      console.error("Ping update failed:", e);
+    }
+  };
 
   updateActiveUsers();
+  updatePing();
 
-  // Update every 60 seconds
   setInterval(updateActiveUsers, 60000);
+  setInterval(updatePing, 5000);
 </script>
 
