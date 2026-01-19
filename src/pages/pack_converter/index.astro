@@ -104,14 +104,18 @@ import FancyDiv from "@components/FancyDiv.astro";
               <div
                 class="template flex items-center justify-between font-mono text-sm text-gray-700 dark:text-gray-300"
               >
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 min-w-0">
                   <div
-                    class="w-3 h-3 rounded-full bg-gray-400 dark:bg-gray-600"
+                    class="mod_circle h-2.5 w-2.5 rounded-full shrink-0 aspect-square bg-gray-400 dark:bg-gray-600 animate-pulse"
                   >
                   </div>
-                  <span class="mod_name">Mod Name</span>
+                  <span class="mod_name truncate min-w-0"> Mod Name </span>
                 </div>
-                <span class="mod_status text-right">Mod Status</span>
+                <span
+                  class="mod_status text-right whitespace-nowrap ml-3 shrink-0"
+                >
+                  Status
+                </span>
               </div>
               <!-- content will be dynamically added here -->
             </div>
@@ -188,495 +192,500 @@ import FancyDiv from "@components/FancyDiv.astro";
       </FancyDiv>
     </div>
   </div>
+</PageLayout>
 
-  <script>
-    import JSZip from "jszip";
+<script>
+  import JSZip from "jszip";
 
-    const fileInput = document.getElementById(
-      "file_input",
-    ) as HTMLInputElement | null;
-    const convertBtn = document.getElementById(
-      "convert_to_zip_btn",
-    ) as HTMLButtonElement | null;
-    const debugConsole = document.getElementById(
-      "debug_console",
-    ) as HTMLDivElement | null;
-    const fileInputText = document.getElementById(
-      "file_input_text",
-    ) as HTMLSpanElement | null;
-    const modpack_browser = document.getElementById(
-      "modpack_browser",
-    ) as HTMLDivElement | null;
+  const fileInput = document.getElementById(
+    "file_input",
+  ) as HTMLInputElement | null;
+  const convertBtn = document.getElementById(
+    "convert_to_zip_btn",
+  ) as HTMLButtonElement | null;
+  const debugConsole = document.getElementById(
+    "debug_console",
+  ) as HTMLDivElement | null;
+  const fileInputText = document.getElementById(
+    "file_input_text",
+  ) as HTMLSpanElement | null;
+  const modpack_browser = document.getElementById(
+    "modpack_browser",
+  ) as HTMLDivElement | null;
 
-    const deleted_mods: string[] = [];
+  const deleted_mods: string[] = [];
 
-    if (!fileInput || !convertBtn || !debugConsole) {
-      throw new Error("Required DOM elements not found");
-    }
+  if (!fileInput || !convertBtn || !debugConsole) {
+    throw new Error("Required DOM elements not found");
+  }
 
-    // grab url params eg ?modpack_id=xyz
-    const urlParams = new URLSearchParams(window.location.search);
+  // grab url params eg ?modpack_id=xyz
+  const urlParams = new URLSearchParams(window.location.search);
 
-    type LogLevel = "info" | "warn" | "error" | "success";
+  type LogLevel = "info" | "warn" | "error" | "success";
 
-    const LOG_COLORS: Record<LogLevel, string> = {
-      info: "text-blue-600 dark:text-blue-400",
-      warn: "text-yellow-600 dark:text-yellow-400",
-      error: "text-red-600 dark:text-red-400",
-      success: "text-green-600 dark:text-green-400",
-    };
+  const LOG_COLORS: Record<LogLevel, string> = {
+    info: "text-blue-600 dark:text-blue-400",
+    warn: "text-yellow-600 dark:text-yellow-400",
+    error: "text-red-600 dark:text-red-400",
+    success: "text-green-600 dark:text-green-400",
+  };
 
-    const STATUS_COLORS: Record<string, string> = {
-      Queued: "bg-gray-400 dark:bg-gray-600",
-      "Downloading...": "bg-blue-500",
-      Downloaded: "bg-blue-300",
-      Imported: "bg-green-500",
-      Failed: "bg-red-500",
-      Removed: "bg-yellow-500",
-      Analyzing: "bg-purple-500",
-    };
+  const STATUS_COLORS: Record<string, string[]> = {
+    Queued: ["bg-gray-400", "dark:bg-gray-600"],
+    "Downloading...": ["bg-blue-500"],
+    Downloaded: ["bg-blue-300"],
+    Imported: ["bg-green-500"],
+    Failed: ["bg-red-500"],
+    Removed: ["bg-yellow-500"],
+    Analyzing: ["bg-purple-500"],
+  };
 
-    function add_to_browser_mod_list(mod_name: string, status: string) {
-      if (!modpack_browser) return;
+  function updateCircleColor(circle: HTMLDivElement, status: string) {
+    const classesToRemove = Array.from(circle.classList).filter(
+      (c) => c.startsWith("bg-") || c.startsWith("dark:bg-"),
+    );
+    circle.classList.remove(...classesToRemove);
 
-      const template = modpack_browser.querySelector(
-        ".template",
-      ) as HTMLDivElement;
-      if (!template) return;
+    const newClasses = STATUS_COLORS[status] || [
+      "bg-gray-400",
+      "dark:bg-gray-600",
+    ];
+    circle.classList.add(...newClasses);
+  }
 
-      const modEntry = template.cloneNode(true) as HTMLDivElement;
-      modEntry.classList.remove("template");
+  function add_to_browser_mod_list(mod_name: string, status: string) {
+    if (!modpack_browser) return;
 
-      const modNameSpan = modEntry.querySelector(
-        ".mod_name",
-      ) as HTMLSpanElement;
-      const modStatusSpan = modEntry.querySelector(
+    const template = modpack_browser.querySelector(
+      ".template",
+    ) as HTMLDivElement;
+    if (!template) return;
+
+    const modEntry = template.cloneNode(true) as HTMLDivElement;
+    modEntry.classList.remove("template");
+
+    const modNameSpan = modEntry.querySelector(".mod_name") as HTMLSpanElement;
+    const modStatusSpan = modEntry.querySelector(
+      ".mod_status",
+    ) as HTMLSpanElement;
+    const statusCircle = modEntry.querySelector(
+      ".mod_circle",
+    ) as HTMLDivElement;
+
+    if (modNameSpan) modNameSpan.textContent = mod_name;
+    if (modStatusSpan) modStatusSpan.textContent = status;
+    if (statusCircle) updateCircleColor(statusCircle, status);
+
+    modpack_browser.appendChild(modEntry);
+  }
+
+  function update_in_browser_mod_list(mod_name: string, status: string) {
+    if (!modpack_browser) return;
+
+    const entries = modpack_browser.querySelectorAll(
+      "div:not(.template)",
+    ) as NodeListOf<HTMLDivElement>;
+
+    entries.forEach((entry) => {
+      const modNameSpan = entry.querySelector(".mod_name") as HTMLSpanElement;
+      const modStatusSpan = entry.querySelector(
         ".mod_status",
       ) as HTMLSpanElement;
-      const statusCircle = modEntry.querySelector(
-        "div.w-3.h-3.rounded-full",
-      ) as HTMLDivElement;
+      const statusCircle = entry.querySelector(".mod_circle") as HTMLDivElement;
 
-      if (modNameSpan) modNameSpan.textContent = mod_name;
-      if (modStatusSpan) modStatusSpan.textContent = status;
-      if (statusCircle) {
-        statusCircle.className = `w-3 h-3 rounded-full ${STATUS_COLORS[status] || "bg-gray-400 dark:bg-gray-600"}`;
+      if (modNameSpan && modNameSpan.textContent === mod_name) {
+        if (modStatusSpan) modStatusSpan.textContent = status;
+        if (statusCircle) updateCircleColor(statusCircle, status);
       }
+    });
+  }
 
-      modpack_browser.appendChild(modEntry);
-    }
+  function clean_browser_mod_list() {
+    if (!modpack_browser) return;
 
-    function update_in_browser_mod_list(mod_name: string, status: string) {
-      if (!modpack_browser) return;
-
-      const entries = modpack_browser.querySelectorAll(
-        "div:not(.template)",
-      ) as NodeListOf<HTMLDivElement>;
-
-      entries.forEach((entry) => {
-        const modNameSpan = entry.querySelector(".mod_name") as HTMLSpanElement;
-        const modStatusSpan = entry.querySelector(
-          ".mod_status",
-        ) as HTMLSpanElement;
-        const statusCircle = entry.querySelector(
-          "div.w-3.h-3.rounded-full",
-        ) as HTMLDivElement;
-
-        if (modNameSpan && modNameSpan.textContent === mod_name) {
-          if (modStatusSpan) modStatusSpan.textContent = status;
-          if (statusCircle) {
-            statusCircle.className = `w-3 h-3 rounded-full ${STATUS_COLORS[status] || "bg-gray-400 dark:bg-gray-600"}`;
-          }
-        }
-      });
-    }
-
-    function clean_browser_mod_list() {
-      if (!modpack_browser) return;
-
-      Array.from(modpack_browser.children).forEach((child) => {
-        const el = child as HTMLDivElement;
-        if (!el.classList.contains("template")) {
-          el.remove();
-        }
-      });
-    }
-
-    function clear_log() {
-      const container = document.getElementById("log_messages");
-      if (container) {
-        container.innerHTML = "";
+    Array.from(modpack_browser.children).forEach((child) => {
+      const el = child as HTMLDivElement;
+      if (!el.classList.contains("template")) {
+        el.remove();
       }
-    }
+    });
+  }
 
-    function log(message: string, level: LogLevel = "info") {
-      const time = new Date().toLocaleTimeString();
-      const line = `
+  function clear_log() {
+    const container = document.getElementById("log_messages");
+    if (container) {
+      container.innerHTML = "";
+    }
+  }
+
+  function log(message: string, level: LogLevel = "info") {
+    const time = new Date().toLocaleTimeString();
+    const line = `
     <div class="${LOG_COLORS[level]}">
       [${time}] ${message}
     </div>
   `;
-      const container = document.getElementById("log_messages");
-      if (container) {
-        container.innerHTML += line;
-        debugConsole!.scrollTop = debugConsole!.scrollHeight;
-      }
-    }
-
-    //  const PROGRESS_ID = "progress-line";
-
-    function formatETA(seconds: number): string {
-      if (!isFinite(seconds) || seconds <= 0) return "calculating…";
-      if (seconds < 60) return `${Math.ceil(seconds)}s`;
-      const m = Math.floor(seconds / 60);
-      const s = Math.ceil(seconds % 60);
-      return `${m}m ${s}s`;
-    }
-
-    function renderProgress(
-      label: string,
-      current: number,
-      total: number,
-      startTime: number,
-    ) {
-      const percent =
-        total > 0 ? Math.min(100, Math.floor((current / total) * 100)) : 0;
-      const barLength = 20;
-      const filled = Math.floor((percent / 100) * barLength);
-      const remainingBar = barLength - filled;
-
-      const bar =
-        "=".repeat(filled) +
-        (remainingBar > 0 ? ">" : "") +
-        " ".repeat(Math.max(0, remainingBar - 1));
-
-      const elapsed = (performance.now() - startTime) / 1000;
-      const rate = current / elapsed;
-      const remainingTime = rate > 0 ? (total - current) / rate : Infinity;
-
-      const progressDiv = document.getElementById("progress-line");
-      if (progressDiv) {
-        progressDiv.innerHTML = `${label} [${bar}] ${percent}% • ETA ${formatETA(remainingTime)}`;
-      }
-
+    const container = document.getElementById("log_messages");
+    if (container) {
+      container.innerHTML += line;
       debugConsole!.scrollTop = debugConsole!.scrollHeight;
     }
+  }
 
-    function extractProjectId(url: string): string | null {
-      const match = url.match(/cdn\.modrinth\.com\/data\/([^/]+)\//);
-      return match?.[1] ?? null;
+  //  const PROGRESS_ID = "progress-line";
+
+  function formatETA(seconds: number): string {
+    if (!isFinite(seconds) || seconds <= 0) return "calculating…";
+    if (seconds < 60) return `${Math.ceil(seconds)}s`;
+    const m = Math.floor(seconds / 60);
+    const s = Math.ceil(seconds % 60);
+    return `${m}m ${s}s`;
+  }
+
+  function renderProgress(
+    label: string,
+    current: number,
+    total: number,
+    startTime: number,
+  ) {
+    const percent =
+      total > 0 ? Math.min(100, Math.floor((current / total) * 100)) : 0;
+    const barLength = 20;
+    const filled = Math.floor((percent / 100) * barLength);
+    const remainingBar = barLength - filled;
+
+    const bar =
+      "=".repeat(filled) +
+      (remainingBar > 0 ? ">" : "") +
+      " ".repeat(Math.max(0, remainingBar - 1));
+
+    const elapsed = (performance.now() - startTime) / 1000;
+    const rate = current / elapsed;
+    const remainingTime = rate > 0 ? (total - current) / rate : Infinity;
+
+    const progressDiv = document.getElementById("progress-line");
+    if (progressDiv) {
+      progressDiv.innerHTML = `${label} [${bar}] ${percent}% • ETA ${formatETA(remainingTime)}`;
     }
 
-    async function main(file: File | Blob) {
-      clean_browser_mod_list();
-      clear_log();
+    debugConsole!.scrollTop = debugConsole!.scrollHeight;
+  }
 
-      try {
-        // load
-        const mrpackZip = await JSZip.loadAsync(file);
-        log("MRPACK loaded.", "success");
+  function extractProjectId(url: string): string | null {
+    const match = url.match(/cdn\.modrinth\.com\/data\/([^/]+)\//);
+    return match?.[1] ?? null;
+  }
 
-        const indexFile = mrpackZip.file("modrinth.index.json");
-        if (!indexFile) throw new Error("modrinth.index.json not found");
+  async function main(file: File | Blob) {
+    clean_browser_mod_list();
+    clear_log();
 
-        const index = JSON.parse(await indexFile.async("string"));
+    try {
+      // load
+      const mrpackZip = await JSZip.loadAsync(file);
+      log("MRPACK loaded.", "success");
 
-        log(`Modpack: ${index.name} (${index.versionId})`, "info");
-        log(`Mods to download: ${index.files.length}`, "info");
+      const indexFile = mrpackZip.file("modrinth.index.json");
+      if (!indexFile) throw new Error("modrinth.index.json not found");
 
-        const outputZip = new JSZip();
+      const index = JSON.parse(await indexFile.async("string"));
 
-        log(`Populating mod browser...`, "info");
-        index.files.forEach((mod: { path: string }) => {
-          add_to_browser_mod_list(mod.path, "Queued");
-        });
+      log(`Modpack: ${index.name} (${index.versionId})`, "info");
+      log(`Mods to download: ${index.files.length}`, "info");
 
-        // download mods
-        const modStart = performance.now();
+      const outputZip = new JSZip();
 
-        for (let i = 0; i < index.files.length; i++) {
-          const mod = index.files[i];
-          const url = mod.downloads?.[0];
+      log(`Populating mod browser...`, "info");
+      index.files.forEach((mod: { path: string }) => {
+        add_to_browser_mod_list(mod.path, "Queued");
+      });
 
-          if (!url) {
-            log(`Skipping ${mod.path} (no URL)`, "warn");
-            update_in_browser_mod_list(mod.path, "Failed");
-            continue;
-          }
+      // download mods
+      const modStart = performance.now();
 
-          if (
-            !mod.env ||
-            (mod.env.server !== "required" && mod.env.server !== "optional")
-          ) {
-            log(`Skipping ${mod.path} (client-only)`, "warn");
-            update_in_browser_mod_list(mod.path, "Removed");
-            continue;
-          }
+      for (let i = 0; i < index.files.length; i++) {
+        const mod = index.files[i];
+        const url = mod.downloads?.[0];
 
-          renderProgress(
-            "Downloading server mods",
-            i,
-            index.files.length,
-            modStart,
-          );
-          update_in_browser_mod_list(mod.path, "Downloading...");
+        if (!url) {
+          log(`Skipping ${mod.path} (no URL)`, "warn");
+          update_in_browser_mod_list(mod.path, "Failed");
+          continue;
+        }
 
-          try {
-            const res = await fetch(url);
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-            const blob = await res.blob();
-            outputZip.file(mod.path, blob);
-            log(`Downloaded ${mod.path}`, "success");
-            update_in_browser_mod_list(mod.path, "Downloaded");
-          } catch (err: any) {
-            log(`Failed to download ${mod.path}: ${err.message}`, "error");
-          }
+        if (
+          !mod.env ||
+          (mod.env.server !== "required" && mod.env.server !== "optional")
+        ) {
+          log(`Skipping ${mod.path} (client-only)`, "warn");
+          update_in_browser_mod_list(mod.path, "Removed");
+          continue;
         }
 
         renderProgress(
-          "Downloading mods",
-          index.files.length,
+          "Downloading server mods",
+          i,
           index.files.length,
           modStart,
         );
-        log("All mods downloaded.", "success");
+        update_in_browser_mod_list(mod.path, "Downloading...");
 
-        // 2
-        const overrides = mrpackZip.folder("overrides");
-        if (overrides) {
-          const files = Object.values(overrides.files).filter((f) => !f.dir);
-          const overrideStart = performance.now();
+        try {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-          log("Applying overrides…", "info");
-
-          let done = 0;
-          for (const entry of files) {
-            const data = await entry.async("arraybuffer");
-            const target = entry.name.replace(/^overrides\//, "");
-            outputZip.file(target, data);
-
-            done++;
-            renderProgress(
-              "Applying overrides",
-              done,
-              files.length,
-              overrideStart,
-            );
-          }
-
-          log("Overrides applied.", "success");
-        } else {
-          log("No overrides folder found.", "warn");
+          const blob = await res.blob();
+          outputZip.file(mod.path, blob);
+          log(`Downloaded ${mod.path}`, "success");
+          update_in_browser_mod_list(mod.path, "Downloaded");
+        } catch (err: any) {
+          log(`Failed to download ${mod.path}: ${err.message}`, "error");
         }
+      }
 
-        // cleanup client-only mods
-        log("Cleaning up client-only projects…", "info");
+      renderProgress(
+        "Downloading mods",
+        index.files.length,
+        index.files.length,
+        modStart,
+      );
+      log("All mods downloaded.", "success");
 
-        index.files.forEach((mod: { path: string }) => {
-          update_in_browser_mod_list(mod.path, "Analyzing");
-        });
+      // 2
+      const overrides = mrpackZip.folder("overrides");
+      if (overrides) {
+        const files = Object.values(overrides.files).filter((f) => !f.dir);
+        const overrideStart = performance.now();
 
-        const API_ENDPOINT = "https://api.modrinth.com/v2/projects";
-        const BATCH_SIZE = 100; // safe bulk size
-        const startTime = performance.now();
+        log("Applying overrides…", "info");
 
-        // extract projects ids and build the index
-        const projectIds = index.files
-          .map((mod: any) => extractProjectId(mod.downloads?.[0]))
-          .filter((id: string | null): id is string => id !== null);
+        let done = 0;
+        for (const entry of files) {
+          const data = await entry.async("arraybuffer");
+          const target = entry.name.replace(/^overrides\//, "");
+          outputZip.file(target, data);
 
-        const uniqueProjectIds = Array.from(new Set(projectIds));
-
-        const projects: Record<string, any> = {};
-
-        // bulk fetch
-        for (let i = 0; i < uniqueProjectIds.length; i += BATCH_SIZE) {
-          const chunk = uniqueProjectIds.slice(i, i + BATCH_SIZE);
-
+          done++;
           renderProgress(
-            "Fetching project metadata",
-            Math.min(i + chunk.length, uniqueProjectIds.length),
-            uniqueProjectIds.length,
-            startTime,
+            "Applying overrides",
+            done,
+            files.length,
+            overrideStart,
           );
-
-          const res = await fetch(
-            `${API_ENDPOINT}?ids=${encodeURIComponent(JSON.stringify(chunk))}`,
-            {
-              headers: {
-                "User-Agent": "NikosStuff/modpack-tool/1.0.0 (web)",
-              },
-            },
-          );
-
-          if (!res.ok) {
-            log(`Failed to fetch project info: HTTP ${res.status}`, "error");
-            continue;
-          }
-
-          const data = await res.json();
-          for (const project of data) {
-            projects[project.id] = project;
-          }
         }
 
-        // try to remove client only projects
-        let removed = 0;
-        let processed = 0;
+        log("Overrides applied.", "success");
+      } else {
+        log("No overrides folder found.", "warn");
+      }
 
-        for (const mod of index.files) {
-          const projectId = extractProjectId(mod.downloads?.[0]);
-          if (!projectId) continue;
+      // cleanup client-only mods
+      log("Cleaning up client-only projects…", "info");
 
-          const project = projects[projectId];
-          if (!project) continue;
+      index.files.forEach((mod: { path: string }) => {
+        update_in_browser_mod_list(mod.path, "Analyzing");
+      });
 
-          processed++;
+      const API_ENDPOINT = "https://api.modrinth.com/v2/projects";
+      const BATCH_SIZE = 100; // safe bulk size
+      const startTime = performance.now();
 
-          renderProgress(
-            "Removing client-only mods",
-            processed,
-            index.files.length,
-            startTime,
-          );
+      // extract projects ids and build the index
+      const projectIds = index.files
+        .map((mod: any) => extractProjectId(mod.downloads?.[0]))
+        .filter((id: string | null): id is string => id !== null);
 
-          if (project.server_side === "unsupported") {
-            outputZip.remove(mod.path);
-            removed++;
-            log(`Removed client-only mod: ${project.title}`, "warn");
-            deleted_mods.push(project.title);
-            update_in_browser_mod_list(mod.path, "Removed");
-          } else {
-            update_in_browser_mod_list(mod.path, "Imported");
-          }
-        }
+      const uniqueProjectIds = Array.from(new Set(projectIds));
+
+      const projects: Record<string, any> = {};
+
+      // bulk fetch
+      for (let i = 0; i < uniqueProjectIds.length; i += BATCH_SIZE) {
+        const chunk = uniqueProjectIds.slice(i, i + BATCH_SIZE);
 
         renderProgress(
-          "Cleanup complete",
-          index.files.length,
+          "Fetching project metadata",
+          Math.min(i + chunk.length, uniqueProjectIds.length),
+          uniqueProjectIds.length,
+          startTime,
+        );
+
+        const res = await fetch(
+          `${API_ENDPOINT}?ids=${encodeURIComponent(JSON.stringify(chunk))}`,
+          {
+            headers: {
+              "User-Agent": "NikosStuff/modpack-tool/1.0.0 (web)",
+            },
+          },
+        );
+
+        if (!res.ok) {
+          log(`Failed to fetch project info: HTTP ${res.status}`, "error");
+          continue;
+        }
+
+        const data = await res.json();
+        for (const project of data) {
+          projects[project.id] = project;
+        }
+      }
+
+      // try to remove client only projects
+      let removed = 0;
+      let processed = 0;
+
+      for (const mod of index.files) {
+        const projectId = extractProjectId(mod.downloads?.[0]);
+        if (!projectId) continue;
+
+        const project = projects[projectId];
+        if (!project) continue;
+
+        processed++;
+
+        renderProgress(
+          "Removing client-only mods",
+          processed,
           index.files.length,
           startTime,
         );
 
-        // deleted_mods.txt
-        if (deleted_mods.length > 0) {
-          const deletedContent = `The following client-only mods were removed from the pack:\n\n- ${deleted_mods.join(
-            "\n- ",
-          )}\n\nYou may need to install these mods manually on your client.`;
-          outputZip.file("deleted_mods.txt", deletedContent);
+        if (project.server_side === "unsupported") {
+          outputZip.remove(mod.path);
+          removed++;
+          log(`Removed client-only mod: ${project.title}`, "warn");
+          deleted_mods.push(project.title);
+          update_in_browser_mod_list(mod.path, "Removed");
+        } else {
+          update_in_browser_mod_list(mod.path, "Imported");
         }
-
-        log(`Cleanup finished. Removed ${removed} client-only mods.`, "info");
-
-        // build zip
-        log("Building final ZIP…", "info");
-
-        const zipStart = performance.now();
-        const finalBlob = await outputZip.generateAsync(
-          {
-            type: "blob",
-            compression: "DEFLATE",
-            compressionOptions: { level: 6 },
-          },
-          (meta) => {
-            renderProgress("Compressing", meta.percent ?? 0, 100, zipStart);
-          },
-        );
-
-        const name = `${index.name}-${index.versionId}.zip`.replace(
-          /[^\w.-]+/g,
-          "_",
-        );
-
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(finalBlob);
-        a.download = name;
-        a.click();
-        URL.revokeObjectURL(a.href);
-
-        log("Done! ZIP downloaded.", "success");
-      } catch (err: any) {
-        console.error(err);
-        log(err.message || "Unknown error", "error");
-        alert("Conversion failed — see log");
       }
+
+      renderProgress(
+        "Cleanup complete",
+        index.files.length,
+        index.files.length,
+        startTime,
+      );
+
+      // deleted_mods.txt
+      if (deleted_mods.length > 0) {
+        const deletedContent = `The following client-only mods were removed from the pack:\n\n- ${deleted_mods.join(
+          "\n- ",
+        )}\n\nYou may need to install these mods manually on your client.`;
+        outputZip.file("deleted_mods.txt", deletedContent);
+      }
+
+      log(`Cleanup finished. Removed ${removed} client-only mods.`, "info");
+
+      // build zip
+      log("Building final ZIP…", "info");
+
+      const zipStart = performance.now();
+      const finalBlob = await outputZip.generateAsync(
+        {
+          type: "blob",
+          compression: "DEFLATE",
+          compressionOptions: { level: 6 },
+        },
+        (meta) => {
+          renderProgress("Compressing", meta.percent ?? 0, 100, zipStart);
+        },
+      );
+
+      const name = `${index.name}-${index.versionId}.zip`.replace(
+        /[^\w.-]+/g,
+        "_",
+      );
+
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(finalBlob);
+      a.download = name;
+      a.click();
+      URL.revokeObjectURL(a.href);
+
+      log("Done! ZIP downloaded.", "success");
+    } catch (err: any) {
+      console.error(err);
+      log(err.message || "Unknown error", "error");
+      alert("Conversion failed — see log");
+    }
+  }
+
+  // file input
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files?.[0];
+    if (file) {
+      fileInputText!.textContent = file.name;
+      log(`Selected file: ${file.name}`, "info");
+    } else {
+      fileInputText!.textContent = "No file chosen";
+      log("File selection cleared.", "warn");
+    }
+  });
+
+  // main
+  convertBtn.addEventListener("click", async () => {
+    const file = fileInput.files?.[0];
+    if (!file) {
+      alert("Please select a .mrpack file");
+      return;
     }
 
-    // file input
-    fileInput.addEventListener("change", () => {
-      const file = fileInput.files?.[0];
-      if (file) {
-        fileInputText!.textContent = file.name;
-        log(`Selected file: ${file.name}`, "info");
-      } else {
-        fileInputText!.textContent = "No file chosen";
-        log("File selection cleared.", "warn");
-      }
+    log(`Loading ${file.name}…`, "info");
+    await main(file);
+  });
+
+  // thru url params
+  const modpackId = urlParams.get("modpack_id");
+  if (modpackId) {
+    const base_url = `https://api.modrinth.com/v2/project/${encodeURIComponent(
+      modpackId,
+    )}/version`;
+
+    log(`Fetching modpack info for ID: ${modpackId}`, "info");
+
+    // fetch the info with header
+    const res = await fetch(base_url, {
+      headers: {
+        "User-Agent": "NikosStuff/modpack-tool/1.0.0 (web)",
+      },
     });
 
-    // main
-    convertBtn.addEventListener("click", async () => {
-      const file = fileInput.files?.[0];
-      if (!file) {
-        alert("Please select a .mrpack file");
-        return;
-      }
-
-      log(`Loading ${file.name}…`, "info");
-      await main(file);
-    });
-
-    // thru url params
-    const modpackId = urlParams.get("modpack_id");
-    if (modpackId) {
-      const base_url = `https://api.modrinth.com/v2/project/${encodeURIComponent(
-        modpackId,
-      )}/version`;
-
-      log(`Fetching modpack info for ID: ${modpackId}`, "info");
-
-      // fetch the info with header
-      const res = await fetch(base_url, {
-        headers: {
-          "User-Agent": "NikosStuff/modpack-tool/1.0.0 (web)",
-        },
-      });
-
-      if (!res.ok) {
-        log(`Failed to fetch modpack info: HTTP ${res.status}`, "error");
+    if (!res.ok) {
+      log(`Failed to fetch modpack info: HTTP ${res.status}`, "error");
+    } else {
+      const data = await res.json();
+      if (data.length === 0) {
+        log("No versions found for the specified modpack ID.", "error");
       } else {
-        const data = await res.json();
-        if (data.length === 0) {
-          log("No versions found for the specified modpack ID.", "error");
+        // pick the latest version
+        const latest = data[0];
+        const fileInfo = latest.files.find((f: any) => f.primary === true);
+        if (!fileInfo) {
+          log("No primary file found for the latest version.", "error");
         } else {
-          // pick the latest version
-          const latest = data[0];
-          const fileInfo = latest.files.find((f: any) => f.primary === true);
-          if (!fileInfo) {
-            log("No primary file found for the latest version.", "error");
-          } else {
-            const downloadUrl = fileInfo.url;
-            log(`Fetching modpack from URL: ${downloadUrl}`, "info");
-            try {
-              const fileRes = await fetch(downloadUrl);
-              if (!fileRes.ok) {
-                log(
-                  `Failed to download modpack: HTTP ${fileRes.status}`,
-                  "error",
-                );
-              } else {
-                const blob = await fileRes.blob();
-                fileInputText!.textContent = fileInfo.filename;
-                log(`Downloaded modpack: ${fileInfo.filename}`, "info");
-                await main(blob);
-              }
-            } catch (err: any) {
-              log(`Error downloading modpack: ${err.message}`, "error");
+          const downloadUrl = fileInfo.url;
+          log(`Fetching modpack from URL: ${downloadUrl}`, "info");
+          try {
+            const fileRes = await fetch(downloadUrl);
+            if (!fileRes.ok) {
+              log(
+                `Failed to download modpack: HTTP ${fileRes.status}`,
+                "error",
+              );
+            } else {
+              const blob = await fileRes.blob();
+              fileInputText!.textContent = fileInfo.filename;
+              log(`Downloaded modpack: ${fileInfo.filename}`, "info");
+              await main(blob);
             }
+          } catch (err: any) {
+            log(`Error downloading modpack: ${err.message}`, "error");
           }
         }
       }
     }
-  </script>
-</PageLayout>
+  }
+</script>
