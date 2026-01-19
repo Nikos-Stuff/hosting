@@ -830,6 +830,7 @@ import FancyDiv from "@components/FancyDiv.astro";
       log("Done! ZIP downloaded.", "success");
 
       already_running = false;
+      reset_phase_progress();
     } catch (err: any) {
       console.error(err);
       log(err.message || "Unknown error", "error");
