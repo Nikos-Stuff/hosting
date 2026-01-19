@@ -106,6 +106,7 @@ import FancyDiv from "@components/FancyDiv.astro";
               </label>
             </div>
 
+            <!-- Convert button -->
             <div class="animate mb-0 hidden">
               <button
                 id="convert_to_zip_btn"
@@ -132,7 +133,7 @@ import FancyDiv from "@components/FancyDiv.astro";
               h-60 overflow-y-scroll
             hover:bg-black/5 hover:dark:bg-white/10
             border-black/15 dark:border-white/20
-              transition-all duration-300 ease-in-out"
+              transition-all duration-300 ease-in-out hide_scrollbar"
             >
               <div
                 class="template flex items-center justify-between font-mono text-sm text-gray-700 dark:text-gray-300"
@@ -160,7 +161,7 @@ import FancyDiv from "@components/FancyDiv.astro";
          flex flex-col justify-between gap-2
          hover:bg-black/5 hover:dark:bg-white/10
          border-black/15 dark:border-white/20
-         transition-all duration-300 ease-in-out"
+         transition-all duration-300 ease-in-out hide_scrollbar"
             >
               <div id="log_messages">Waiting for file...</div>
               <div
@@ -317,6 +318,17 @@ import FancyDiv from "@components/FancyDiv.astro";
         if (statusCircle) updateCircleColor(statusCircle, status);
       }
     });
+
+    // scroll to the updated mod
+    const targetEntry = Array.from(entries).find((entry) => {
+      const modNameSpan = entry.querySelector(
+        ".mod_name",
+      ) as HTMLSpanElement;
+      return modNameSpan && modNameSpan.textContent === mod_name;
+    });
+    if (targetEntry) {
+      targetEntry.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
   }
 
   function clean_browser_mod_list() {

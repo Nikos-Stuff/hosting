@@ -461,3 +461,13 @@ article img {
    .group:hover { --group-scale: 1.05; }
    or with Tailwind: group-hover:[--group-scale:1.05]
 */
+
+.hide_scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide_scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
