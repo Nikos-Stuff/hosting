@@ -1,0 +1,340 @@
+---
+import PageLayout from "@layouts/PageLayout.astro";
+import { SITE } from "@consts";
+import MeteorShower from "@components/MeteorShower.astro";
+import TwinklingStars from "@components/TwinklingStars.astro";
+import BackgroundFX from "@components/page_effects/BackgroundFX.astro";
+import POD from "@components/POD.astro";
+import FancyDiv from "@components/FancyDiv.astro";
+---
+
+<PageLayout title="Pack Converter" description={SITE.DESCRIPTION}>
+  <!-- <script is:inline data-astro-rerun async src="/js/scroll_animation.js"
+  ></script> -->
+
+  <POD />
+  <!-- Light Mode: Particles -->
+  <div class="absolute inset-0 block dark:hidden">
+    <div id="particles1" class="fixed inset-0"></div>
+    <div id="particles2" class="fixed inset-0"></div>
+    <div id="particles3" class="fixed inset-0"></div>
+  </div>
+
+  <!-- Dark Theme: Stars -->
+  <div class="absolute inset-0 hidden dark:block">
+    <div id="stars1" class="fixed inset-0"></div>
+    <div id="stars2" class="fixed inset-0"></div>
+    <div id="stars3" class="fixed inset-0"></div>
+  </div>
+
+  <!-- Dark Theme: Twinkling Stars / Metors -->
+  <div id="galaxy" class="fixed inset-0">
+    <div class="hidden dark:block">
+      <TwinklingStars />
+      <MeteorShower />
+    </div>
+  </div>
+
+  <!-- <script is:inline defer src="/js/bg.js"></script> -->
+  <BackgroundFX />
+
+  <div class="relative mt-auto">
+    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
+      <div class="transition-all">
+        <p
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+        >
+          Modpack Converter
+        </p>
+        <p class="font-bold text-sm mb-2 animate">
+          Convert .mrpack files to .zip for easy installation (included .jars
+          inside)
+        </p>
+
+        <div class="space-y-4 animate" id="calculator">
+          <!-- File input-->
+          <div class="relative" id="file_input_div">
+            <input
+              id="file_input"
+              type="file"
+              accept=".mrpack"
+              class="hidden"
+            />
+            <label
+              for="file_input"
+              id="file_input_label"
+              class="group w-full p-4 mt-5 flex items-center justify-between border rounded-lg
+         hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20
+         cursor-pointer transition-all duration-300 ease-in-out"
+            >
+              <span>Choose File…</span>
+              <span
+                id="file_input_text"
+                class="text-gray-500 dark:text-gray-400">No file chosen</span
+              >
+            </label>
+          </div>
+
+          <div
+            id="debug_console"
+            class="font-mono text-sm overflow-y-scroll h-30 w-full p-4 mt-5 border rounded-lg
+         flex flex-col justify-between gap-2
+         hover:bg-black/5 hover:dark:bg-white/10
+         border-black/15 dark:border-white/20
+         transition-all duration-300 ease-in-out"
+          >
+            <div id="log_messages">Waiting for file...</div>
+            <div
+              id="progress-line"
+              class="text-gray-700 dark:text-gray-300 whitespace-pre"
+            >
+              <!-- progress will update here -->
+            </div>
+          </div>
+
+          <div class="animate">
+            <button
+              id="convert_to_zip_btn"
+              class="group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-all duration-300 ease-in-out"
+            >
+              <span
+                class="w-full z-10 relative group-hover:text-black group-hover:dark:text-white text-center transition-color duration-300"
+              >
+                Convert to ZIP server pack!
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </FancyDiv>
+  </div>
+</PageLayout>
+
+<script>
+  import JSZip from "jszip";
+
+  const fileInput = document.getElementById(
+    "file_input",
+  ) as HTMLInputElement | null;
+  const convertBtn = document.getElementById(
+    "convert_to_zip_btn",
+  ) as HTMLButtonElement | null;
+  const debugConsole = document.getElementById(
+    "debug_console",
+  ) as HTMLDivElement | null;
+  const fileInputText = document.getElementById(
+    "file_input_text",
+  ) as HTMLSpanElement | null;
+
+  if (!fileInput || !convertBtn || !debugConsole) {
+    throw new Error("Required DOM elements not found");
+  }
+
+  type LogLevel = "info" | "warn" | "error" | "success";
+
+  const LOG_COLORS: Record<LogLevel, string> = {
+    info: "text-blue-600 dark:text-blue-400",
+    warn: "text-yellow-600 dark:text-yellow-400",
+    error: "text-red-600 dark:text-red-400",
+    success: "text-green-600 dark:text-green-400",
+  };
+
+  function log(message: string, level: LogLevel = "info") {
+    const time = new Date().toLocaleTimeString();
+    const line = `
+    <div class="${LOG_COLORS[level]}">
+      [${time}] ${message}
+    </div>
+  `;
+    const container = document.getElementById("log_messages");
+    if (container) {
+      container.innerHTML += line;
+      debugConsole!.scrollTop = debugConsole!.scrollHeight;
+    }
+  }
+
+  //  const PROGRESS_ID = "progress-line";
+
+  function formatETA(seconds: number): string {
+    if (!isFinite(seconds) || seconds <= 0) return "calculating…";
+    if (seconds < 60) return `${Math.ceil(seconds)}s`;
+    const m = Math.floor(seconds / 60);
+    const s = Math.ceil(seconds % 60);
+    return `${m}m ${s}s`;
+  }
+
+  function renderProgress(
+    label: string,
+    current: number,
+    total: number,
+    startTime: number,
+  ) {
+    const percent =
+      total > 0 ? Math.min(100, Math.floor((current / total) * 100)) : 0;
+    const barLength = 20;
+    const filled = Math.floor((percent / 100) * barLength);
+    const remainingBar = barLength - filled;
+
+    const bar =
+      "=".repeat(filled) +
+      (remainingBar > 0 ? ">" : "") +
+      " ".repeat(Math.max(0, remainingBar - 1));
+
+    const elapsed = (performance.now() - startTime) / 1000;
+    const rate = current / elapsed;
+    const remainingTime = rate > 0 ? (total - current) / rate : Infinity;
+
+    const progressDiv = document.getElementById("progress-line");
+    if (progressDiv) {
+      progressDiv.innerHTML = `${label} [${bar}] ${percent}% • ETA ${formatETA(remainingTime)}`;
+    }
+
+    debugConsole!.scrollTop = debugConsole!.scrollHeight;
+  }
+
+  // file input
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files?.[0];
+    if (file) {
+      fileInputText!.textContent = file.name;
+      log(`Selected file: ${file.name}`, "info");
+    } else {
+      fileInputText!.textContent = "No file chosen";
+      log("File selection cleared.", "warn");
+    }
+  });
+
+  // main
+  convertBtn.addEventListener("click", async () => {
+    const file = fileInput.files?.[0];
+    if (!file) {
+      alert("Please select a .mrpack file");
+      return;
+    }
+
+    log(`Loading ${file.name}…`, "info");
+
+    try {
+      // load
+      const mrpackZip = await JSZip.loadAsync(file);
+      log("MRPACK loaded.", "success");
+
+      const indexFile = mrpackZip.file("modrinth.index.json");
+      if (!indexFile) throw new Error("modrinth.index.json not found");
+
+      const index = JSON.parse(await indexFile.async("string"));
+
+      log(`Modpack: ${index.name} (${index.versionId})`, "info");
+      log(`Mods to download: ${index.files.length}`, "info");
+
+      const outputZip = new JSZip();
+
+      // download mods
+      const modStart = performance.now();
+
+      for (let i = 0; i < index.files.length; i++) {
+        const mod = index.files[i];
+        const url = mod.downloads?.[0];
+
+        if (!url) {
+          log(`Skipping ${mod.path} (no URL)`, "warn");
+          continue;
+        }
+
+        if (
+          !mod.env ||
+          (mod.env.server !== "required" && mod.env.server !== "optional")
+        ) {
+          log(`Skipping ${mod.path} (client-only)`, "warn");
+          continue;
+        }
+
+        renderProgress(
+          "Downloading server mods",
+          i,
+          index.files.length,
+          modStart,
+        );
+
+        try {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+          const blob = await res.blob();
+          outputZip.file(mod.path, blob);
+          log(`Downloaded ${mod.path}`, "success");
+        } catch (err: any) {
+          log(`Failed to download ${mod.path}: ${err.message}`, "error");
+        }
+      }
+
+      renderProgress(
+        "Downloading mods",
+        index.files.length,
+        index.files.length,
+        modStart,
+      );
+      log("All mods downloaded.", "success");
+
+      // 2
+      const overrides = mrpackZip.folder("overrides");
+      if (overrides) {
+        const files = Object.values(overrides.files).filter((f) => !f.dir);
+        const overrideStart = performance.now();
+
+        log("Applying overrides…", "info");
+
+        let done = 0;
+        for (const entry of files) {
+          const data = await entry.async("arraybuffer");
+          const target = entry.name.replace(/^overrides\//, "");
+          outputZip.file(target, data);
+
+          done++;
+          renderProgress(
+            "Applying overrides",
+            done,
+            files.length,
+            overrideStart,
+          );
+        }
+
+        log("Overrides applied.", "success");
+      } else {
+        log("No overrides folder found.", "warn");
+      }
+
+      // build zip
+      log("Building final ZIP…", "info");
+
+      const zipStart = performance.now();
+      const finalBlob = await outputZip.generateAsync(
+        {
+          type: "blob",
+          compression: "DEFLATE",
+          compressionOptions: { level: 6 },
+        },
+        (meta) => {
+          renderProgress("Compressing", meta.percent ?? 0, 100, zipStart);
+        },
+      );
+
+      const name = `${index.name}-${index.versionId}.zip`.replace(
+        /[^\w.-]+/g,
+        "_",
+      );
+
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(finalBlob);
+      a.download = name;
+      a.click();
+      URL.revokeObjectURL(a.href);
+
+      log("Done! ZIP downloaded.", "success");
+    } catch (err: any) {
+      console.error(err);
+      log(err.message || "Unknown error", "error");
+      alert("Conversion failed — see log");
+    }
+  });
+</script>

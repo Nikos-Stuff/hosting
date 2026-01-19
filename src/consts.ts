@@ -18,6 +18,10 @@ export const LINKS: Links = [
   { 
     TEXT: "Go back to main page", 
     HREF: "https://nikostuff.com", 
+  },
+  {
+    TEXT: "Pack Converter",
+    HREF: "/pack_converter",
   }
 ]
 
