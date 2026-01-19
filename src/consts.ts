@@ -3,13 +3,13 @@ import type { Site, Links, Socials } from "@types"
 // Global
 export const SITE: Site = {
   TITLE: "Niko's Stuff",
-  DESCRIPTION: "Randomness since 2018.",
+  DESCRIPTION: "Hosting & tools for your servers and projects.",
   AUTHOR: "Niko's Stuff",
 }
 
 export const LEGAL: Site = {
   TITLE: "Niko's Stuff",
-  DESCRIPTION: "Randomness since 2018.",
+  DESCRIPTION: "Hosting & tools for your servers and projects.",
   AUTHOR: "Niko's Stuff",
 }
 
