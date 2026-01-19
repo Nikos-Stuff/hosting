@@ -158,10 +158,10 @@ import FancyDiv from "@components/FancyDiv.astro";
             <div
               id="debug_console"
               class="font-mono text-sm overflow-scroll h-30 w-full p-4 mt-5 border rounded-lg
-         flex flex-col justify-between gap-2
-         hover:bg-black/5 hover:dark:bg-white/10
-         border-black/15 dark:border-white/20
-         transition-all duration-300 ease-in-out hide_scrollbar"
+              flex flex-col justify-between gap-2
+            hover:bg-black/5 hover:dark:bg-white/10
+            border-black/15 dark:border-white/20
+              transition-all duration-300 ease-in-out hide_scrollbar"
             >
               <div id="log_messages">Waiting for file...</div>
               <div
@@ -169,6 +169,35 @@ import FancyDiv from "@components/FancyDiv.astro";
                 class="text-gray-700 dark:text-gray-300 whitespace-pre"
               >
                 <!-- progress will update here -->
+              </div>
+            </div>
+
+            <!-- Resources usage bars -->
+            <div class="mt-4 flex gap-4">
+              <div class="flex-1">
+                <div
+                  class="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-[0.3px]"
+                >
+                  <div
+                    id="cpu_usage"
+                    class="dark:bg-white bg-black h-[0.3px] rounded-full transition-all duration-500 ease-in-out"
+                    style="width: 0%"
+                  >
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex-1">
+                <div
+                  class="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-[0.3px]"
+                >
+                  <div
+                    id="progress_bar"
+                    class="dark:bg-white bg-black h-[0.3px] rounded-full transition-all duration-500 ease-in-out"
+                    style="width: 0%"
+                  >
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -183,24 +212,27 @@ import FancyDiv from "@components/FancyDiv.astro";
           </h2>
           <ol class="list-decimal list-inside space-y-2 mt-4 animate">
             <li>
-              Click "Choose File" and select a <code>.mrpack</code> file from your
-              computer.
+              Obtain a <code>.mrpack</code> file from a Modrinth modpack page.
             </li>
             <li>
-              Click the "Convert to ZIP server pack!" button to start the
-              conversion process.
+              Either upload the <code>.mrpack</code> file using the "Choose File…"
+              button, or paste the modpack URL into the input field at the top.
             </li>
             <li>
-              Wait for the process to complete. Progress and logs will be shown
-              in the console area.
+              Wait for the process to complete. The log and mod browser will
+              update with progress information.
             </li>
             <li>
-              Once done, a download for the converted <code>.zip</code> file will
-              start automatically.
+              Once finished, a ZIP file will be automatically downloaded to your
+              device.
             </li>
             <li>
-              Use the downloaded ZIP file to install the server pack on your
-              Minecraft server.
+              Extract the ZIP file and install the included JAR files on your
+              server.
+            </li>
+            <li>
+              If any client-only mods were removed, refer to the
+              <code>deleted_mods.txt</code> file inside the ZIP for details.
             </li>
           </ol>
         </div>
@@ -230,6 +262,12 @@ import FancyDiv from "@components/FancyDiv.astro";
   const url_input = document.getElementById(
     "url_input",
   ) as HTMLInputElement | null;
+  const cpu_usage_bar = document.getElementById(
+    "cpu_usage",
+  ) as HTMLDivElement | null;
+  const progress_bar = document.getElementById(
+    "progress_bar",
+  ) as HTMLDivElement | null;
 
   const deleted_mods: string[] = [];
   let already_running = false;
@@ -259,6 +297,39 @@ import FancyDiv from "@components/FancyDiv.astro";
     Removed: ["bg-yellow-500"],
     Analyzing: ["bg-purple-500"],
   };
+
+  type Phase =
+    | "load"
+    | "download"
+    | "overrides"
+    | "metadata"
+    | "cleanup"
+    | "compress";
+
+  const PHASE_WEIGHTS: Record<Phase, number> = {
+    load: 5,
+    download: 45,
+    overrides: 10,
+    metadata: 15,
+    cleanup: 10,
+    compress: 15,
+  };
+
+  const phaseProgress: Record<Phase, number> = {
+    load: 0,
+    download: 0,
+    overrides: 0,
+    metadata: 0,
+    cleanup: 0,
+    compress: 0,
+  };
+
+  let monitorInterval: number | null = null;
+  const lagSamples: number[] = [];
+  const LAG_WINDOW_MS = 5000;
+  const INTERVAL_MS = 500;
+
+  // ---------------------------------------------------------------
 
   function updateCircleColor(circle: HTMLDivElement, status: string) {
     const classesToRemove = Array.from(circle.classList).filter(
@@ -418,6 +489,92 @@ import FancyDiv from "@components/FancyDiv.astro";
     return match?.[1] ?? null;
   }
 
+  function updateCPUbar(cpuPercent: number | null) {
+    if (cpu_usage_bar) {
+      cpu_usage_bar.style.width = `${cpuPercent ?? 0}%`;
+      cpu_usage_bar.title =
+        cpuPercent !== null
+          ? `CPU approx: ${Math.round(cpuPercent)}%`
+          : "CPU approx: N/A";
+    }
+  }
+
+  function getOverallProgressPercent(): number {
+    let total = 0;
+
+    for (const phase in PHASE_WEIGHTS) {
+      const p = phase as Phase;
+      total += phaseProgress[p] * PHASE_WEIGHTS[p];
+    }
+
+    return Math.min(100, Math.max(0, total));
+  }
+
+  function updateOverallProgressBar() {
+    const pct = getOverallProgressPercent();
+
+    if (!progress_bar) return;
+
+    progress_bar.style.width = `${pct}%`;
+    progress_bar.title = `Overall progress: ${Math.round(pct)}%`;
+  }
+
+  function setPhaseProgress(phase: Phase, value: number) {
+    phaseProgress[phase] = Math.max(phaseProgress[phase], Math.min(1, value));
+    updateOverallProgressBar();
+  }
+
+  // lag based CPU approximation
+  let lastTick = performance.now();
+  function monitorLoop() {
+    const now = performance.now();
+    const delta = now - lastTick;
+    lastTick = now;
+    // expected interval ~ INTERVAL_MS; lag = how much slower than expected
+    const lag = Math.max(0, delta - INTERVAL_MS);
+    lagSamples.push(lag);
+    // keep window
+    //const cutoff = now - LAG_WINDOW_MS;
+    while (
+      lagSamples.length > 0 &&
+      lagSamples.length * INTERVAL_MS > LAG_WINDOW_MS
+    ) {
+      lagSamples.shift();
+    }
+
+    // average lag over samples
+    const avgLag =
+      lagSamples.reduce((a, b) => a + b, 0) / Math.max(1, lagSamples.length);
+
+    // map avgLag to a rough CPU percent: 0 lag -> ~5% , 200ms lag -> ~100%
+    const cpuPercent = Math.min(100, Math.max(0, (avgLag / 200) * 100));
+
+    // const memPercent = getMemoryUsagePercent();
+
+    updateCPUbar(
+      Math.round(cpuPercent),
+      // memPercent !== null ? Math.round(memPercent) : null,
+    );
+  }
+
+  function startMonitoring() {
+    if (monitorInterval !== null) return;
+    lastTick = performance.now();
+    monitorInterval = window.setInterval(monitorLoop, INTERVAL_MS);
+  }
+
+  function stopMonitoring() {
+    if (monitorInterval !== null) {
+      clearInterval(monitorInterval);
+      monitorInterval = null;
+    }
+  }
+
+  // start monitoring immediately
+  startMonitoring();
+
+  // ---------------------------------------------------------------
+
   async function main(file: File | Blob) {
     try {
       if (already_running) {
@@ -428,9 +585,13 @@ import FancyDiv from "@components/FancyDiv.astro";
       clean_browser_mod_list();
       clear_log();
 
-      // load
+      already_running = true;
+
+      // --- Load phase ---
+      setPhaseProgress("load", 0);
       const mrpackZip = await JSZip.loadAsync(file);
       log("MRPACK loaded.", "success");
+      setPhaseProgress("load", 1);
 
       const indexFile = mrpackZip.file("modrinth.index.json");
       if (!indexFile) throw new Error("modrinth.index.json not found");
@@ -440,18 +601,17 @@ import FancyDiv from "@components/FancyDiv.astro";
       log(`Modpack: ${index.name} (${index.versionId})`, "info");
       log(`Mods to download: ${index.files.length}`, "info");
 
-      already_running = true;
-
       const outputZip = new JSZip();
 
+      // Populate browser mod list
       log(`Populating mod browser...`, "info");
       index.files.forEach((mod: { path: string }) => {
         add_to_browser_mod_list(mod.path, "Queued");
       });
 
-      // download mods
+      // --- Download phase ---
+      setPhaseProgress("download", 0);
       const modStart = performance.now();
-
       for (let i = 0; i < index.files.length; i++) {
         const mod = index.files[i];
         const url = mod.downloads?.[0];
@@ -479,10 +639,11 @@ import FancyDiv from "@components/FancyDiv.astro";
         );
         update_in_browser_mod_list(mod.path, "Downloading...");
 
+        setPhaseProgress("download", (i + 1) / index.files.length);
+
         try {
           const res = await fetch(url);
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
           const blob = await res.blob();
           outputZip.file(mod.path, blob);
           log(`Downloaded ${mod.path}`, "success");
@@ -491,7 +652,7 @@ import FancyDiv from "@components/FancyDiv.astro";
           log(`Failed to download ${mod.path}: ${err.message}`, "error");
         }
       }
-
+      setPhaseProgress("download", 1);
       renderProgress(
         "Downloading mods",
         index.files.length,
@@ -500,13 +661,14 @@ import FancyDiv from "@components/FancyDiv.astro";
       );
       log("All mods downloaded.", "success");
 
-      // 2
+      // --- Overrides phase ---
       const overrides = mrpackZip.folder("overrides");
       if (overrides) {
         const files = Object.values(overrides.files).filter((f) => !f.dir);
         const overrideStart = performance.now();
 
         log("Applying overrides…", "info");
+        setPhaseProgress("overrides", 0);
 
         let done = 0;
         for (const entry of files) {
@@ -521,34 +683,31 @@ import FancyDiv from "@components/FancyDiv.astro";
             files.length,
             overrideStart,
           );
+          setPhaseProgress("overrides", done / files.length);
         }
-
+        setPhaseProgress("overrides", 1);
         log("Overrides applied.", "success");
       } else {
         log("No overrides folder found.", "warn");
+        setPhaseProgress("overrides", 1);
       }
 
-      // cleanup client-only mods
+      // --- Cleanup phase ---
       log("Cleaning up client-only projects…", "info");
-
       index.files.forEach((mod: { path: string }) => {
         update_in_browser_mod_list(mod.path, "Analyzing");
       });
 
       const API_ENDPOINT = "https://api.modrinth.com/v2/projects";
-      const BATCH_SIZE = 100; // safe bulk size
-      const startTime = performance.now();
-
-      // extract projects ids and build the index
+      const BATCH_SIZE = 100;
       const projectIds = index.files
         .map((mod: any) => extractProjectId(mod.downloads?.[0]))
         .filter((id: string | null): id is string => id !== null);
-
       const uniqueProjectIds = Array.from(new Set(projectIds));
-
       const projects: Record<string, any> = {};
 
-      // bulk fetch
+      // Fetch project metadata
+      setPhaseProgress("metadata", 0);
       for (let i = 0; i < uniqueProjectIds.length; i += BATCH_SIZE) {
         const chunk = uniqueProjectIds.slice(i, i + BATCH_SIZE);
 
@@ -556,15 +715,18 @@ import FancyDiv from "@components/FancyDiv.astro";
           "Fetching project metadata",
           Math.min(i + chunk.length, uniqueProjectIds.length),
           uniqueProjectIds.length,
-          startTime,
+          performance.now(),
+        );
+        setPhaseProgress(
+          "metadata",
+          Math.min(i + chunk.length, uniqueProjectIds.length) /
+            uniqueProjectIds.length,
         );
 
         const res = await fetch(
           `${API_ENDPOINT}?ids=${encodeURIComponent(JSON.stringify(chunk))}`,
           {
-            headers: {
-              "User-Agent": "NikosStuff/modpack-tool/1.0.0 (web)",
-            },
+            headers: { "User-Agent": "NikosStuff/modpack-tool/1.0.0 (web)" },
           },
         );
 
@@ -574,19 +736,18 @@ import FancyDiv from "@components/FancyDiv.astro";
         }
 
         const data = await res.json();
-        for (const project of data) {
-          projects[project.id] = project;
-        }
+        for (const project of data) projects[project.id] = project;
       }
+      setPhaseProgress("metadata", 1);
 
-      // try to remove client only projects
+      // Remove client-only mods
       let removed = 0;
       let processed = 0;
+      setPhaseProgress("cleanup", 0);
 
       for (const mod of index.files) {
         const projectId = extractProjectId(mod.downloads?.[0]);
         if (!projectId) continue;
-
         const project = projects[projectId];
         if (!project) continue;
 
@@ -596,7 +757,7 @@ import FancyDiv from "@components/FancyDiv.astro";
           "Removing client-only mods",
           processed,
           index.files.length,
-          startTime,
+          performance.now(),
         );
 
         if (project.server_side === "unsupported") {
@@ -608,16 +769,18 @@ import FancyDiv from "@components/FancyDiv.astro";
         } else {
           update_in_browser_mod_list(mod.path, "Imported");
         }
+
+        setPhaseProgress("cleanup", processed / index.files.length);
       }
+      setPhaseProgress("cleanup", 1);
 
       renderProgress(
         "Cleanup complete",
         index.files.length,
         index.files.length,
-        startTime,
+        performance.now(),
       );
 
-      // deleted_mods.txt
       if (deleted_mods.length > 0) {
         const deletedContent = `The following client-only mods were removed from the pack:\n\n- ${deleted_mods.join(
           "\n- ",
@@ -627,10 +790,11 @@ import FancyDiv from "@components/FancyDiv.astro";
 
       log(`Cleanup finished. Removed ${removed} client-only mods.`, "info");
 
-      // build zip
+      // --- Compress phase ---
       log("Building final ZIP…", "info");
-
+      setPhaseProgress("compress", 0);
       const zipStart = performance.now();
+
       const finalBlob = await outputZip.generateAsync(
         {
           type: "blob",
@@ -639,14 +803,15 @@ import FancyDiv from "@components/FancyDiv.astro";
         },
         (meta) => {
           renderProgress("Compressing", meta.percent ?? 0, 100, zipStart);
+          setPhaseProgress("compress", (meta.percent ?? 0) / 100);
         },
       );
+      setPhaseProgress("compress", 1);
 
       const name = `${index.name}-${index.versionId}.zip`.replace(
         /[^\w.-]+/g,
         "_",
       );
-
       const a = document.createElement("a");
       a.href = URL.createObjectURL(finalBlob);
       a.download = name;
@@ -654,6 +819,7 @@ import FancyDiv from "@components/FancyDiv.astro";
       URL.revokeObjectURL(a.href);
 
       log("Done! ZIP downloaded.", "success");
+
       already_running = false;
     } catch (err: any) {
       console.error(err);
@@ -804,4 +970,9 @@ import FancyDiv from "@components/FancyDiv.astro";
       }
     }
   }
+
+  // ensure monitoring stops when page unloads
+  window.addEventListener("beforeunload", () => {
+    stopMonitoring();
+  });
 </script>
