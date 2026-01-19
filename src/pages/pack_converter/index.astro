@@ -69,6 +69,20 @@ import FancyDiv from "@components/FancyDiv.astro";
           </p>
 
           <div class="space-y-4 animate" id="calculator">
+            <!-- URL input -->
+            <div class="relative" id="url_input_div">
+              <input
+                id="url_input"
+                type="text"
+                placeholder="https://modrinth.com/modpack/example"
+                class="w-full p-4 mt-5 border rounded-lg
+          hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20
+          transition-all duration-300 ease-in-out"
+              />
+            </div>
+
+            <p class="text-center italic">or</p>
+
             <!-- File input-->
             <div class="relative" id="file_input_div">
               <input
@@ -91,6 +105,25 @@ import FancyDiv from "@components/FancyDiv.astro";
                 >
               </label>
             </div>
+
+            <div class="animate mb-0 hidden">
+              <button
+                id="convert_to_zip_btn"
+                class="group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-all duration-300 ease-in-out"
+              >
+                <span
+                  class="w-full z-10 relative group-hover:text-black group-hover:dark:text-white text-center transition-color duration-300"
+                >
+                  Convert to ZIP server pack!
+                </span>
+              </button>
+            </div>
+            <p class="mb-10 mt-0">
+              <small
+                >Runs in your browser — no uploads. External download links may
+                be blocked by CORS.</small
+              >
+            </p>
 
             <!-- Modpack browser -->
             <div
@@ -137,25 +170,6 @@ import FancyDiv from "@components/FancyDiv.astro";
                 <!-- progress will update here -->
               </div>
             </div>
-
-            <div class="animate">
-              <button
-                id="convert_to_zip_btn"
-                class="group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-all duration-300 ease-in-out"
-              >
-                <span
-                  class="w-full z-10 relative group-hover:text-black group-hover:dark:text-white text-center transition-color duration-300"
-                >
-                  Convert to ZIP server pack!
-                </span>
-              </button>
-            </div>
-            <p>
-              <small
-                >Runs in your browser — no uploads. External download links may
-                be blocked by CORS.</small
-              >
-            </p>
           </div>
         </div>
       </FancyDiv>
@@ -212,8 +226,12 @@ import FancyDiv from "@components/FancyDiv.astro";
   const modpack_browser = document.getElementById(
     "modpack_browser",
   ) as HTMLDivElement | null;
+  const url_input = document.getElementById(
+    "url_input",
+  ) as HTMLInputElement | null;
 
   const deleted_mods: string[] = [];
+  let already_running = false;
 
   if (!fileInput || !convertBtn || !debugConsole) {
     throw new Error("Required DOM elements not found");
@@ -378,10 +396,15 @@ import FancyDiv from "@components/FancyDiv.astro";
   }
 
   async function main(file: File | Blob) {
-    clean_browser_mod_list();
-    clear_log();
-
     try {
+      if (already_running) {
+        log("Conversion already in progress. Please wait.", "warn");
+        return;
+      }
+
+      clean_browser_mod_list();
+      clear_log();
+
       // load
       const mrpackZip = await JSZip.loadAsync(file);
       log("MRPACK loaded.", "success");
@@ -393,6 +416,8 @@ import FancyDiv from "@components/FancyDiv.astro";
 
       log(`Modpack: ${index.name} (${index.versionId})`, "info");
       log(`Mods to download: ${index.files.length}`, "info");
+
+      already_running = true;
 
       const outputZip = new JSZip();
 
@@ -606,19 +631,22 @@ import FancyDiv from "@components/FancyDiv.astro";
       URL.revokeObjectURL(a.href);
 
       log("Done! ZIP downloaded.", "success");
+      already_running = false;
     } catch (err: any) {
       console.error(err);
       log(err.message || "Unknown error", "error");
       alert("Conversion failed — see log");
+      already_running = false;
     }
   }
 
-  // file input
+  // thru file input
   fileInput.addEventListener("change", () => {
     const file = fileInput.files?.[0];
     if (file) {
       fileInputText!.textContent = file.name;
       log(`Selected file: ${file.name}`, "info");
+      main(file);
     } else {
       fileInputText!.textContent = "No file chosen";
       log("File selection cleared.", "warn");
@@ -635,6 +663,71 @@ import FancyDiv from "@components/FancyDiv.astro";
 
     log(`Loading ${file.name}…`, "info");
     await main(file);
+  });
+
+  // thru url input
+  url_input!.addEventListener("change", async () => {
+    const url = url_input!.value.trim();
+    if (!url) {
+      alert("Please enter a Modrinth modpack URL");
+      return;
+    }
+    // Example imput: https://modrinth.com/modpack/example
+    const modpackIdMatch = url.match(/modrinth\.com\/modpack\/([^\/?#]+)/);
+    const modpackId = modpackIdMatch ? modpackIdMatch[1] : null;
+    if (!modpackId) {
+      alert("Invalid Modrinth modpack URL");
+      return;
+    }
+
+    const base_url = `https://api.modrinth.com/v2/project/${encodeURIComponent(
+      modpackId,
+    )}/version`;
+
+    log(`Fetching modpack info for ID: ${modpackId}`, "info");
+
+    // fetch the info with header
+    const res = await fetch(base_url, {
+      headers: {
+        "User-Agent": "NikosStuff/modpack-tool/1.0.0 (web)",
+      },
+    });
+
+    if (!res.ok) {
+      log(`Failed to fetch modpack info: HTTP ${res.status}`, "error");
+      return;
+    }
+
+    const data = await res.json();
+    if (data.length === 0) {
+      log("No versions found for the specified modpack ID.", "error");
+      return;
+    }
+
+    // pick the latest version
+    const latest = data[0];
+    const fileInfo = latest.files.find((f: any) => f.primary === true);
+    if (!fileInfo) {
+      log("No primary file found for the latest version.", "error");
+      return;
+    }
+
+    const downloadUrl = fileInfo.url;
+    log(`Fetching modpack from URL: ${downloadUrl}`, "info");
+    try {
+      const fileRes = await fetch(downloadUrl);
+      if (!fileRes.ok) {
+        log(`Failed to download modpack: HTTP ${fileRes.status}`, "error");
+        return;
+      }
+
+      const blob = await fileRes.blob();
+      fileInputText!.textContent = fileInfo.filename;
+      log(`Downloaded modpack: ${fileInfo.filename}`, "info");
+      await main(blob);
+    } catch (err: any) {
+      log(`Error downloading modpack: ${err.message}`, "error");
+    }
   });
 
   // thru url params
