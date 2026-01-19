@@ -319,15 +319,26 @@ import FancyDiv from "@components/FancyDiv.astro";
       }
     });
 
-    // scroll to the updated mod
+    // scroll to the updated mod only inside the modpack browser
     const targetEntry = Array.from(entries).find((entry) => {
-      const modNameSpan = entry.querySelector(
-        ".mod_name",
-      ) as HTMLSpanElement;
+      const modNameSpan = entry.querySelector(".mod_name") as HTMLSpanElement;
       return modNameSpan && modNameSpan.textContent === mod_name;
     });
-    if (targetEntry) {
-      targetEntry.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (targetEntry && modpack_browser) {
+      const container = modpack_browser as HTMLElement;
+      const entry = targetEntry as HTMLElement;
+
+      // compute entry position relative to the container and center it
+      const containerRect = container.getBoundingClientRect();
+      const entryRect = entry.getBoundingClientRect();
+      const offset =
+        entryRect.top -
+        containerRect.top +
+        container.scrollTop -
+        container.clientHeight / 2 +
+        entry.clientHeight / 2;
+
+      container.scrollTo({ top: offset, behavior: "smooth" });
     }
   }
 
