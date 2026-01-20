@@ -56,7 +56,7 @@ import FancyDiv from "@components/FancyDiv.astro";
 
   <div class="relative">
     <div class="w-svw">
-      <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
+      <FancyDiv isAnimated={true} theme="default_big" margin_bottom="10">
         <div class="transition-all">
           <p
             class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
@@ -76,8 +76,14 @@ import FancyDiv from "@components/FancyDiv.astro";
                 type="text"
                 placeholder="https://modrinth.com/modpack/example"
                 class="w-full p-4 mt-5 border rounded-lg
-          hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20
-          transition-all duration-300 ease-in-out"
+                    bg-transparent
+                  border-black/15 dark:border-white/20
+                  hover:bg-black/5 hover:dark:bg-white/10
+                    focus:outline-none
+                  focus:border-black/40 dark:focus:border-white/40
+                    focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20
+                    focus:ring-offset-0
+                    transition-all duration-300 ease-out"
               />
             </div>
 
@@ -203,13 +209,99 @@ import FancyDiv from "@components/FancyDiv.astro";
           </div>
         </div>
       </FancyDiv>
+
+      <FancyDiv isAnimated="true" theme="default_big" margin_bottom="50">
+        <div class="transition-all">
+          <p
+            class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+          >
+            Modpack Browser
+          </p>
+          <p class="font-bold text-sm mb-2 animate">
+            Quickly search through mods without leaving the page.
+          </p>
+
+          <!-- Modpack browser -->
+          <div class="mb-3 animate">
+            <input
+              id="modrint_search"
+              type="text"
+              placeholder="Search modpacks…"
+              class="w-full p-4 mt-5 border rounded-lg
+                bg-transparent
+                border-black/15 dark:border-white/20
+                hover:bg-black/5 hover:dark:bg-white/10
+                focus:outline-none
+                focus:border-black/40 dark:focus:border-white/40
+                focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20
+                focus:ring-offset-0
+                transition-all duration-300 ease-out"
+            />
+          </div>
+
+          <div class="animate">
+            <div
+              id="modrint_mod_browser"
+              class="flex flex-col gap-2 p-4 mt-2 border rounded-lg
+                   h-125 overflow-y-scroll
+                 hover:bg-black/5 hover:dark:bg-white/10
+                 border-black/15 dark:border-white/20
+                   transition-all duration-300 ease-in-out hide_scrollbar"
+            >
+              <!-- Template -->
+              <div
+                class="mdr_template group hidden relative flex-col min-h-50 border border-black/10 dark:border-white/20 rounded-lg cursor-pointer hover:shadow-2xl transition-all duration-300 overflow-hidden"
+              >
+                <div
+                  class="mdr_template_image absolute inset-0 bg-cover bg-center bg-no-repeat blur-sm scale-100 transition-transform duration-500 ease-out group-hover:scale-125"
+                  style="background-image: url('/imgs/plc.png');"
+                >
+                </div>
+
+                <div
+                  class="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/60"
+                >
+                </div>
+
+                <div
+                  class="relative z-10 p-6 flex flex-col justify-center items-center h-full text-center text-white transition-transform duration-300 group-hover:scale-[1.02]"
+                >
+                  <span
+                    class="mdr_mod_name block font-bold text-2xl mb-3 transition-transform duration-300 group-hover:scale-110"
+                  >
+                    Mod Name
+                  </span>
+
+                  <div class="relative max-w-[90%]">
+                    <p
+                      class="mdr_mod_description text-base opacity-90 transition-all duration-300 group-hover:opacity-0 group-hover:scale-50"
+                    >
+                      Mod description goes here. This is a placeholder text.
+                    </p>
+                    <p
+                      class="click-to-convert absolute inset-0 opacity-0 transition-all duration-300 flex items-center justify-center group-hover:opacity-100 group-hover:scale-110 font-mono"
+                    >
+                      Click to Convert
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </FancyDiv>
+
       <FancyDiv isAnimated={true} theme="default_big">
         <div class="transition-all">
-          <h2
-            class="text-2xl md:text-3xl lg:text-4xl font-bold uppercase text-black dark:text-white animate"
+          <p
+            class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
           >
             How to use
-          </h2>
+          </p>
+          <p class="font-bold text-sm mb-2 animate">
+            Follow these steps to convert a Modrinth .mrpack file to a
+            server-ready .zip file:
+          </p>
           <ol class="list-decimal list-inside space-y-2 mt-4 animate">
             <li>
               Obtain a <code>.mrpack</code> file from a Modrinth modpack page.
@@ -235,11 +327,144 @@ import FancyDiv from "@components/FancyDiv.astro";
               <code>deleted_mods.txt</code> file inside the ZIP for details.
             </li>
           </ol>
+
+          <div class="mt-6 animate">
+            <strong>Note:</strong> This tool runs entirely in your browser. No files
+            are uploaded to any server, ensuring your privacy and security. However,
+            some external download links may be blocked due to CORS restrictions.
+            Also note that large modpacks may take longer to process. We always fetch
+            the latest modpack version from Modrinth, so you don't have to worry about
+            updating it manually.
+          </div>
         </div>
       </FancyDiv>
     </div>
   </div>
 </PageLayout>
+
+<script>
+  const browser = document.getElementById(
+    "modrint_mod_browser",
+  ) as HTMLDivElement | null;
+
+  const searchInput = document.getElementById(
+    "modrint_search",
+  ) as HTMLInputElement | null;
+
+  const converter_url_input = document.getElementById(
+    "url_input",
+  ) as HTMLInputElement | null;
+
+  if (!browser || !searchInput || !converter_url_input) {
+    throw new Error("Required DOM elements not found");
+  }
+
+  const API_BASE = "https://api.modrinth.com/v2";
+
+  const template = browser.querySelector(".mdr_template") as HTMLDivElement;
+
+  function clearBrowser() {
+    browser!
+      .querySelectorAll(".mdr_template:not(.hidden)")
+      .forEach((el) => el.remove());
+  }
+
+  function createCard(mod: any): HTMLDivElement {
+    const card = template.cloneNode(true) as HTMLDivElement;
+    card.classList.remove("hidden");
+    card.classList.add("flex");
+
+    const image = card.querySelector(".mdr_template_image") as HTMLDivElement;
+
+    const name = card.querySelector(".mdr_mod_name") as HTMLSpanElement;
+
+    const desc = card.querySelector(
+      ".mdr_mod_description",
+    ) as HTMLParagraphElement;
+
+    const bg = mod.icon_url || mod.gallery?.[0] || "/imgs/plc.png";
+
+    image.style.backgroundImage = `url("${bg}")`;
+    name.textContent = mod.title;
+    desc.textContent = mod.description ?? "No description";
+
+    // Optional: click to Modrinth
+    card.addEventListener("click", () => {
+      // move to converter with modpack URL
+      const modpackUrl = `https://modrinth.com/modpack/${mod.slug}`;
+      converter_url_input!.value = modpackUrl;
+      // trigger the change event
+      const event = new Event("change", { bubbles: true });
+      converter_url_input!.dispatchEvent(event);
+      // scroll
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    return card;
+  }
+
+  function render(mods: any[]) {
+    clearBrowser();
+    mods.forEach((mod) => {
+      browser!.appendChild(createCard(mod));
+    });
+  }
+
+  async function loadRandom() {
+    try {
+      const res = await fetch(`${API_BASE}/projects_random?count=70`);
+      const data = await res.json();
+
+      const filtered = data
+        .filter(
+          (p: any) =>
+            p.project_type === "modpack" && p.server_side === "required",
+        )
+        .slice(0, 10);
+
+      render(filtered);
+    } catch (err) {
+      console.error("Failed to load random modpacks", err);
+    }
+  }
+
+  async function search(query: string) {
+    if (!query.trim()) {
+      loadRandom();
+      return;
+    }
+
+    const facets = JSON.stringify([
+      ["project_type:modpack"],
+      ["server_side:required"],
+    ]);
+
+    const url =
+      `${API_BASE}/search` +
+      `?query=${encodeURIComponent(query)}` +
+      `&limit=10` +
+      `&facets=${encodeURIComponent(facets)}`;
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      render(data.hits);
+    } catch (err) {
+      console.error("Search failed", err);
+    }
+  }
+
+  let timeout: number;
+
+  searchInput.addEventListener("change", () => {
+    clearTimeout(timeout);
+    timeout = window.setTimeout(() => {
+      search(searchInput.value);
+    }, 300);
+  });
+
+  loadRandom();
+</script>
 
 <script>
   import JSZip from "jszip";
@@ -595,7 +820,7 @@ import FancyDiv from "@components/FancyDiv.astro";
 
       already_running = true;
 
-      // --- Load phase ---
+      // load phase
       setPhaseProgress("load", 0);
       const mrpackZip = await JSZip.loadAsync(file);
       log("MRPACK loaded.", "success");
@@ -617,7 +842,7 @@ import FancyDiv from "@components/FancyDiv.astro";
         add_to_browser_mod_list(mod.path, "Queued");
       });
 
-      // --- Download phase ---
+      // download stuff
       setPhaseProgress("download", 0);
       const modStart = performance.now();
       for (let i = 0; i < index.files.length; i++) {
@@ -670,7 +895,7 @@ import FancyDiv from "@components/FancyDiv.astro";
       );
       log("All mods downloaded.", "success");
 
-      // --- Overrides phase ---
+      // configure overrides
       const overrides = mrpackZip.folder("overrides");
       if (overrides) {
         const files = Object.values(overrides.files).filter((f) => !f.dir);
@@ -701,7 +926,7 @@ import FancyDiv from "@components/FancyDiv.astro";
         setPhaseProgress("overrides", 1);
       }
 
-      // --- Cleanup phase ---
+      // remove useless mods
       log("Cleaning up client-only projects…", "info");
       index.files.forEach((mod: { path: string }) => {
         update_in_browser_mod_list(mod.path, "Analyzing");
@@ -799,7 +1024,7 @@ import FancyDiv from "@components/FancyDiv.astro";
 
       log(`Cleanup finished. Removed ${removed} client-only mods.`, "info");
 
-      // --- Compress phase ---
+      // compress into zip and serve back
       log("Building final ZIP…", "info");
       setPhaseProgress("compress", 0);
       const zipStart = performance.now();
