@@ -262,9 +262,20 @@ import FancyDiv from "@components/FancyDiv.astro";
                 <div
                   class="relative z-10 p-6 flex flex-col justify-center items-center text-center text-white"
                 >
-                  <span class="mdr_mod_name block font-bold text-2xl mb-3 transition-all duration-300 group-hover:scale-125">
+                  <span
+                    class="mdr_mod_name block font-bold text-2xl mb-3 transition-all duration-300 group-hover:scale-110"
+                  >
                     Mod Name
                   </span>
+
+                  <p
+                    class="mdr_modpack_version absolute top-2 left-2 z-20
+                     rounded-md bg-black/60 px-2 py-1
+                     text-[11px] font-mono text-white
+                    transition-all duration-300 group-hover:opacity-0"
+                  >
+                    -
+                  </p>
 
                   <div class="relative w-full">
                     <p
@@ -280,6 +291,14 @@ import FancyDiv from "@components/FancyDiv.astro";
                     </p>
                   </div>
                 </div>
+              </div>
+
+              <!-- Full cover loading -->
+              <div
+                id="mdr_loading"
+                class="absolute inset-0 bg-black hidden items-center justify-center text-white font-mono text-lg rounded-lg z-20"
+              >
+                <p class="animate-bounce z-20">Loading modpacks…</p>
               </div>
             </div>
           </div>
@@ -327,9 +346,10 @@ import FancyDiv from "@components/FancyDiv.astro";
             <strong>Note:</strong> This tool runs entirely in your browser. No files
             are uploaded to any server, ensuring your privacy and security. However,
             some external download links may be blocked due to CORS restrictions.
-            Also note that large modpacks may take longer to process. We always fetch
-            the latest modpack version from Modrinth, so you don't have to worry about
-            updating it manually.
+            Also note that large modpacks may take longer to process.<br />
+            Pro Tip: You can include advanced search queries in the modpack browser,
+            such as <code>[version:1.20.4]</code> or <code>[loader:fabric]</code
+            > to filter modpacks by Minecraft version or mod loader.
           </div>
         </div>
       </FancyDiv>
@@ -341,71 +361,164 @@ import FancyDiv from "@components/FancyDiv.astro";
   const browser = document.getElementById(
     "modrint_mod_browser",
   ) as HTMLDivElement | null;
-
   const searchInput = document.getElementById(
     "modrint_search",
   ) as HTMLInputElement | null;
-
   const converter_url_input = document.getElementById(
     "url_input",
   ) as HTMLInputElement | null;
+  const loading_screen = document.getElementById(
+    "mdr_loading",
+  ) as HTMLDivElement | null;
 
-  if (!browser || !searchInput || !converter_url_input) {
+  if (!browser || !searchInput || !converter_url_input || !loading_screen) {
     throw new Error("Required DOM elements not found");
   }
 
   const API_BASE = "https://api.modrinth.com/v2";
-
   const template = browser.querySelector(".mdr_template") as HTMLDivElement;
 
+  const facetAliases: Record<string, string> = {
+    version: "versions",
+    loader: "categories",
+  };
+
+  // clear browser content
   function clearBrowser() {
+    loading_screen?.classList.add("flex");
+    loading_screen?.classList.remove("hidden");
+
     browser!
       .querySelectorAll(".mdr_template:not(.hidden)")
       .forEach((el) => el.remove());
   }
 
+  // fetch project versions
+  async function fetchProjectVersions(
+    slug: string,
+    gameVersion?: string,
+    loader?: string,
+  ) {
+    const params = new URLSearchParams();
+    if (gameVersion) params.append("game_versions", gameVersion);
+    if (loader) params.append("loaders", loader);
+
+    const res = await fetch(
+      `${API_BASE}/project/${slug}/version?${params.toString()}`,
+    );
+    return res.json(); // returns array of version objects
+  }
+
+  // create a mod card
   function createCard(mod: any): HTMLDivElement {
     const card = template.cloneNode(true) as HTMLDivElement;
     card.classList.remove("hidden");
     card.classList.add("flex");
 
     const image = card.querySelector(".mdr_template_image") as HTMLDivElement;
-
     const name = card.querySelector(".mdr_mod_name") as HTMLSpanElement;
-
     const desc = card.querySelector(
       ".mdr_mod_description",
     ) as HTMLParagraphElement;
+    const versionBadge = card.querySelector(
+      ".mdr_modpack_version",
+    ) as HTMLParagraphElement;
+
+    // Pick the first filtered version
+    const matchedVersion = mod.filteredVersions?.[0];
+
+    if (matchedVersion) {
+      const loaders = matchedVersion.loaders?.join(", ") || "Unknown loader";
+      const gameVersions =
+        matchedVersion.game_versions?.join(", ") || "Unknown version";
+      versionBadge.textContent = `${gameVersions} - ${loaders}`;
+    } else {
+      versionBadge.textContent = "No matching version";
+    }
 
     const bg = mod.icon_url || mod.gallery?.[0] || "/imgs/plc.png";
-
     image.style.backgroundImage = `url("${bg}")`;
     name.textContent = mod.title;
     desc.textContent = mod.description ?? "No description";
 
-    // Optional: click to Modrinth
     card.addEventListener("click", () => {
-      // move to converter with modpack URL
-      const modpackUrl = `https://modrinth.com/modpack/${mod.slug}`;
-      converter_url_input!.value = modpackUrl;
-      // trigger the change event
-      const event = new Event("change", { bubbles: true });
-      converter_url_input!.dispatchEvent(event);
-      // scroll
+      const targetUrl = matchedVersion
+        ? `https://modrinth.com/project/${mod.slug}/version/${matchedVersion.id}`
+        : `https://modrinth.com/modpack/${mod.slug}`;
+
+      converter_url_input!.value = targetUrl;
+      converter_url_input!.dispatchEvent(
+        new Event("change", { bubbles: true }),
+      );
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
+    if (!browser) return card;
+    browser.appendChild(card);
     return card;
   }
 
-  function render(mods: any[]) {
+  // render hits
+  async function render(
+    hits: any[] | undefined,
+    gameVersion?: string,
+    loader?: string,
+  ) {
     clearBrowser();
-    mods.forEach((mod) => {
-      browser!.appendChild(createCard(mod));
-    });
+
+    console.log("Rendering hits:", hits);
+
+    if (!browser || !hits || hits.length === 0) return;
+
+    const hitsWithVersions = await Promise.all(
+      hits.map(async (mod) => {
+        let versions = await fetchProjectVersions(
+          mod.slug,
+          gameVersion,
+          loader,
+        );
+
+        if (!versions) return null; // safety check
+
+        if (gameVersion) {
+          versions = versions.filter(
+            (v: { game_versions: string | string[] }) =>
+              v.game_versions.includes(gameVersion),
+          );
+        }
+        if (loader) {
+          versions = versions.filter((v: { loaders: string | string[] }) =>
+            v.loaders?.includes(loader),
+          );
+        }
+
+        if (!versions || versions.length === 0) return null;
+
+        versions.sort(
+          (
+            a: { date_published: string | number | Date },
+            b: { date_published: string | number | Date },
+          ) =>
+            new Date(b.date_published).getTime() -
+            new Date(a.date_published).getTime(),
+        );
+        return { ...mod, filteredVersions: versions };
+      }),
+    );
+
+    hitsWithVersions
+      .filter(Boolean) // remove nulls
+      .forEach((mod) => createCard(mod));
+
+      
+      loading_screen?.classList.add("hidden");
+      loading_screen?.classList.remove("flex");
   }
 
+  // random modpacks
   async function loadRandom() {
+    clearBrowser();
+
     try {
       const res = await fetch(`${API_BASE}/projects_random?count=70`);
       const data = await res.json();
@@ -423,34 +536,46 @@ import FancyDiv from "@components/FancyDiv.astro";
     }
   }
 
+  // search
   async function search(query: string) {
     if (!query.trim()) {
       loadRandom();
       return;
     }
 
-    const facets = JSON.stringify([
-      ["project_type:modpack"],
-      ["server_side:required"],
-    ]);
+    // manage [version:...] and [loader:...] filters
+    const advancedMatches = Array.from(query.matchAll(/\[(.+?):(.+?)\]/g));
+    let gameVersion: string | undefined;
+    let loader: string | undefined;
 
-    const url =
-      `${API_BASE}/search` +
-      `?query=${encodeURIComponent(query)}` +
-      `&limit=10` +
-      `&facets=${encodeURIComponent(facets)}`;
+    advancedMatches.forEach((match) => {
+      const key = facetAliases[match[1].trim()] ?? match[1].trim();
+      const value = match[2].trim();
+
+      if (key === "versions") gameVersion = value;
+      if (key === "categories") loader = value;
+    });
+
+    // remove tags from query
+    query = query.replace(/\[(.+?):(.+?)\]/g, "").trim();
+
+    const facets = [["project_type:modpack"], ["server_side:required"]];
+    if (gameVersion) facets.push([`versions:${gameVersion}`]);
+    if (loader) facets.push([`categories:${loader}`]);
+
+    const url = `${API_BASE}/search?query=${encodeURIComponent(query)}&limit=10&facets=${encodeURIComponent(JSON.stringify(facets))}`;
 
     try {
       const res = await fetch(url);
       const data = await res.json();
-      render(data.hits);
+      render(data.hits, gameVersion, loader);
     } catch (err) {
       console.error("Search failed", err);
     }
   }
 
+  // main
   let timeout: number;
-
   searchInput.addEventListener("change", () => {
     clearTimeout(timeout);
     timeout = window.setTimeout(() => {
@@ -1096,49 +1221,70 @@ import FancyDiv from "@components/FancyDiv.astro";
       alert("Please enter a Modrinth modpack URL");
       return;
     }
-    // Example imput: https://modrinth.com/modpack/example
-    const modpackIdMatch = url.match(/modrinth\.com\/modpack\/([^\/?#]+)/);
-    const modpackId = modpackIdMatch ? modpackIdMatch[1] : null;
-    if (!modpackId) {
+
+    // Check if it’s a specific version URL
+    const versionMatch = url.match(
+      /modrinth\.com\/project\/([^\/?#]+)\/version\/([^\/?#]+)/,
+    );
+    const modpackMatch = url.match(/modrinth\.com\/modpack\/([^\/?#]+)/);
+
+    let modpackId: string | null = null;
+    let versionId: string | null = null;
+
+    if (versionMatch) {
+      modpackId = versionMatch[1];
+      versionId = versionMatch[2];
+    } else if (modpackMatch) {
+      modpackId = modpackMatch[1];
+    } else {
       alert("Invalid Modrinth modpack URL");
       return;
     }
 
-    const base_url = `https://api.modrinth.com/v2/project/${encodeURIComponent(
-      modpackId,
-    )}/version`;
-
     log(`Fetching modpack info for ID: ${modpackId}`, "info");
 
-    // fetch the info with header
-    const res = await fetch(base_url, {
-      headers: {
-        "User-Agent": "NikosStuff/modpack-tool/1.0.0 (web)",
-      },
-    });
-
-    if (!res.ok) {
-      log(`Failed to fetch modpack info: HTTP ${res.status}`, "error");
-      return;
+    let versionsUrl = `https://api.modrinth.com/v2/project/${encodeURIComponent(modpackId)}/version`;
+    if (versionId) {
+      // If a specific version is requested, fetch that version only
+      versionsUrl += `/${encodeURIComponent(versionId)}`;
     }
 
-    const data = await res.json();
-    if (data.length === 0) {
-      log("No versions found for the specified modpack ID.", "error");
-      return;
-    }
-
-    // pick the latest version
-    const latest = data[0];
-    const fileInfo = latest.files.find((f: any) => f.primary === true);
-    if (!fileInfo) {
-      log("No primary file found for the latest version.", "error");
-      return;
-    }
-
-    const downloadUrl = fileInfo.url;
-    log(`Fetching modpack from URL: ${downloadUrl}`, "info");
     try {
+      const res = await fetch(versionsUrl, {
+        headers: {
+          "User-Agent": "NikosStuff/modpack-tool/1.0.0 (web)",
+        },
+      });
+
+      if (!res.ok) {
+        log(`Failed to fetch modpack info: HTTP ${res.status}`, "error");
+        return;
+      }
+
+      let data: any;
+      if (versionId) {
+        // API returns a single object for a specific version
+        data = [await res.json()];
+      } else {
+        data = await res.json(); // array of all versions
+      }
+
+      if (data.length === 0) {
+        log("No versions found for the specified modpack ID.", "error");
+        return;
+      }
+
+      // pick latest if version not specified
+      const selected = versionId ? data[0] : data[0];
+      const fileInfo = selected.files.find((f: any) => f.primary === true);
+      if (!fileInfo) {
+        log("No primary file found for the selected version.", "error");
+        return;
+      }
+
+      const downloadUrl = fileInfo.url;
+      log(`Fetching modpack from URL: ${downloadUrl}`, "info");
+
       const fileRes = await fetch(downloadUrl);
       if (!fileRes.ok) {
         log(`Failed to download modpack: HTTP ${fileRes.status}`, "error");
