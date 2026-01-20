@@ -272,7 +272,7 @@ import FancyDiv from "@components/FancyDiv.astro";
                     class="mdr_modpack_version absolute top-2 left-2 z-20
                      rounded-md bg-black/60 px-2 py-1
                      text-[11px] font-mono text-white
-                    transition-all duration-300 group-hover:opacity-0"
+                    transition-all duration-300 group-hover:opacity-0 truncate max-w-1/2"
                   >
                     -
                   </p>
@@ -296,9 +296,19 @@ import FancyDiv from "@components/FancyDiv.astro";
               <!-- Full cover loading -->
               <div
                 id="mdr_loading"
-                class="absolute inset-0 bg-black hidden items-center justify-center text-white font-mono text-lg rounded-lg z-20"
+                class="hidden absolute inset-0 z-10 flex-col items-center justify-center space-y-2 rounded-2xl"
               >
-                <p class="animate-bounce z-20">Loading modpacks…</p>
+                <img
+                  src="/imgs/plc.png"
+                  alt="Loading Meme"
+                  class="random_loading_memme max-w-1/2 max-h-1/2 rounded-lg object-cover animate-pulse" 
+                />
+                <p class="mdr_loading_text animate-bounce z-20">
+                  Loading modpacks…
+                </p>
+                <p class="text-xs animate-pulse">
+                  Stuck? Try another search query!
+                </p>
               </div>
             </div>
           </div>
@@ -371,6 +381,28 @@ import FancyDiv from "@components/FancyDiv.astro";
     "mdr_loading",
   ) as HTMLDivElement | null;
 
+  const random_loading_text = [
+    "Navigating the Labyrinth...",
+    "Querying the Modrinth index...",
+    "Fetching projects from the Labyrinth...",
+    "Walking the green path to your modpacks...",
+    "Locating curated modpack gems...",
+    "Pulling metadata from the Modrinth core...",
+    "Exploring the depths of the Labyrinth...",
+    "Polishing the Modrinth search results...",
+    "Venturing into the Modrinth multiverse...",
+    "Synchronizing with the Labyrinth nodes...",
+    "Optimizing your modpack discovery...",
+    "Connecting to the open-source source...",
+    "Harvesting the latest modpack releases...",
+    "Lost in the Labyrinth? Just kidding, fetching now...",
+    "Filtering through the Modrinth archives...",
+    "Summoning modpacks from the Labyrinth depths...",
+    "Getting stuck in the Modrinth maze...",
+    "*jazz music stops*",
+    "AAAAAAAAAAAAAAAAAAAAAAA...",
+  ];
+
   if (!browser || !searchInput || !converter_url_input || !loading_screen) {
     throw new Error("Required DOM elements not found");
   }
@@ -385,6 +417,40 @@ import FancyDiv from "@components/FancyDiv.astro";
 
   // clear browser content
   function clearBrowser() {
+    const meme_url_endpoint = "https://meme-api.com/gimme/ProgrammerHumor";
+    const randomIndex = Math.floor(Math.random() * random_loading_text.length);
+    const randomText = random_loading_text[randomIndex];
+    const loadingTextElem = loading_screen?.querySelector(
+      ".mdr_loading_text",
+    ) as HTMLParagraphElement;
+    const randomMemeElem = loading_screen?.querySelector(
+      ".random_loading_memme",
+    ) as HTMLImageElement;
+
+
+
+    fetch(meme_url_endpoint)
+      .then((response) => response.json())
+      .then((data) => {
+        // if (randomMemeElem && data.preview && data.preview.length > 0) {
+        //   // pick the largest preview available
+        //   const largestPreview = data.preview[data.preview.length - 1];
+        //   randomMemeElem.src = largestPreview;
+        // get the url image
+        if (randomMemeElem && data.url) {
+          randomMemeElem.src = data.url;
+          // 50/50 chance of getting the normal loading text or the meme title
+          if (Math.random() < 0.5) {
+            loadingTextElem.textContent = randomText;
+          } else {
+            loadingTextElem.textContent = data.title;
+          }
+        }
+      })
+      .catch((error) => {
+        console.warn("Failed to fetch random meme:", error);
+      });
+
     loading_screen?.classList.add("flex");
     loading_screen?.classList.remove("hidden");
 
@@ -464,7 +530,7 @@ import FancyDiv from "@components/FancyDiv.astro";
     gameVersion?: string,
     loader?: string,
   ) {
-    clearBrowser();
+    //clearBrowser();
 
     console.log("Rendering hits:", hits);
 
@@ -510,9 +576,8 @@ import FancyDiv from "@components/FancyDiv.astro";
       .filter(Boolean) // remove nulls
       .forEach((mod) => createCard(mod));
 
-      
-      loading_screen?.classList.add("hidden");
-      loading_screen?.classList.remove("flex");
+    loading_screen?.classList.add("hidden");
+    loading_screen?.classList.remove("flex");
   }
 
   // random modpacks
@@ -542,6 +607,8 @@ import FancyDiv from "@components/FancyDiv.astro";
       loadRandom();
       return;
     }
+
+    clearBrowser();
 
     // manage [version:...] and [loader:...] filters
     const advancedMatches = Array.from(query.matchAll(/\[(.+?):(.+?)\]/g));
