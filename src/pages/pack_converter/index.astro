@@ -680,8 +680,10 @@ import FancyDiv from "@components/FancyDiv.astro";
   //  const PROGRESS_ID = "progress-line";
 
   function formatETA(seconds: number): string {
-    if (!isFinite(seconds) || seconds <= 0) return "calculating…";
+    if (seconds === 0) return "Completed!";
+    if (!isFinite(seconds) || seconds < 0) return "calculating…";
     if (seconds < 60) return `${Math.ceil(seconds)}s`;
+
     const m = Math.floor(seconds / 60);
     const s = Math.ceil(seconds % 60);
     return `${m}m ${s}s`;
