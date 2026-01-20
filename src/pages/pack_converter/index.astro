@@ -998,6 +998,8 @@ import FancyDiv from "@components/FancyDiv.astro";
           log(`Cleaned up client-only mod: ${project.title}`, "warn");
           deleted_mods.push(project.title);
           update_in_browser_mod_list(mod.path, "Cleaned Up");
+          // small delay to not kill user browser lmao
+          await new Promise((r) => setTimeout(r, 50));
         } else {
           update_in_browser_mod_list(mod.path, "Imported");
         }
