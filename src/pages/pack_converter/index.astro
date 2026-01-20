@@ -250,36 +250,31 @@ import FancyDiv from "@components/FancyDiv.astro";
             >
               <!-- Template -->
               <div
-                class="mdr_template group hidden relative flex-col min-h-50 border border-black/10 dark:border-white/20 rounded-lg cursor-pointer hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                class="mdr_template group relative hidden flex-col h-auto border border-black/10 rounded-lg overflow-hidden shrink-0"
               >
                 <div
-                  class="mdr_template_image absolute inset-0 bg-cover bg-center bg-no-repeat blur-sm scale-100 transition-transform duration-500 ease-out group-hover:scale-125"
+                  class="mdr_template_image absolute inset-0 bg-cover bg-center blur-sm transition-transform duration-500 group-hover:scale-125"
                   style="background-image: url('/imgs/plc.png');"
                 >
                 </div>
+                <div class="absolute inset-0 bg-black/50"></div>
 
                 <div
-                  class="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/60"
+                  class="relative z-10 p-6 flex flex-col justify-center items-center text-center text-white"
                 >
-                </div>
-
-                <div
-                  class="relative z-10 p-6 flex flex-col justify-center items-center h-full text-center text-white transition-transform duration-300 group-hover:scale-[1.02]"
-                >
-                  <span
-                    class="mdr_mod_name block font-bold text-2xl mb-3 transition-transform duration-300 group-hover:scale-110"
-                  >
+                  <span class="mdr_mod_name block font-bold text-2xl mb-3">
                     Mod Name
                   </span>
 
-                  <div class="relative max-w-[90%]">
+                  <div class="relative w-full">
                     <p
-                      class="mdr_mod_description text-base opacity-90 transition-all duration-300 group-hover:opacity-0 group-hover:scale-50"
+                      class="mdr_mod_description text-base opacity-90 transition-all duration-300 group-hover:opacity-0"
                     >
-                      Mod description goes here. This is a placeholder text.
+                      This is a short description.
                     </p>
+
                     <p
-                      class="click-to-convert absolute inset-0 opacity-0 transition-all duration-300 flex items-center justify-center group-hover:opacity-100 group-hover:scale-110 font-mono"
+                      class="click-to-convert absolute inset-0 opacity-0 transition-all duration-300 flex items-center justify-center group-hover:opacity-100 font-mono"
                     >
                       Click to Convert
                     </p>
