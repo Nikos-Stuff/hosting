@@ -296,19 +296,28 @@ import FancyDiv from "@components/FancyDiv.astro";
               <!-- Full cover loading -->
               <div
                 id="mdr_loading"
-                class="hidden absolute inset-0 z-10 flex-col items-center justify-center space-y-2 rounded-2xl"
+                class="hidden absolute inset-0 z-10 items-center justify-center rounded-2xl overflow-hidden"
               >
                 <img
                   src="/imgs/plc.png"
                   alt="Loading Meme"
-                  class="random_loading_memme max-w-1/2 max-h-1/2 rounded-lg object-cover animate-pulse" 
+                  class="random_loading_meme absolute inset-0 w-full h-full object-contain animate-pulse"
                 />
-                <p class="mdr_loading_text animate-bounce z-20">
-                  Loading modpacks…
-                </p>
-                <p class="text-xs animate-pulse">
-                  Stuck? Try another search query!
-                </p>
+
+                <div class="absolute inset-0 bg-black/40"></div>
+
+                <div class="relative z-20 flex flex-col items-center space-y-2">
+                  <p
+                    class="mdr_loading_text animate-bounce text-white px-4 py-2 rounded-full bg-black/70 text-lg font-semibold"
+                  >
+                    Loading modpacks…
+                  </p>
+                  <p
+                    class="text-xs text-white px-3 py-1 rounded-full bg-black/60 animate-pulse"
+                  >
+                    Stuck? Try another search query!
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -417,6 +426,16 @@ import FancyDiv from "@components/FancyDiv.astro";
 
   // clear browser content
   function clearBrowser() {
+    browser!
+      .querySelectorAll(".mdr_template:not(.hidden)")
+      .forEach((el) => el.remove());
+
+    loading_screen?.classList.add("flex");
+    loading_screen?.classList.remove("hidden");
+  }
+
+  // randomize loading screen meme and text
+  function radomize_loading_screen() {
     const meme_url_endpoint = "https://meme-api.com/gimme/ProgrammerHumor";
     const randomIndex = Math.floor(Math.random() * random_loading_text.length);
     const randomText = random_loading_text[randomIndex];
@@ -424,10 +443,8 @@ import FancyDiv from "@components/FancyDiv.astro";
       ".mdr_loading_text",
     ) as HTMLParagraphElement;
     const randomMemeElem = loading_screen?.querySelector(
-      ".random_loading_memme",
+      ".random_loading_meme",
     ) as HTMLImageElement;
-
-
 
     fetch(meme_url_endpoint)
       .then((response) => response.json())
@@ -450,13 +467,6 @@ import FancyDiv from "@components/FancyDiv.astro";
       .catch((error) => {
         console.warn("Failed to fetch random meme:", error);
       });
-
-    loading_screen?.classList.add("flex");
-    loading_screen?.classList.remove("hidden");
-
-    browser!
-      .querySelectorAll(".mdr_template:not(.hidden)")
-      .forEach((el) => el.remove());
   }
 
   // fetch project versions
@@ -578,6 +588,7 @@ import FancyDiv from "@components/FancyDiv.astro";
 
     loading_screen?.classList.add("hidden");
     loading_screen?.classList.remove("flex");
+    radomize_loading_screen();
   }
 
   // random modpacks
