@@ -12,10 +12,11 @@ const { title, description, image = "/open-graph.jpg" } = Astro.props;
 // import { ViewTransitions } from  "astro:transitions"
 import CursorEffect from "@components/page_effects/CursorHoverEffect.astro";
 import PageAnimations from "@components/page_effects/CustomAnimations.astro";
+import TooltipHandler from "@components/Tooltip_Handler.astro";
 ---
 
 <!-- Preconnect -->
- <link rel="preconnect" href="https://challenges.cloudflare.com">
+<link rel="preconnect" href="https://challenges.cloudflare.com">
 <link rel="preconnect" href="https://hosting.nikostuff.com" crossorigin />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
@@ -57,6 +58,7 @@ import PageAnimations from "@components/page_effects/CustomAnimations.astro";
 
 <PageAnimations />
 <CursorEffect />
+<TooltipHandler />
 <!--<script is:inline async src="/js/bg.js"/>-->
 <!--<script is:inline data-astro-rerun async src="/js/typewriter.js"/>-->
 

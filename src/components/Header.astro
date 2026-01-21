@@ -48,13 +48,15 @@ import HeaderIcon from "@components/web_icon.astro";
 
       <div class="buttons absolute right-0 top-1/2 -translate-y-1/2 flex gap-1">
         <div
-          id="active-users-pill"
+          data-tooltip="Average panel ➜ server ping"
+          id="server-latency-pill"
           class="flex items-center justify-center bg-blue-500/20 border border-black/10 dark:border-white/25 text-sm font-medium px-3 py-1 rounded-full transition-all duration-300"
         >
           Ping: <span id="avreage-ping" class="ml-1">0.00</span> ms
         </div>
 
         <div
+          data-tooltip="Amount of created accounts"
           id="active-users-pill"
           class="flex items-center justify-center bg-green-500/20 border border-black/10 dark:border-white/25 text-sm font-medium px-3 py-1 rounded-full transition-all duration-300"
         >
@@ -62,6 +64,7 @@ import HeaderIcon from "@components/web_icon.astro";
         </div>
 
         <button
+          data-tooltip="Toggle theme"
           id="header-theme-button"
           aria-label={`Toggle light and dark theme`}
           class={cn(

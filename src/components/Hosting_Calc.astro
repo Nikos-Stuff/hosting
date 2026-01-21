@@ -5,6 +5,7 @@
       <p class="block text-sm font-medium mb-1">Choose Location:</p>
 
       <div
+        data-tooltip="Selecting a nearby server reduces ping and improves speed."
         id="location_selected"
         class="border border-black/15 dark:border-white/20 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center select-none hover:bg-black/5 dark:hover:bg-white/10 transition-all duration-300 ease-in-out"
       >
@@ -33,6 +34,7 @@
       <p class="block text-sm font-medium mb-1">Select "egg":</p>
 
       <div
+        data-tooltip="Pick a server type for the game you want to run."
         id="egg_selected"
         class="border border-black/15 dark:border-white/20 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center select-none hover:bg-black/5 dark:hover:bg-white/10 transition-all duration-300 ease-in-out"
       >
@@ -74,6 +76,7 @@
     <div class="relative">
       <p class="block text-sm font-medium mb-1">Your Email:</p>
       <input
+        data-tooltip="Your auto-generated password will be sent here. No spam!"
         id="client_email"
         type="text"
         placeholder="example@xyz.com"
@@ -124,39 +127,39 @@
   // DOM ELEMENT REFERENCES
   // ------------------------------
   const locationDropdown = document.getElementById(
-    "location_dropdown"
+    "location_dropdown",
   ) as HTMLElement | null;
   const locationSelected = document.getElementById(
-    "location_selected"
+    "location_selected",
   ) as HTMLElement | null;
   const locationOptions = document.getElementById(
-    "location_options"
+    "location_options",
   ) as HTMLElement | null;
 
   const eggDropdown = document.getElementById(
-    "egg_dropdown"
+    "egg_dropdown",
   ) as HTMLElement | null;
   const eggSelected = document.getElementById(
-    "egg_selected"
+    "egg_selected",
   ) as HTMLElement | null;
   const eggOptions = document.getElementById(
-    "egg_options"
+    "egg_options",
   ) as HTMLElement | null;
   const eggTemplate = document.getElementById(
-    "egg_template"
+    "egg_template",
   ) as HTMLElement | null;
 
   const clientEmailInput = document.getElementById(
-    "client_email"
+    "client_email",
   ) as HTMLInputElement | null;
   const placeOrderBtn = document.getElementById(
-    "place_order_btn"
+    "place_order_btn",
   ) as HTMLElement | null;
   const order_blocker = document.getElementById(
-    "order_blocker"
+    "order_blocker",
   ) as HTMLElement | null;
   const order_status = document.getElementById(
-    "order_activity"
+    "order_activity",
   ) as HTMLElement | null;
   // ------------------------------
 

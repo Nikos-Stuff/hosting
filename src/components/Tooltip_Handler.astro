@@ -1,0 +1,88 @@
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const tooltip = document.createElement("div");
+  tooltip.id = "custom-tooltip";
+  tooltip.className = `
+    fixed
+    px-2 py-1
+    text-xs
+    backdrop-blur-sm
+    backdrop-saturate-200
+    backdrop-brightness-200
+    backdrop-contrast-200
+    dark:bg-black/60 bg-white/60
+    border border-black/10 dark:border-white/25
+    rounded-lg
+    rounded-tl-xs
+    pointer-events-none
+    opacity-0
+    transition-[opacity]
+    duration-200
+    z-50
+  `;
+  document.body.appendChild(tooltip);
+
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let speed = 0.05;
+  let lastText = "";
+  let fadeTimeout: ReturnType<typeof setTimeout>;
+  let hoveredEl: HTMLElement | null = null;
+
+  function animate() {
+    currentX += (targetX - currentX) * speed;
+    currentY += (targetY - currentY) * speed;
+    tooltip.style.left = `${currentX}px`;
+    tooltip.style.top = `${currentY}px`;
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+
+  document.querySelectorAll<HTMLElement>("[data-tooltip]").forEach((el) => {
+    el.addEventListener("mouseenter", () => {
+      hoveredEl = el;
+      const text = el.dataset.tooltip;
+      if (!text) return;
+
+      tooltip.classList.add("opacity-0");
+      clearTimeout(fadeTimeout);
+      fadeTimeout = setTimeout(() => {
+        tooltip.textContent = text;
+        lastText = text;
+        tooltip.classList.remove("opacity-0");
+        tooltip.classList.add("opacity-100");
+      }, 150);
+    });
+
+    el.addEventListener("mousemove", (e: MouseEvent) => {
+      targetX = e.clientX + 15;
+      targetY = e.clientY + 20;
+    });
+
+    el.addEventListener("mouseleave", () => {
+      hoveredEl = null;
+      clearTimeout(fadeTimeout);
+      tooltip.classList.remove("opacity-100");
+      tooltip.classList.add("opacity-0");
+    });
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!hoveredEl) return;
+    const rect = hoveredEl.getBoundingClientRect();
+    if (
+      e.clientX < rect.left - 50 ||
+      e.clientX > rect.right + 50 ||
+      e.clientY < rect.top - 50 ||
+      e.clientY > rect.bottom + 50
+    ) {
+      hoveredEl = null;
+      tooltip.classList.remove("opacity-100");
+      tooltip.classList.add("opacity-0");
+      clearTimeout(fadeTimeout);
+    }
+  });
+});
+</script>
