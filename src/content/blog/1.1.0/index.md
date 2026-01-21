@@ -1,6 +1,6 @@
 ---
 title: "v1.1.0"
-date: "January 29, 2026"
+date: "January 19, 2026"
 time: 02:05
 draft: false
 tags:
