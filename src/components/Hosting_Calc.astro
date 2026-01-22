@@ -229,6 +229,7 @@
         eggOption.id = "";
         eggOption.classList.add("egg_option");
         eggOption.setAttribute("data-egg_id", egg.id);
+        eggOption.setAttribute("data-tooltip", egg.desc);
         eggOption.hidden = false;
 
         const img = eggOption.querySelector("img");
