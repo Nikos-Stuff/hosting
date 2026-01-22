@@ -12,7 +12,7 @@
     border border-black/10 dark:border-white/25
     rounded-lg rounded-tl-xs
     pointer-events-none
-    opacity-0 transition-opacity duration-150
+    opacity-0 transition-[opacity,border-radius] duration-150
     z-50
   `;
     document.body.appendChild(tooltip);
@@ -20,12 +20,20 @@
     let hoveredEl: HTMLElement | null = null;
     let observedEl: HTMLElement | null = null;
     let fadeTimeout: number | undefined;
+    let tooltipCorner: "tl" | "tr" = "tl";
 
     let targetX = 0;
     let targetY = 0;
     let currentX = 0;
     let currentY = 0;
     const speed = 0.08;
+
+    function setTooltipCorner(corner: "tl" | "tr") {
+      if (tooltipCorner === corner) return;
+      tooltip.classList.remove(`rounded-${tooltipCorner}-xs`);
+      tooltip.classList.add(`rounded-${corner}-xs`);
+      tooltipCorner = corner;
+    }
 
     function animate(): void {
       currentX += (targetX - currentX) * speed;
@@ -46,7 +54,6 @@
       tooltip.classList.add("opacity-0");
     }
 
-    // IntersectionObserver — auto hide if element disappears
     const io = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]) => {
         for (const entry of entries) {
@@ -87,8 +94,36 @@
 
     document.addEventListener("pointermove", (e: PointerEvent) => {
       if (!hoveredEl) return;
-      targetX = e.clientX + 14;
-      targetY = e.clientY + 18;
+
+      const cursorOffsetX = 14;
+      const cursorOffsetY = 18;
+      const margin = 8;
+
+      let x = e.clientX + cursorOffsetX;
+      let y = e.clientY + cursorOffsetY;
+
+      const tooltipRect = tooltip.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      let corner: "tl" | "tr" = "tl"; // default
+
+      if (x + tooltipRect.width + margin > viewportWidth) {
+        x = e.clientX - tooltipRect.width - margin;
+        corner = "tr";
+      }
+
+      if (y + tooltipRect.height + margin > viewportHeight) {
+        y = e.clientY - tooltipRect.height - margin;
+      }
+
+      x = Math.max(margin, x);
+      y = Math.max(margin, y);
+
+      targetX = x;
+      targetY = y;
+
+      setTooltipCorner(corner);
     });
 
     document.addEventListener("pointerout", (e: PointerEvent) => {
