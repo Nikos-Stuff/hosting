@@ -1,120 +1,135 @@
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const tooltip: HTMLDivElement = document.createElement("div");
-    tooltip.id = "custom-tooltip";
-    tooltip.className = `
+document.addEventListener("DOMContentLoaded", () => {
+  const tooltip = document.createElement("div");
+  tooltip.id = "custom-tooltip";
+  tooltip.className = `
     fixed px-2 py-1 text-xs
     max-w-1/3
+    top_left_rounded
     line-clamp-4
     backdrop-blur-sm backdrop-saturate-200
     backdrop-contrast-200
     dark:bg-black/60 bg-white/60
     border border-black/10 dark:border-white/25
-    rounded-lg rounded-tl-xs
     pointer-events-none
-    opacity-0 transition-[opacity,border-radius] duration-150
+    opacity-0 transition-[opacity,border-radius] duration-500 ease-in-out
+    will-change-[transform,border-radius]
     z-50
   `;
-    document.body.appendChild(tooltip);
+  document.body.appendChild(tooltip);
 
-    let hoveredEl: HTMLElement | null = null;
-    let observedEl: HTMLElement | null = null;
-    let fadeTimeout: number | undefined;
-    let tooltipCorner: "tl" | "tr" = "tl";
+  type Corner = "tl" | "tr" | "bl" | "br";
+  let hoveredEl: HTMLElement | null = null;
+  let observedEl: HTMLElement | null = null;
+  let fadeTimeout: number | undefined;
+  let tooltipCorner: Corner = "tl";
 
-    let targetX = 0;
-    let targetY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    const speed = 0.08;
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  const speed = 0.08;
 
-    function setTooltipCorner(corner: "tl" | "tr") {
-      if (tooltipCorner === corner) return;
-      tooltip.classList.remove(`rounded-${tooltipCorner}-xs`);
-      tooltip.classList.add(`rounded-${corner}-xs`);
-      tooltipCorner = corner;
-    }
-
-    function animate(): void {
-      currentX += (targetX - currentX) * speed;
-      currentY += (targetY - currentY) * speed;
-      tooltip.style.left = `${currentX}px`;
-      tooltip.style.top = `${currentY}px`;
-      requestAnimationFrame(animate);
-    }
+  function animate() {
+    currentX += (targetX - currentX) * speed;
+    currentY += (targetY - currentY) * speed;
+    tooltip.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
     requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
 
-    function hideTooltip(): void {
-      hoveredEl = null;
-      if (fadeTimeout !== undefined) {
-        clearTimeout(fadeTimeout);
-        fadeTimeout = undefined;
-      }
-      tooltip.classList.remove("opacity-100");
-      tooltip.classList.add("opacity-0");
+  function setTooltipCorner(corner: Corner) {
+    if (tooltipCorner === corner) return;
+    tooltip.classList.remove(
+      tooltipCorner === "tl"
+        ? "top_left_rounded"
+        : tooltipCorner === "tr"
+        ? "top_right_rounded"
+        : tooltipCorner === "bl"
+        ? "bottom_left_rounded"
+        : "bottom_right_rounded"
+    );
+    tooltip.classList.add(
+      corner === "tl"
+        ? "top_left_rounded"
+        : corner === "tr"
+        ? "top_right_rounded"
+        : corner === "bl"
+        ? "bottom_left_rounded"
+        : "bottom_right_rounded"
+    );
+    tooltipCorner = corner;
+  }
+
+  function hideTooltip() {
+    hoveredEl = null;
+    tooltipCorner = "tl";
+    if (fadeTimeout !== undefined) clearTimeout(fadeTimeout);
+    tooltip.classList.remove("opacity-100");
+    tooltip.classList.add("opacity-0");
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting && entry.target === hoveredEl) hideTooltip();
+    }
+  });
+
+  document.addEventListener("pointerover", (e: PointerEvent) => {
+    const target = e.target;
+    if (!(target instanceof HTMLElement)) return;
+    const el = target.closest<HTMLElement>("[data-tooltip]");
+    if (!el || el === hoveredEl) return;
+    const text = el.dataset.tooltip;
+    if (!text) return;
+
+    hoveredEl = el;
+
+    if (observedEl !== el) {
+      if (observedEl) io.unobserve(observedEl);
+      io.observe(el);
+      observedEl = el;
     }
 
-    const io = new IntersectionObserver(
-      (entries: IntersectionObserverEntry[]) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting && entry.target === hoveredEl) {
-            hideTooltip();
-          }
-        }
-      },
-    );
+    if (fadeTimeout !== undefined) clearTimeout(fadeTimeout);
 
-    document.addEventListener("pointerover", (e: PointerEvent) => {
-      const target = e.target;
-      if (!(target instanceof Element)) return;
+    tooltip.textContent = text;
+    tooltip.classList.add("opacity-0");
+    tooltip.classList.remove("opacity-100");
 
-      const el = target.closest<HTMLElement>("[data-tooltip]");
-      if (!el || el === hoveredEl) return;
+    fadeTimeout = window.setTimeout(() => {
+      tooltip.classList.remove("opacity-0");
+      tooltip.classList.add("opacity-100");
+    }, 120);
+  });
 
-      const text = el.dataset.tooltip;
-      if (!text) return;
-
-      hoveredEl = el;
-
-      if (observedEl !== el) {
-        if (observedEl) io.unobserve(observedEl);
-        io.observe(el);
-        observedEl = el;
-      }
-
-      tooltip.classList.add("opacity-0");
-      if (fadeTimeout !== undefined) clearTimeout(fadeTimeout);
-
-      fadeTimeout = window.setTimeout(() => {
-        tooltip.textContent = text;
-        tooltip.classList.remove("opacity-0");
-        tooltip.classList.add("opacity-100");
-      }, 120);
-    });
-
-    document.addEventListener("pointermove", (e: PointerEvent) => {
-      if (!hoveredEl) return;
-
-      const cursorOffsetX = 14;
-      const cursorOffsetY = 18;
+  let rafId: number | null = null;
+  document.addEventListener("pointermove", (e: PointerEvent) => {
+    if (!hoveredEl) return;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(() => {
+      const offsetX = 14;
+      const offsetY = 18;
       const margin = 8;
 
-      let x = e.clientX + cursorOffsetX;
-      let y = e.clientY + cursorOffsetY;
+      let x = e.clientX + offsetX;
+      let y = e.clientY + offsetY;
 
-      const tooltipRect = tooltip.getBoundingClientRect();
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
+      const rect = tooltip.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
 
-      let corner: "tl" | "tr" = "tl"; // default
+      let xSide: "l" | "r" = "l";
+      let ySide: "t" | "b" = "t";
 
-      if (x + tooltipRect.width + margin > viewportWidth) {
-        x = e.clientX - tooltipRect.width - margin;
-        corner = "tr";
+      if (x + rect.width + margin > vw) {
+        x = e.clientX - rect.width - margin;
+        xSide = "r";
       }
 
-      if (y + tooltipRect.height + margin > viewportHeight) {
-        y = e.clientY - tooltipRect.height - margin;
+      if (y + rect.height + margin > vh) {
+        y = e.clientY - rect.height - margin;
+        ySide = "b";
       }
 
       x = Math.max(margin, x);
@@ -123,18 +138,24 @@
       targetX = x;
       targetY = y;
 
-      setTooltipCorner(corner);
-    });
-
-    document.addEventListener("pointerout", (e: PointerEvent) => {
-      if (!hoveredEl) return;
-
-      const related = e.relatedTarget;
-      if (related instanceof Node && hoveredEl.contains(related)) return;
-
-      io.unobserve(hoveredEl);
-      observedEl = null;
-      hideTooltip();
+      const cornerMap: Record<string, Corner> = {
+        tl: "tl",
+        tr: "tr",
+        bl: "bl",
+        br: "br",
+      };
+      const cornerKey = `${ySide}${xSide}`;
+      setTooltipCorner(cornerMap[cornerKey]);
     });
   });
+
+  document.addEventListener("pointerout", (e: PointerEvent) => {
+    if (!hoveredEl) return;
+    const related = e.relatedTarget;
+    if (related instanceof Node && hoveredEl.contains(related)) return;
+    io.unobserve(hoveredEl);
+    observedEl = null;
+    hideTooltip();
+  });
+});
 </script>

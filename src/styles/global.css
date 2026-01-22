@@ -471,3 +471,23 @@ article img {
   display: none;
 }
 
+/* Tooltip BS */
+
+.top_left_rounded {
+  border-radius: var(--radius-lg);
+  border-top-left-radius: var(--radius-xs);
+}
+.top_right_rounded {
+  border-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-xs);
+}
+
+.bottom_left_rounded {
+  border-radius: var(--radius-lg);
+  border-bottom-left-radius: var(--radius-xs);
+}
+
+.bottom_right_rounded {
+  border-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-xs);
+}
