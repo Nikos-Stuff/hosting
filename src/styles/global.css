@@ -191,7 +191,7 @@ article img {
 #meteors .meteor {
   @apply animate-meteor; /* defined in tailwind.config */
   @apply absolute top-1/2 left-1/2 w-px h-[75vh];
-  @apply bg-gradient-to-b from-white to-transparent;
+  @apply bg-linear-to-b from-white to-transparent;
 }
 
 #meteors .shower.ur {
@@ -388,7 +388,7 @@ article img {
 }
 
 .copy-btn {
-  @apply w-[30px] fixed;
+  @apply w-7.5 fixed;
   left: calc(100% - var(--copy-btn-margin));
   transform: translateX(-100%);
 }

@@ -758,6 +758,25 @@ import FancyDiv from "@components/FancyDiv.astro";
 
   // ---------------------------------------------------------------
 
+  async function sendNotification(title: string, description: any) {
+    if (!("Notification" in window)) {
+      console.warn("Notifications are not supported in this browser.");
+      return;
+    }
+
+    if (Notification.permission !== "granted") {
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") return;
+    }
+
+    const favicon = "/favicon.webp"
+
+    new Notification(title, {
+      body: description,
+      icon: favicon,
+    });
+  }
+
   function updateCircleColor(circle: HTMLDivElement, status: string) {
     const classesToRemove = Array.from(circle.classList).filter(
       (c) => c.startsWith("bg-") || c.startsWith("dark:bg-"),
@@ -1021,6 +1040,7 @@ import FancyDiv from "@components/FancyDiv.astro";
       clean_browser_mod_list();
       clear_log();
       reset_phase_progress();
+      sendNotification("Warming Up...", "Starting up the conversion!");
 
       already_running = true;
 
@@ -1259,6 +1279,7 @@ import FancyDiv from "@components/FancyDiv.astro";
       URL.revokeObjectURL(a.href);
 
       log("Done! ZIP downloaded.", "success");
+      sendNotification("Ready to go!", "Your server side modpack is ready to go! Have Fun!");
 
       already_running = false;
       reset_phase_progress();
