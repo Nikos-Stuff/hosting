@@ -3,20 +3,20 @@
     const tooltip = document.createElement("div");
     tooltip.id = "custom-tooltip";
     tooltip.className = `
-    fixed px-2 py-1 text-xs
-    max-w-1/3 h-fit
-    top_left_rounded
-    line-clamp-4
-    overflow-hidden
-    backdrop-blur-sm backdrop-saturate-200
-    backdrop-contrast-200
-    dark:bg-black/60 bg-white/60
-    border border-black/10 dark:border-white/25
-    pointer-events-none
-    opacity-0 transition-[opacity,border-radius] duration-500 ease-in-out
-    will-change-[transform,border-radius]
-    z-50
-  `;
+      fixed px-2 py-1 text-xs
+      max-w-1/3 h-fit
+      top_left_rounded
+      line-clamp-4
+      overflow-hidden
+      backdrop-blur-sm backdrop-saturate-200
+      backdrop-contrast-200
+      dark:bg-black/60 bg-white/60
+      border border-black/10 dark:border-white/25
+      pointer-events-none
+      opacity-0 transition-[opacity,border-radius] duration-500 ease-in-out
+      will-change-[transform,border-radius,opacity]
+      z-50
+    `;
     document.body.appendChild(tooltip);
 
     type Corner = "tl" | "tr" | "bl" | "br";
@@ -41,33 +41,24 @@
 
     function setTooltipCorner(corner: Corner) {
       if (tooltipCorner === corner) return;
-      tooltip.classList.remove(
-        tooltipCorner === "tl"
-          ? "top_left_rounded"
-          : tooltipCorner === "tr"
-            ? "top_right_rounded"
-            : tooltipCorner === "bl"
-              ? "bottom_left_rounded"
-              : "bottom_right_rounded",
-      );
-      tooltip.classList.add(
-        corner === "tl"
-          ? "top_left_rounded"
-          : corner === "tr"
-            ? "top_right_rounded"
-            : corner === "bl"
-              ? "bottom_left_rounded"
-              : "bottom_right_rounded",
-      );
+
+      const cornerClasses = {
+        tl: "top_left_rounded",
+        tr: "top_right_rounded",
+        bl: "bottom_left_rounded",
+        br: "bottom_right_rounded"
+      };
+
+      Object.values(cornerClasses).forEach(cls => tooltip.classList.remove(cls));
+      
+      tooltip.classList.add(cornerClasses[corner]);
       tooltipCorner = corner;
     }
 
     function hideTooltip() {
       hoveredEl = null;
-      tooltipCorner = "tl";
       if (fadeTimeout !== undefined) clearTimeout(fadeTimeout);
-      tooltip.classList.remove("opacity-100");
-      tooltip.classList.add("opacity-0");
+      tooltip.classList.replace("opacity-100", "opacity-0");
     }
 
     const io = new IntersectionObserver((entries) => {
@@ -99,54 +90,46 @@
 
       fadeTimeout = window.setTimeout(() => {
         tooltip.textContent = text;
-
         tooltip.classList.replace("opacity-0", "opacity-100");
-      }, 250); 
+      }, 150); 
     });
 
     let rafId: number | null = null;
     document.addEventListener("pointermove", (e: PointerEvent) => {
       if (!hoveredEl) return;
       if (rafId) cancelAnimationFrame(rafId);
+      
       rafId = requestAnimationFrame(() => {
         const offsetX = 14;
         const offsetY = 18;
         const margin = 8;
 
-        let x = e.clientX + offsetX;
-        let y = e.clientY + offsetY;
-
         const rect = tooltip.getBoundingClientRect();
         const vw = window.innerWidth;
         const vh = window.innerHeight;
 
+        let x = e.clientX + offsetX;
+        let y = e.clientY + offsetY;
         let xSide: "l" | "r" = "l";
         let ySide: "t" | "b" = "t";
 
+        // Flip Horizontal
         if (x + rect.width + margin > vw) {
           x = e.clientX - rect.width - margin;
           xSide = "r";
         }
 
+        // Flip Vertical
         if (y + rect.height + margin > vh) {
           y = e.clientY - rect.height - margin;
           ySide = "b";
         }
 
-        x = Math.max(margin, x);
-        y = Math.max(margin, y);
+        targetX = Math.max(margin, Math.min(x, vw - rect.width - margin));
+        targetY = Math.max(margin, Math.min(y, vh - rect.height - margin));
 
-        targetX = x;
-        targetY = y;
-
-        const cornerMap: Record<string, Corner> = {
-          tl: "tl",
-          tr: "tr",
-          bl: "bl",
-          br: "br",
-        };
-        const cornerKey = `${ySide}${xSide}`;
-        setTooltipCorner(cornerMap[cornerKey]);
+        const cornerKey = `${ySide}${xSide}` as Corner;
+        setTooltipCorner(cornerKey);
       });
     });
 
@@ -154,7 +137,7 @@
       if (!hoveredEl) return;
       const related = e.relatedTarget;
       if (related instanceof Node && hoveredEl.contains(related)) return;
-      io.unobserve(hoveredEl);
+      if (observedEl) io.unobserve(observedEl);
       observedEl = null;
       hideTooltip();
     });
