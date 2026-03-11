@@ -41,6 +41,27 @@ const posts = (await getCollection("blog"))
   <!-- <script is:inline data-astro-rerun async src="/js/scroll_animation.js"
   ></script> -->
 
+  <!-- Ping popup thingy -->
+  <div
+    id="ping_analysis_popup"
+    class="fixed inset-0 z-50 items-center justify-center hidden"
+  >
+    <div
+      class="border border-black/15 dark:border-white/20 bg-white dark:bg-black rounded-lg p-6 flex flex-col items-start w-96 shadow-2xl"
+    >
+      <h2 class="text-xl font-semibold mb-5">Ping Analysis</h2>
+      <div
+        id="popup-ping-value"
+        class="text-6xl md:text-7xl font-bold mb-1 text-black dark:text-white"
+      >
+        --ms
+      </div>
+      <p id="popup-status-text" class="text-xs font-medium">
+        Initializing...
+      </p>
+    </div>
+  </div>
+
   <POD />
   <!-- Light Mode: Particles -->
   <div class="absolute inset-0 block dark:hidden">
@@ -742,7 +763,7 @@ const posts = (await getCollection("blog"))
       const progressBar = document.getElementById("tip_progress_bar");
       const progressPercent = Math.min(
         (current_amount / goal_amount) * 100,
-        100
+        100,
       );
       if (!progressBar) return;
       const end = Math.floor(current_amount);
