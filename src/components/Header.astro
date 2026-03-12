@@ -339,7 +339,7 @@ import HeaderIcon from "@components/web_icon.astro";
           diffs.push(Math.abs(localHistory[j] - localHistory[j - 1]));
         }
         const jitter = Math.round(diffs.reduce((a, b) => a + b) / diffs.length);
-        jitterDisplay.textContent = `Jitter: ${jitter}ms (±${Math.round(jitter / 2)}ms) | ${localHistory.length} samples | ${successfulPings} successful | Region ${node.region}`;
+        jitterDisplay.textContent = `Jitter: ${jitter}ms (±${Math.round(jitter / 2)}ms) | ${localHistory.length} samples | ${successfulPings} successful`;
       } else {
         jitterDisplay.textContent = `Not enough successful pings to calculate stats (0 or 1 successful) | Region ${node.region}`;
       }
