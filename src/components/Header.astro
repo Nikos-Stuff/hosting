@@ -285,6 +285,11 @@ import HeaderIcon from "@components/web_icon.astro";
     if (!popup || !modal || !pingDisplay || !statusDisplay || !jitterDisplay)
       return;
 
+    // reset the stuff for the new analysis
+    jitterDisplay.textContent = `Measuring stats...`;
+    pingDisplay.textContent = `--ms`;
+    statusDisplay.textContent = `Initializing...`; 
+
     popup.classList.remove("hidden");
     popup.classList.add("flex");
     gsap.set(popup, {
