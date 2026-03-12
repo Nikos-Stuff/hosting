@@ -47,17 +47,28 @@ const posts = (await getCollection("blog"))
     class="fixed inset-0 z-50 items-center justify-center hidden"
   >
     <div
-      class="border border-black/15 dark:border-white/20 bg-white dark:bg-black rounded-lg p-6 flex flex-col items-start w-96 shadow-2xl"
+      class="border border-black/15 dark:border-white/20 bg-white dark:bg-black rounded-lg p-8 flex flex-col items-center justify-center w-96 min-h-64 shadow-2xl text-center"
     >
       <h2 class="text-xl font-semibold mb-5">Ping Analysis</h2>
+
       <div
         id="popup-ping-value"
         class="text-6xl md:text-7xl font-bold mb-1 text-black dark:text-white"
       >
         --ms
       </div>
-      <p id="popup-status-text" class="text-xs font-medium">
+
+      <p id="popup-jitter-value" class="text-xs opacity-50 mb-4">
+        Measuring stats...
+      </p>
+
+      <p id="popup-status-text" class="text-xs font-medium mb-6">
         Initializing...
+      </p>
+
+      <p class="text-[10px] opacity-30 mt-auto">
+        *Web-based estimate. Actual in-game ping may vary due to protocol
+        differences.
       </p>
     </div>
   </div>

@@ -50,7 +50,7 @@ import HeaderIcon from "@components/web_icon.astro";
           id="server-latency-pill"
           class="flex items-center justify-center bg-blue-500/20 border border-black/10 dark:border-white/25 text-sm font-medium px-3 py-1 rounded-full transition-all duration-300"
         >
-          Ping: <span id="average-ping" class="ml-1">0.00</span> ms
+          Ping: <span id="average-ping" class="ml-1">0</span> ms
         </button>
 
         <div
@@ -175,27 +175,49 @@ import HeaderIcon from "@components/web_icon.astro";
     { name: "US #0", url: "https://usnode0.nikostuff.com", region: "US" },
   ];
 
+  const nodeHistoryMap = new Map<string, number[]>();
+
+  const getHistoryForNode = (url: string): number[] => {
+    if (!nodeHistoryMap.has(url)) nodeHistoryMap.set(url, []);
+    return nodeHistoryMap.get(url)!;
+  };
+
   let pingRunning = false;
+  const pingHistory: number[] = [];
 
-  const pingNode = async (url: string) => {
-    const start = performance.now();
+  const pingNode = async (url: string, history: number[], retries = 3) => {
+    for (let attempt = 0; attempt < retries; attempt++) {
+      const start = performance.now();
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
+      try {
+        await fetch(url, {
+          method: "HEAD",
+          mode: "no-cors",
+          cache: "no-store",
+          signal: controller.signal,
+        });
 
-    try {
-      await fetch(`${url}?t=${Date.now()}`, {
-        method: "HEAD",
-        mode: "no-cors",
-        cache: "no-store",
-        signal: controller.signal,
-      });
+        clearTimeout(timeout);
+        const ping = Math.round(performance.now() - start);
 
-      clearTimeout(timeout);
-      return Math.round(performance.now() - start);
-    } catch {
-      return Infinity;
+        const avg =
+          history.length > 0
+            ? history.reduce((a, b) => a + b) / history.length
+            : ping;
+
+        // Only accept if it's not a massive spike or if it's our first measurement
+        if (ping < avg * 3 || history.length === 0) {
+          history.push(ping);
+          if (history.length > 5) history.shift();
+          return ping;
+        }
+      } catch {
+        clearTimeout(timeout);
+      }
     }
+    return Infinity;
   };
 
   const updatePing = async () => {
@@ -203,25 +225,19 @@ import HeaderIcon from "@components/web_icon.astro";
     pingRunning = true;
 
     try {
-      console.log("PING UPDATE", Date.now());
-
       const results: NodeWithPing[] = await Promise.all(
         nodes.map(async (node) => ({
           ...node,
-          ping: await pingNode(node.url),
+          ping: await pingNode(node.url, getHistoryForNode(node.url)),
         })),
       );
 
       const validNodes = results.filter((n) => n.ping !== Infinity);
-      if (!validNodes.length) {
-        console.warn("No reachable nodes");
-        return;
-      }
+      if (!validNodes.length) return;
 
       const recommendedNode = validNodes.reduce((best, node) =>
         node.ping < best.ping ? node : best,
       );
-
       console.log("Recommended:", recommendedNode.name);
 
       const latencyPill = document.getElementById("server-latency-pill");
@@ -232,7 +248,7 @@ import HeaderIcon from "@components/web_icon.astro";
         );
       }
 
-      animateValue(pingSpan, currentPing, recommendedNode.ping, 500, 2);
+      animateValue(pingSpan, currentPing, recommendedNode.ping, 500);
       currentPing = recommendedNode.ping;
 
       console.table(
@@ -253,7 +269,8 @@ import HeaderIcon from "@components/web_icon.astro";
   setInterval(updateActiveUsers, 60000);
   setInterval(updatePing, 5000);
 
-  const sleep = (ms: number | undefined) => new Promise((resolve) => setTimeout(resolve, ms));
+  const sleep = (ms: number | undefined) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   pingSpan.parentElement?.addEventListener("click", async () => {
     const popup = document.getElementById("ping_analysis_popup");
@@ -263,8 +280,10 @@ import HeaderIcon from "@components/web_icon.astro";
     const modal = popup.firstElementChild;
     const pingDisplay = document.getElementById("popup-ping-value");
     const statusDisplay = document.getElementById("popup-status-text");
+    const jitterDisplay = document.getElementById("popup-jitter-value");
 
-    if (!popup || !modal || !pingDisplay || !statusDisplay) return;
+    if (!popup || !modal || !pingDisplay || !statusDisplay || !jitterDisplay)
+      return;
 
     popup.classList.remove("hidden");
     popup.classList.add("flex");
@@ -290,10 +309,14 @@ import HeaderIcon from "@components/web_icon.astro";
       let totalPing = 0;
       let successfulPings = 0;
 
+      // CREATE LOCAL HISTORY FOR THIS SPECIFIC ANALYSIS
+      const localHistory: number[] = [];
+
       for (let i = 1; i <= 10; i++) {
         statusDisplay.textContent = `Testing ${node.name} (${node.region}) - Attempt ${i}/10`;
 
-        const ping = await pingNode(node.url);
+        // PASS THE LOCAL HISTORY
+        const ping = await pingNode(node.url, localHistory);
 
         if (ping !== Infinity) {
           totalPing += ping;
@@ -310,19 +333,38 @@ import HeaderIcon from "@components/web_icon.astro";
         await sleep(500);
       }
 
+      if (successfulPings > 1) {
+        const diffs = [];
+        for (let j = 1; j < localHistory.length; j++) {
+          diffs.push(Math.abs(localHistory[j] - localHistory[j - 1]));
+        }
+        const jitter = Math.round(diffs.reduce((a, b) => a + b) / diffs.length);
+        jitterDisplay.textContent = `Jitter: ${jitter}ms (±${Math.round(jitter / 2)}ms) | ${localHistory.length} samples | ${successfulPings} successful | Region ${node.region}`;
+      } else {
+        jitterDisplay.textContent = `Not enough successful pings to calculate stats (0 or 1 successful) | Region ${node.region}`;
+      }
+
       if (successfulPings > 0) {
         const avg = Math.round(totalPing / successfulPings);
         if (avg < bestOverall.ping) {
           bestOverall = { ping: avg, name: node.name, region: node.region };
         }
       }
+
+      // wait a bit before next node
+      await sleep(3500);
+      // reset the jitter display & ping display for the next node
+
+      jitterDisplay.textContent = `Measuring stats...`;
+      pingDisplay.textContent = `--ms`;
     }
 
     statusDisplay.textContent = `Best: ${bestOverall.name} (${bestOverall.region})`;
     pingDisplay.textContent = `${bestOverall.ping}ms`;
+    jitterDisplay.textContent = `Done!`;
     gsap.to(pingDisplay, { scale: 1.2, duration: 0.3, yoyo: true, repeat: 1 });
 
-    await sleep(1500);
+    await sleep(5000);
     gsap.to(popup, {
       backgroundColor: "rgba(0,0,0,0)",
       backdropFilter: "blur(0px)",
