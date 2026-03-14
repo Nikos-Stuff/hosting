@@ -9,6 +9,7 @@ tags:
 ---
 
 ## Bugfixes & New Location!
+
 Hello! We added a new location! United States!
 Enjoy better ping and overall more stable connection.
 
@@ -17,9 +18,11 @@ Enjoy better ping and overall more stable connection.
 - Fixed issues with server deletion
 
 ## Coming soon!
+
 - Ability to get more RAM & CPU for 3$/mo
 - More nodes
 - More eggs ( as always - you can help us with this! )
+- Egg changer
 
 I would like to give a huge shout-out to our Ko-Fi supporters!
 Thanks for supporting us! <3
