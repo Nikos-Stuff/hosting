@@ -473,15 +473,32 @@ const posts = (await getCollection("blog"))
       <section class="relative animate">
         <!-- OPEN BETA NOTICE -->
         <div
-          class="w-full p-4 mb-5 gap-3 flex items-center border rounded-lg bg-yellow-100/50 border-yellow-300 dark:bg-yellow-900/30 dark:border-yellow-700 transition-all duration-300 ease-in-out"
+          class="w-full p-4 mb-5 flex items-start gap-4 border rounded-lg bg-yellow-100/50 border-yellow-300 dark:bg-yellow-900/30 dark:border-yellow-700 transition-all duration-300 ease-in-out"
         >
-          <p>
-            You can now hop in and create your free server!<br />
-            Notice that we are currently in open beta testing phase - so we are using
-            a little bit slower and less powerful hardware than usual.<br />
-            Full launch with better hardware is coming soon! Thank you for your patience
-            and support!
-          </p>
+          <div class="text-3xl mt-0.5 select-none"><i class="ph ph-seal-warning animate-pulse"></i></div>
+
+          <div class="leading-relaxed">
+            <p class="font-semibold text-lg mb-1">
+              Infrastructure Refactor in Progress
+            </p>
+
+            <p class="text-sm opacity-90">
+              Our API may be temporarily unavailable while we rebuild our
+              infrastructure to improve modularity and long-term
+              maintainability.
+            </p>
+
+            <p class="text-sm opacity-90 mt-2">
+              <span class="font-medium">Impact:</span>
+              Ordering new servers is temporarily disabled. Existing services continue
+              to operate normally.
+            </p>
+
+            <p class="text-sm opacity-80 mt-2">
+              Thanks for your patience — this upgrade enables upcoming
+              improvements.
+            </p>
+          </div>
         </div>
         <p
           class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"

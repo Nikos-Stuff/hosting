@@ -102,6 +102,11 @@ html.dark {
   background-color: black;
 }
 
+button,
+a {
+  cursor: default;
+}
+
 html,
 body {
   @apply h-full w-full antialiased;

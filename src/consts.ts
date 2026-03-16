@@ -33,7 +33,7 @@ export const LINKS: Links = [
 export const SOCIALS: Socials = [
   {
     NAME: "Email",
-    ICON: "email",
+    ICON: "ph ph-envelope-simple",
     TEXT: "team@nikostuff.com",
     HREF: "mailto:team@nikostuff.com",
   },
@@ -51,7 +51,7 @@ export const SOCIALS: Socials = [
   // },
   {
     NAME: "Discord",
-    ICON: "discord",
+    ICON: "ph ph-discord-logo",
     TEXT: "niko_fluffer",
     HREF: "https://dc.nikostuff.com",
   }
