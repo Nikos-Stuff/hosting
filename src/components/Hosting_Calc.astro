@@ -32,10 +32,9 @@
           data-location_name="us_free"
         >
           <div>
-            <span class="fi fi-us mr-5"></span>United States 
+            <span class="fi fi-us mr-5"></span>United States
           </div>
         </div>
-
       </div>
     </div>
 
@@ -173,10 +172,8 @@
   ) as HTMLElement | null;
   // ------------------------------
 
-  const egg_list =
-    "https://api.nikostuff.com/HostingPelicanData?list_eggs"; // API for eggs
-  const order_api =
-    "https://api.nikostuff.com/HostingOrderManager?place_order"; // API for placing / renewing stuff
+  const egg_list = "https://api.nikostuff.com/HostingPelicanData?list_eggs"; // API for eggs
+  const order_api = "https://api.nikostuff.com/HostingOrderManager?place_order"; // API for placing / renewing stuff
 
   const data_storage: {
     egg_id: string;
@@ -222,6 +219,14 @@
   // ------------------------------
   // FETCH EGGS
   // ------------------------------
+
+  type Egg = {
+    id: number;
+    name: string;
+    desc: string;
+    image: string;
+  };
+
   async function fetchEggs() {
     try {
       const res = await fetch(egg_list);
@@ -232,29 +237,31 @@
       if (!grid) return;
 
       // Create egg options
-      for (const egg of data) {
+      const eggs = Object.values(data).filter(
+        (item): item is Egg =>
+          typeof item === "object" && item !== null && "id" in item,
+      );
+
+      for (const egg of eggs) {
         const eggOption = eggTemplate?.cloneNode(true);
         if (!(eggOption instanceof HTMLElement)) continue;
 
         eggOption.id = "";
         eggOption.classList.add("egg_option");
-        eggOption.setAttribute("data-egg_id", egg.id);
-        eggOption.setAttribute("data-tooltip", egg.desc);
+        eggOption.dataset.egg_id = String(egg.id);
+        eggOption.dataset.tooltip = egg.desc;
         eggOption.hidden = false;
 
         const img = eggOption.querySelector("img");
         if (img) {
-          (img as HTMLImageElement).src = egg.image || "/imgs/plc.png";
-          (img as HTMLImageElement).alt = egg.name || "";
+          img.src = egg.image || "/imgs/plc.png";
+          img.alt = egg.name || "";
         }
 
         const label = eggOption.querySelector("span");
-        if (label) (label as HTMLElement).textContent = egg.name || "";
+        if (label) label.textContent = egg.name || "";
 
         grid.appendChild(eggOption);
-
-        // small delay for rendering large number of eggs
-        await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
       // Add click listeners for eggs
