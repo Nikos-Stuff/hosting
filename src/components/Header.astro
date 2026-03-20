@@ -146,7 +146,7 @@ import HeaderIcon from "@components/web_icon.astro";
   const updateActiveUsers = async () => {
     try {
       const { active_users } = await fetchJSON(
-        "https://api.nikostuff.com/v2/hosting/pelican_data?active_users",
+        "https://api.nikostuff.com/HostingPelicanData?active_users",
       );
 
       if (active_users !== currentUsers) {
