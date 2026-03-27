@@ -1,5 +1,5 @@
 ---
-import { SITE, LINKS } from "@consts";
+import { LINKS } from "@consts";
 import { cn } from "@lib/utils";
 const { pathname } = Astro.url;
 const subpath = pathname.match(/[^/]+/g);
@@ -109,7 +109,6 @@ import HeaderIcon from "@components/web_icon.astro";
 
   const pill = document.getElementById("active-users-count");
   const pingSpan = document.getElementById("average-ping");
-  const pingPopup = document.getElementById("ping_analysis_popup");
 
   if (!pill || !pingSpan) throw new Error("Required elements not found");
 
@@ -183,7 +182,6 @@ import HeaderIcon from "@components/web_icon.astro";
   };
 
   let pingRunning = false;
-  const pingHistory: number[] = [];
 
   const pingNode = async (url: string, history: number[], retries = 3) => {
     for (let attempt = 0; attempt < retries; attempt++) {
