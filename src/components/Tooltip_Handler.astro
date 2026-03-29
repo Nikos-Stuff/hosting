@@ -89,7 +89,9 @@
       tooltip.classList.replace("opacity-100", "opacity-0");
 
       fadeTimeout = window.setTimeout(() => {
-        tooltip.textContent = text;
+        // tooltip.textContent = text;
+        // respect html in tooltip text
+        tooltip.innerHTML = text;
         tooltip.classList.replace("opacity-0", "opacity-100");
       }, 150); 
     });

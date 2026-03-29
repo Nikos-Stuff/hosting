@@ -21,20 +21,20 @@
         <div
           class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
           data-location_name="europe_free"
-          data-tooltip="Free EPYC based servers located in Europe | Performance: ★★★★☆"
+          data-tooltip="EPYC based servers located in Europe"
         >
           <div>
-            <span class="fi fi-eu mr-5"></span>Europe - Free
+            <span class="fi fi-eu mr-5"></span>Europe
           </div>
         </div>
 
         <div
           class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
           data-location_name="us_free"
-          data-tooltip="Free EPYC based servers located in the United States | Performance: ★★★★☆"
+          data-tooltip="EPYC based servers located in the United States"
         >
           <div>
-            <span class="fi fi-us mr-5"></span>United States - Free
+            <span class="fi fi-us mr-5"></span>United States
           </div>
         </div>
       </div>
@@ -83,6 +83,48 @@
       </div>
     </div>
 
+    <!-- Subplan dropdown -->
+    <div class="relative" id="subplan_dropdown">
+      <p class="block text-sm font-medium mb-1">Select Subplan:</p>
+
+      <div
+        data-tooltip="Subplans are different server configurations with varying performance and prices. Choose one that fits your needs."
+        id="subplan_selected"
+        class="border border-black/15 dark:border-white/20 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center select-none hover:bg-black/5 dark:hover:bg-white/10 transition-all duration-300 ease-in-out"
+      >
+        <div>Click to choose subplan</div>
+      </div>
+
+      <div
+        id="subplan_options"
+        class="hide_scrollbar absolute w-full rounded-lg mt-1 overflow-auto max-h-0 transition-all duration-300 z-51 dark:bg-black bg-white shadow-lg"
+      >
+        <div
+          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
+          data-subplan_name="free"
+          data-tooltip="Good old free plan. Specifications are scaled based on the egg you choose."
+        >
+          <div>Free - 0$/month</div>
+        </div>
+
+        <div
+          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
+          data-subplan_name="friends"
+          data-tooltip="Enhanced performance with more resources for growing projects </br> +1GB RAM, +1.5 CPU core, +5GB storage | Performance: ★★★☆☆"
+        >
+          <div>Friends - 5$/month</div>
+        </div>
+
+        <div
+          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
+          data-subplan_name="advanced"
+          data-tooltip="Premium performance with the most resources for large projects </br> +2GB RAM, +2 CPU cores, +10GB storage | Performance: ★★★★★"
+        >
+          <div>Advanced - 15$/month</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Email Input for order -->
     <div class="relative">
       <p class="block text-sm font-medium mb-1">Your Email:</p>
@@ -109,6 +151,63 @@
         >
         </div>
       </div>
+    </div>
+
+    <!-- Server specs preview ( CPU / RAM / SSD bars ) -->
+    <div id="specs_preview" class="space-y-3">
+      <p class="block text-sm font-medium mb-1">Server Specs Preview:</p>
+      <div class="space-y-2">
+        <div>
+          <p class="text-xs mb-1">CPU</p>
+          <div
+            class="w-full bg-black/5 dark:bg-white/5 rounded-full h-4"
+            data-tooltip="0vCores"
+          >
+            <div
+              id="cpu_bar"
+              class="h-4 rounded-full transition-all duration-300 bg-black dark:bg-white"
+              style="width: 5%"
+            >
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-xs mb-1">RAM</p>
+          <div
+            class="w-full bg-black/5 dark:bg-white/5 rounded-full h-4"
+            data-tooltip="0GB RAM"
+          >
+            <div
+              id="ram_bar"
+              class="h-4 rounded-full transition-all duration-300 bg-black dark:bg-white"
+              style="width: 5%"
+            >
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-xs mb-1">SSD Storage</p>
+          <div
+            class="w-full bg-black/5 dark:bg-white/5 rounded-full h-4"
+            data-tooltip="0GB Storage"
+          >
+            <div
+              id="ssd_bar"
+              class="h-4 rounded-full transition-all duration-300 bg-black dark:bg-white"
+              style="width: 5%"
+            >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total cost -->
+    <div class="flex justify-between items-center">
+      <p class="text-lg font-semibold">Monthly Cost:</p>
+      <p id="estimated_cost" class="text-4xl font-bold">0$</p>
     </div>
 
     <div class="animate">
@@ -160,6 +259,16 @@
     "egg_template",
   ) as HTMLElement | null;
 
+  const subplanDropdown = document.getElementById(
+    "subplan_dropdown",
+  ) as HTMLElement | null;
+  const subplanSelected = document.getElementById(
+    "subplan_selected",
+  ) as HTMLElement | null;
+  const subplanOptions = document.getElementById(
+    "subplan_options",
+  ) as HTMLElement | null;
+
   const clientEmailInput = document.getElementById(
     "client_email",
   ) as HTMLInputElement | null;
@@ -181,10 +290,12 @@
     egg_id: string;
     client_email: string;
     location: string;
+    subplan: string;
     turnstile_token: string;
   } = {
     egg_id: "",
     client_email: "",
+    subplan: "",
     location: "",
     turnstile_token: "",
   };
@@ -293,6 +404,10 @@
   locationSelected?.addEventListener("click", () => {
     locationOptions?.classList.toggle("max-h-60");
   });
+
+  subplanSelected?.addEventListener("click", () => {
+    subplanOptions?.classList.toggle("max-h-60");
+  });
   // ------------------------------
 
   // Click outside to close dropdowns
@@ -303,6 +418,9 @@
     }
     if (!(target instanceof Node) || !eggDropdown?.contains(target)) {
       eggOptions?.classList.remove("max-h-60");
+    }
+    if (!(target instanceof Node) || !subplanDropdown?.contains(target)) {
+      subplanOptions?.classList.remove("max-h-60");
     }
   });
 
@@ -322,6 +440,21 @@
         data_storage.location = selected;
       });
     });
+
+  // ------------------------------
+  // SUBPLAN OPTION SELECT
+  // ------------------------------
+  subplanOptions?.querySelectorAll("[data-subplan_name]")?.forEach((option) => {
+    option.addEventListener("click", () => {
+      if (!subplanSelected || !subplanOptions) return;
+      subplanSelected.innerHTML = option.innerHTML;
+      // store selected subplan for cost calc
+      const selected = option.getAttribute("data-subplan_name") || "";
+      subplanOptions.classList.remove("max-h-60");
+      // add to data storage for ordering
+      data_storage.subplan = selected;
+    });
+  });
 
   placeOrderBtn?.addEventListener("click", async () => {
     // ensure latest email committed before sending
