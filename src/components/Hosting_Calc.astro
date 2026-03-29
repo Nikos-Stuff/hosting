@@ -164,9 +164,15 @@
         data-tooltip="0% Availability"
       >
         <div
+          id="availability_after_bar"
+          class="absolute h-full rounded-md transition-all duration-300 bg-gray-900 dark:bg-gray-400"
+          style="width: 0%; opacity: 0.5; z-index: 2;"
+        >
+        </div>
+        <div
           id="availability_base_bar"
           class="relative h-full rounded-md transition-all duration-300 bg-black dark:bg-white"
-          style="width: 0%"
+          style="width: 0%; z-index: 1;"
         >
         </div>
       </div>
@@ -332,6 +338,9 @@
     const availabilityBar = document.getElementById(
       "availability_base_bar",
     ) as HTMLElement | null;
+    const availabilityAfterBar = document.getElementById(
+      "availability_after_bar",
+    ) as HTMLElement | null;
 
     const estimatedCost = document.getElementById(
       "estimated_cost",
@@ -453,8 +462,19 @@
           availabilityBar.style.width = `${availability}%`;
           availabilityBar.parentElement?.setAttribute(
             "data-tooltip",
-            `${availability}% Availability`,
+            `${availability}% Availability ( After the server creation: ${Math.max(
+              0,
+              Math.min(100, Number(data.availability_after) || 0),
+            )}% )`,
           );
+        }
+
+        if (availabilityAfterBar) {
+          const availabilityAfter = Math.max(
+            0,
+            Math.min(100, Number(data.availability_after) || 0),
+          );
+          availabilityAfterBar.style.width = `${availabilityAfter}%`;
         }
       } catch (err) {
         console.error("Error updating specs and cost:", err);
