@@ -155,13 +155,11 @@
 
     <!-- Server specs preview ( CPU / RAM / SSD bars ) -->
     <div id="specs_preview" class="space-y-3">
-      <p class="block text-sm font-medium mb-1">
-        Overall Location Availability:
-      </p>
+      <p class="block text-sm font-medium mb-1">Overall Avaiable Resources:</p>
       <div
         id="availability_bar"
         class="w-full bg-black/5 dark:bg-white/5 rounded-md h-5 relative"
-        data-tooltip="0% Availability"
+        data-tooltip="0% Available Resources"
       >
         <div
           id="availability_after_bar"
@@ -462,10 +460,10 @@
           availabilityBar.style.width = `${availability}%`;
           availabilityBar.parentElement?.setAttribute(
             "data-tooltip",
-            `${availability}% Availability ( After the server creation: ${Math.max(
+            `${availability}% Available Resources ( After this order, ${Math.max(
               0,
               Math.min(100, Number(data.availability_after) || 0),
-            )}% )`,
+            )}% will be available )`,
           );
         }
 
