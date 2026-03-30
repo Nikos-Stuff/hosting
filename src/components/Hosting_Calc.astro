@@ -670,6 +670,7 @@
             "Action completed successfully! Redirecting in 7 sec...";
           setTimeout(() => {
             if (order_blocker) order_blocker.setAttribute("hidden", "true");
+            // TODO: make it follow the response url from the API instead of hardcoding it ( free servers = panel, paid servers = stripe or something )
             window.location.href = "https://panel.nikostuff.com";
           }, 7000);
         } else {
@@ -683,7 +684,7 @@
           err && typeof err === "object" && "message" in err
             ? (err as any).message
             : String(err);
-        alert("Oops. Something went wrong. API returned: " + errMsg);
+        alert("Failed to place order: " + errMsg);
       }
 
       // Refresh Turnstile
