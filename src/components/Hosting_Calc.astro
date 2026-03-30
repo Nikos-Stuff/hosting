@@ -670,8 +670,13 @@
             "Action completed successfully! Redirecting in 7 sec...";
           setTimeout(() => {
             if (order_blocker) order_blocker.setAttribute("hidden", "true");
-            // TODO: make it follow the response url from the API instead of hardcoding it ( free servers = panel, paid servers = stripe or something )
-            window.location.href = "https://panel.nikostuff.com";
+            // api should return "redirect_url" in response, but if not, fallback to panel homepage
+            const redirectUrl =
+              typeof data.redirect_url === "string"
+                ? data.redirect_url
+                : "https://panel.nikostuff.com";
+            window.location.href = redirectUrl;
+
           }, 7000);
         } else {
           if (order_blocker) order_blocker.setAttribute("hidden", "true");
