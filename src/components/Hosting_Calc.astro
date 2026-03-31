@@ -607,17 +607,16 @@
       const target = e.target;
       if (!(target instanceof Node) || !locationDropdown?.contains(target)) {
         locationOptions?.classList.remove("max-h-60");
-        updateSpecsAndCost();
       }
       if (!(target instanceof Node) || !eggDropdown?.contains(target)) {
         eggOptions?.classList.remove("max-h-60");
-        updateSpecsAndCost();
       }
       if (!(target instanceof Node) || !subplanDropdown?.contains(target)) {
         subplanOptions?.classList.remove("max-h-60");
-        updateSpecsAndCost();
       }
     });
+
+    setInterval(updateSpecsAndCost, 2000);
 
     // ------------------------------
     // LOCATION OPTION SELECT
