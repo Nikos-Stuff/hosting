@@ -667,7 +667,7 @@
         // Redirect to payment / order page
         if (data.status === "task_created") {
           order_status.textContent =
-            "Action completed successfully! Redirecting in 7 sec...";
+            "Action completed successfully! Redirecting...";
           setTimeout(() => {
             if (order_blocker) order_blocker.setAttribute("hidden", "true");
             // api should return "redirect_url" in response, but if not, fallback to panel homepage
@@ -677,7 +677,7 @@
                 : "https://panel.nikostuff.com";
             window.location.href = redirectUrl;
 
-          }, 7000);
+          }, 3000);
         } else {
           if (order_blocker) order_blocker.setAttribute("hidden", "true");
           alert("Oops. Something went wrong. Please try again later.");
