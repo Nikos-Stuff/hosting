@@ -375,7 +375,8 @@ const posts = (await getCollection("blog"))
                   Business model
                 </td>
                 <td class="px-4 py-3 text-green-600 font-semibold">
-                  100% non-profit (donations)
+                  Free + optional subplans
+                  <!-- We do have subplans (aka monthly subscriptions) but also a free base packages! -->
                 </td>
                 <td class="px-4 py-3">Ad-driven</td>
                 <td class="px-4 py-3">Tunnels & limits</td>
@@ -479,16 +480,16 @@ const posts = (await getCollection("blog"))
 
           <div class="leading-relaxed">
             <p class="font-semibold text-lg mb-1">
-              Experimental functions ahead!
+              Open Beta: Subplans & Payment Flow
             </p>
 
             <p class="text-sm opacity-90">
-              We're refactoring how our hosting services work. Currently subplans and server specs preview is not functional (Work In Progress). The server setup process is still fully functional and you can set up your free server without any issues.
+              You can now select any subplan and buy it. Note that this is an open beta of the payment flow. If something will go wrong, you will be immediately (manually) refunded and your server will not be affected. However, if you want to be extra safe, you can wait with buying subplans until the official launch. The free base package will remain unaffected and available at all times.
             </p>
 
             <p class="text-sm opacity-90 mt-2">
               <span class="font-medium">Notice:</span>
-              Please reports any bugs via our Ticketing system!
+              I will say that again - Please reports any bugs via our Ticketing system!
             </p>
 
             <p class="text-sm opacity-80 mt-2">
@@ -689,6 +690,16 @@ const posts = (await getCollection("blog"))
 
         <div>
           <Accordion
+            title="Why some locations have older CPUs?"
+            details="We have multiple server providers and locations, and the specifications can vary based on availability and demand. We are constantly working to upgrade our hardware and provide better performance across all locations."
+          />
+
+          <Accordion
+            title="What are subplans?"
+            details="Subplans are different server configurations with varying performance and prices. More RAM, CPU, and storage are available with each subplan. More subplans and better specifications will be added in the future as we continue to improve our hosting services."
+          />
+
+          <Accordion
             title="My server is 'Suspended'. What should I do?"
             details="Try logging out of the panel and logging back in again. When someone creates an account it can take minute or two to setup everything correctly. This should be fixed / improved soon."
           />
@@ -700,7 +711,7 @@ const posts = (await getCollection("blog"))
 
           <Accordion
             title="What powers our free servers?"
-            details="We use a combination of OVH and Hetzner dedicated hardware. For testing purposes, we're currently using Skillhost VPS."
+            details="We use the best server providers available! OVH, Hetzner, Contabo, and more. We have a custom system that automatically provisions servers on demand and allocates resources efficiently to provide free hosting to our users."
           />
 
           <Accordion
