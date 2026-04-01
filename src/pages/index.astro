@@ -18,6 +18,7 @@ import playit_gg from "@assets/hosting/playit.png";
 import WhyUs from "@components/WhyUs.astro";
 
 import BlogSummary from "@components/BlogSummary";
+import ServerList from "@components/ServerList.astro";
 
 const posts = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
@@ -476,7 +477,9 @@ const posts = (await getCollection("blog"))
         <div
           class="w-full p-4 mb-5 flex items-start gap-4 border rounded-lg bg-yellow-100/50 border-yellow-300 dark:bg-yellow-900/30 dark:border-yellow-700 transition-all duration-300 ease-in-out"
         >
-          <div class="text-3xl mt-0.5 select-none"><i class="ph ph-warning animate-pulse"></i></div>
+          <div class="text-3xl mt-0.5 select-none">
+            <i class="ph ph-warning animate-pulse"></i>
+          </div>
 
           <div class="leading-relaxed">
             <p class="font-semibold text-lg mb-1">
@@ -484,7 +487,12 @@ const posts = (await getCollection("blog"))
             </p>
 
             <p class="text-sm opacity-90">
-              You can now select any subplan and buy it. Note that this is an open beta of the payment flow. If something will go wrong, you will be immediately (manually) refunded and your server will not be affected. However, if you want to be extra safe, you can wait with buying subplans until the official launch. The free base package will remain unaffected and available at all times.
+              You can now select any subplan and buy it. Note that this is an
+              open beta of the payment flow. If something will go wrong, you
+              will be immediately (manually) refunded and your server will not
+              be affected. However, if you want to be extra safe, you can wait
+              with buying subplans until the official launch. The free base
+              package will remain unaffected and available at all times.
             </p>
 
             <p class="text-sm opacity-90 mt-2">
@@ -553,6 +561,19 @@ const posts = (await getCollection("blog"))
         </p>
 
         <ExtendService /> -->
+      </section>
+    </FancyDiv>
+
+    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
+      <section class="relative animate">
+        <h2
+          class="font-bold text-3xl mb-0 text-black dark:text-white uppercase"
+        >
+          Community Hub
+        </h2>
+        <p>Explore what’s live! Minecraft servers, Terraria, and much more!</p>
+
+        <ServerList />
       </section>
     </FancyDiv>
 

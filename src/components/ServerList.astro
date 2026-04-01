@@ -1,0 +1,41 @@
+---
+
+---
+
+<div id="server-list-container" class="my-6"></div>
+
+<hr class="border-gray-200 dark:border-zinc-800 my-6" />
+
+<div class="bg-gray-100 dark:bg-zinc-800/50 p-4 rounded-lg">
+  <h3 class="font-bold text-lg mb-2">Visibility Settings</h3>
+  <p class="text-sm text-gray-500 mb-4">
+    Don't want your server shown here? Enter your Server UUID (found in your
+    Server Settings) below to hide or unhide it.
+  </p>
+
+  <div class="flex gap-2">
+    <input
+      type="text"
+      placeholder="e.g. 550e8400-e29b-41d4-a716-446655440000"
+      class="w-full p-4 mt-5 border rounded-lg
+               bg-transparent
+             border-black/15 dark:border-white/20
+             hover:bg-black/5 hover:dark:bg-white/10
+               focus:outline-none
+             focus:border-black/40 dark:focus:border-white/40
+               focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20
+               focus:ring-offset-0
+               transition-all duration-300 ease-out"
+    />
+    <button
+      id="toggle-visibility-btn"
+      class="group w-50 p-4 mt-5 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-all duration-300 ease-in-out"
+    >
+      <span
+        class="w-full z-10 relative group-hover:text-black group-hover:dark:text-white text-center transition-color duration-300"
+      >
+        Toggle Visibility
+      </span>
+    </button>
+  </div>
+</div>

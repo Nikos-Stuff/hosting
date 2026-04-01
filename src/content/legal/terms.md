@@ -1,148 +1,86 @@
 ---
-title: "Terms of Service for Free Hosting Service"
-date: "12/29/2025"
+title: "Terms of Service for Hosting Service"
+date: "4/1/2026"
 ---
-
-## ⚠️ Beta Version
-
-These Terms of Service apply to the beta version of our free hosting service. The service is experimental, and these terms may be updated as the project develops. By using the service, you agree to these terms.
 
 ---
 
-# 1) Definitions
+## 1) Definitions
 
-- **Service Provider / Administrator:** Maciej Frączek, operating under **Niko’s Stuff**.  
+- **Service Provider:** Maciej Frączek, operating under **Niko’s Stuff**.  
   Contact: **team@nikostuff.com**
-
-- **Service / Platform:** The website **hosting.nikostuff.com**, including the User Panel and Server Panel.
-
-- **Service:** Provision of server resources (CPU, RAM, storage, network bandwidth) to run applications or game servers provided as pre-configured “eggs.”
-
-- **User / Client:** Any individual or entity using the Service.
+- **Platform:** The website **hosting.nikostuff.com**, including the User and Server Panels.
+- **Service:** Provision of server resources via pre-configured "Eggs."
+- **User:** Any individual or entity utilizing the Free or Paid tiers of the Service.
 
 ---
 
-# 2) Acceptance of Terms
+## 2) Acceptance of Terms
 
-Using the Service indicates that you have read, understood, and accepted these Terms.
+1. By creating an account or purchasing a subscription, you confirm you have read and accepted these Terms. Users must be at least 13 years old.
 
----
-
-# 3) Scope and Nature of the Service
-
-1. Users can only run applications provided as **official eggs** by the Service Provider.
-2. Users **cannot** upload custom eggs, Docker images, or modify environments outside the panel-provided configuration.
-3. Users may modify files and configuration **only within the provided environment**.
-4. The Service Provider acts as a **reseller** of external infrastructure (e.g., OVH, Hetzner, Contabo).
-5. Services are provided in a **shared hosting model**; overselling may occur, but stability and security are prioritized.
+2. The Service Provider may display a public list of hosted servers (Server Name, Description, Egg Name, Owner Username, and IP if applicable). Users may opt-out of this list by clicking "Hide my server" under the "Global server list" section.
 
 ---
 
-# 4) Acceptable Use Policy (AUP)
+## 3) Scope of Service & Strict Usage Policy
 
-Users must use the Service lawfully and responsibly.
+1. **Strict Egg Usage:** Users may **only** run the specific application associated with their selected "Egg." 
+   - *Example:* A **Minecraft Vanilla** egg may only run Minecraft Vanilla or direct equivalents (e.g., PaperMC, Spigot, Fabric). Running unrelated scripts, bots, or software on a dedicated game egg is strictly prohibited.
+2. **Configuration:** Users may modify files and settings only within the provided panel environment. 
+3. **Reseller Status:** We utilize external infrastructure (e.g., OVH, Hetzner, Contabo). Service availability is subject to these providers' uptime.
+4. **Shared Hosting:** Resources are shared. We reserve the right to manage loads to ensure stability for all users.
+
+---
+
+## 4) Acceptable Use Policy (AUP)
 
 ### 4.1. Prohibited Actions
+- Hosting illegal content, malware, or pirated software.
+- DDoS attacks, port scanning, or phishing.
+- **Cryptocurrency mining** (Strictly prohibited).
+- Bypassing resource limits or attempting to access the host node.
 
-Including but not limited to:
-
-- Hosting illegal content or content violating third-party rights (pirated software, malware, cheats)
-- Attacks or disruption of the service or third-party networks (DDoS, spam, phishing, port scanning)
-- Cryptocurrency mining
-- Excessive or continuous resource usage that affects other users
-- Reselling or sharing the Service without consent
-
-### 4.2. Resource Limits
-
-The Service Provider may limit performance, suspend servers temporarily, or take other actions if a user overloads the system. Resource allocations (RAM, CPU, disk) vary depending on the selected egg.
+### 4.2. Enforcement
+We reserve the right to suspend or terminate any server that violates the AUP or negatively impacts hardware performance for other users.
 
 ---
 
-# 5) Service Operation and Responsibility
+## 5) Paid Subplans & Stripe
 
-### 5.1. Role of the Service Provider
-
-- Provides server resources and environments
-- Offers technical support for the Panel and eggs
-- Coordinates with infrastructure providers if issues arise beyond the provider’s control
-
-### 5.2. User Responsibility
-
-Users are responsible for:
-
-- Content and files uploaded to their servers
-- Configuration of their instances
-- Actions of anyone using their applications
-- Any damages caused to third parties
-
-### 5.3. Service Availability (SLA)
-
-- The Service Provider strives for high uptime but **does not guarantee continuous availability**.
-- Third-party infrastructure failures are outside the provider’s control.
-
-### 5.4. AI Log Analyzer Disclaimer
-
-The Service may provide an AI-powered Log Analyzer for troubleshooting assistance.
-
-- **Experimental Nature:** Results are generated by third-party AI (Google Gemini) and may be inaccurate or harmful if followed blindly.
-- **No Liability:** The Service Provider is not responsible for any data loss, server instability, or security issues resulting from the use of AI-generated suggestions.
-- **Verification:** Users are expected to verify any commands or configuration changes suggested by the AI before applying them.
+1. **Payments:** Paid tiers (e.g., "Friends" package) are processed securely via **Stripe**.
+2. **Cancellations:** You can cancel at any time via the billing portal. 
+3. **Refunds:** Digital resource allocations are generally non-refundable unless required by Polish Consumer Law.
+4. **Taxation:** All listed prices include applicable VAT per Polish/EU regulations.
 
 ---
 
-# 6) Backups
+## 6) AI Troubleshooting (Gemini)
 
-- **No Warranty:** Automatic backups are **not provided**.
-- Users are solely responsible for making and storing their own backups externally.
-- The Service Provider is not liable for data loss due to hardware failure, account suspension, or accidental deletion.
-
----
-
-# 7) Payments and Renewal
-
-- Free service: no payment required; billing cycles do not apply.
-- Beta testing: no recurring payments or charges.
+The Platform offers AI-driven assistance (Log Analyzer / Server Checker).
+- **Use at Own Risk:** AI suggestions are automated and may be inaccurate. We are not liable for server instability or data loss resulting from following AI-generated advice.
+- **No Training:** Technical data sent to the AI is used for real-time analysis only and is not used to train the underlying models.
 
 ---
 
-# 8) Cancellation and Deletion
+## 7) Responsibility & Backups
 
-- Users may delete servers at any time via the panel.
-- Accounts cannot be deleted directly; to remove an account, users must submit a ticket or email the Service Provider.
-- **Inactivity:** The Service Provider reserves the right to delete servers or accounts that have been inactive for an extended period to reclaim resources for active users.
-
----
-
-# 9) Suspension and Termination
-
-The Service may be suspended or terminated immediately without notice for:
-
-- Violation of law or AUP
-- Abuse of resources
-- Threats to platform stability or security
+1. **User Responsibility:** You are responsible for all files uploaded and actions taken via your server instance.
+2. **Backups:** **Niko's Stuff does not provide guaranteed backups.** Users are solely responsible for backing up their data externally. We are not liable for data loss due to hardware failure or account suspension.
 
 ---
 
-# 10) Complaints
+## 8) Free Tier Activity & Termination
 
-- Users may send complaints to **help@nikostuff.com**.
-- Complaints are reviewed within **14 business days**.
-
----
-
-# 11) Privacy
-
-- Data processing follows the **Privacy Policy**. Using the service constitutes acceptance of how data is handled, including third-party AI processing for logs.
+1. **Weekly Login Requirement:** To keep the Free Tier active, users must log into the panel **at least once every 7 days**. 
+2. **Suspension:** Failure to log in within the weekly window will result in the server being **suspended**. Suspended servers stop running but retain their data temporarily.
+3. **Inactivity Deletion:** If a server remains suspended and no activity or login is recorded for an extended period thereafter, the server and all associated data may be **permanently deleted** to reclaim resources.
+4. **Account Deletion:** To fully remove an account and all data, email **help@nikostuff.com**.
 
 ---
 
-# 12) Force Majeure
+## 9) Final Provisions
 
-The Service Provider is not liable for interruptions caused by force majeure, including infrastructure failures, natural disasters, or global internet outages.
-
----
-
-# 13) Final Provisions
-
-- Terms may be updated; changes take effect upon posting.
-- Polish law applies to all aspects of the Service.
+1. **Governing Law:** These terms are governed by the laws of **Poland**.
+2. **Changes:** We may update these Terms as the service grows. Continued use constitutes acceptance.
+3. **Complaints:** Contact **help@nikostuff.com**. We aim to resolve all issues within 14 days.

@@ -1,123 +1,101 @@
 ---
-title: "Privacy Policy for Free Hosting Service"
-date: "12/29/2025"
+title: "Privacy Policy for Hosting Service"
+date: "4/1/2026"
 ---
 
-## ⚠️ Beta Version
+## 1) General Information
 
-This Privacy Policy covers the early beta version of our free hosting service. The service is experimental, and this policy may be updated as the project develops. By using the service, you agree to the terms outlined below.
+This Privacy Policy describes how **Niko's Stuff**, operated by **Maciej Frączek** ("we," "us," or "our"), collects, uses, and protects your information. By creating an account or using our hosting services, you agree to the practices described herein.
 
----
+- **Data Controller:** Maciej Frączek (Niko's Stuff)
+- **Contact Email:** rodo@nikostuff.com
 
-# 1) General Information
-
-- The data controller is **Maciej Frączek**, operating under **Niko's Stuff**.
-- Contact regarding personal data: **rodo@nikostuff.com**
-
-### Data Processing Basis
-
-We process personal data in compliance with:
-
-- EU Regulation 2016/679 (GDPR)
-- Polish data protection laws
-
-### Data Collected
-
-We collect minimal personal data necessary for service operation:
-
-- Email addresses
-- IP addresses and minimal server logs
-- Account usage data
-
-### Purposes of Data Processing
-
-- Account creation and management
-- Server provisioning and maintenance
-- Security and abuse prevention
-- Optional Ko-fi support management
-
-### 1.1) AI Log Analyzer (Special Provisions)
-
-When you use the Log Analyzer tool, you voluntarily submit server logs for automated analysis.
-
-- **Third-Party Processing:** These logs are processed by **Google Gemini AI**.
-- **Data Content:** You are responsible for ensuring that logs do not contain sensitive personal data you are not authorized to share.
-- **Data Retention:** Logs sent to the AI are processed in real-time. We do not store the content of these logs on our permanent databases after the analysis is complete.
+### 1.1) Legal Basis for Processing
+We process personal data in compliance with the **EU General Data Protection Regulation (GDPR)** and **Polish data protection laws**. Our processing is based on:
+- **Consent:** For account creation and optional features.
+- **Contract Performance:** To provide hosting services and manage paid subscriptions.
+- **Legal Obligation:** To comply with Polish tax and accounting regulations.
+- **Legitimate Interest:** For security, fraud prevention, and service stability.
 
 ---
 
-# 2) Data Protection Measures
+## 2) Data Collection and Usage
 
-- All transmissions are secured with **SSL/TLS**.
-- Passwords are stored as **hashed values**.
-- Optional **two-factor authentication (2FA)** is available.
-- Software (panel and server) is regularly updated.
-- Access to personal data is limited to authorized personnel only.
-- Minimal logs are retained temporarily for operational and security purposes; no tracking or analytics are performed.
+### 2.1) Account & Technical Data
+We collect minimal data necessary to provide a stable service:
+- **Identity:** Email address and username.
+- **Connectivity:** IP addresses and server logs (retained temporarily for security).
+- **Usage:** Statistics related to your server's resource consumption.
 
----
+### 2.2) Payment Data (Subplans & Stripe)
+When you subscribe to a paid plan (e.g., "Friends" package):
+- **Payment Processing:** Payments are processed securely via **Stripe**. 
+- **Information Collected:** Stripe collects your payment method details and billing address. **Niko's Stuff does not store your full credit card numbers.**
+- **Transaction History:** We retain records of your subscription status and payment history for accounting purposes.
 
-# 3) User Rights
-
-You have the right to:
-
-- Access your personal data
-- Request corrections
-- Request deletion (“right to be forgotten”)
-- Request restriction of processing
-- Withdraw consent for optional processing at any time
-- Lodge a complaint with the relevant supervisory authority (e.g., President of UODO in Poland)
-
-**Note:** Users cannot delete accounts directly. To remove your account and all associated data, submit a ticket or email us. Once all servers are deleted, your related personal data (email, IP, etc.) will be permanently removed.
+### 2.3) AI-Powered Tools (Log Analyzer & Server Checker)
+Our service utilizes the **Google Gemini API** to provide automated technical assistance.
+- **Log Analyzer:** Processes server logs you voluntarily submit.
+- **Server Checker:** When used, the system may send technical error codes or status messages to the AI to generate troubleshooting advice.
+- **Privacy Assurance:** Only technical data is sent to the AI; no personal identifiers (emails/passwords) are included in these prompts.
+- **Caching:** AI responses are cached to optimize bandwidth. These caches contain only the AI's technical output, not user-specific personal data.
 
 ---
 
-# 4) Data Sharing
+## 3) Data Sharing & Third-Party Processors
 
-Your data may be shared only with service providers essential for operation:
+We only share data with essential service providers:
+- **Stripe:** For payment processing and subscription management.
+- **Google Cloud / Alphabet Inc.:** For AI analysis services via API (Logs/Server Checker).
+- **Ko-fi:** For managing legacy donations and associated perks.
+- **Infrastructure Providers:** For the physical/virtual servers where your data resides.
+- **Security Services (e.g., CrowdSec):** For automated abuse prevention (IP-based).
 
-- **Ko-fi** – managing donations and perks (only receives necessary donation information)
-- Hosting infrastructure providers – physical or virtual servers
-- Email delivery services – sending verification or notification emails
-- Security providers (e.g., CrowdSec) – abuse prevention (only receives anonymized IPs)
-- Google Cloud / Alphabet Inc. – Provision of AI analysis services via the Gemini API.
-
-Data may also be disclosed to public authorities only as required by law.
-
-**No other third-party marketing or analytics services are used.**
+**We do not sell your data or use third-party marketing trackers.**
 
 ---
 
-# 5) Cookies
+## 4) Data Retention
 
-- The service uses only essential cookies for:
-
-  - Maintaining session and login
-  - Panel functionality
-  - Security purposes
-
-- Types of cookies used:
-
-  - **Session cookies** – deleted after closing the browser
-  - **Persistent cookies** – stored longer for usability
-
-- You can disable cookies in your browser, but some functionality may be limited.
-
-**Browser cookie management guides:**  
-[Edge](https://support.microsoft.com/pl-pl/help/10607/microsoft-edge-view-delete-browser-history), [Chrome](https://support.google.com/chrome/answer/95647?hl=en), [Firefox](https://support.mozilla.org/en-US/kb/enable-and-disable-cookies-website-preferences), [Safari](https://support.apple.com/guide/safari/manage-cookies-and-website-data-sfri11471/mac)
+- **Account Data:** Retained as long as your account is active.
+- **Server Content:** Deleted upon server deletion or account termination.
+- **Financial Records:** Per Polish law, data related to paid transactions (invoices/billing records) must be retained for **5 years** from the end of the tax year in which the transaction occurred.
+- **Logs:** Temporary logs for security and performance are automatically purged on a regular cycle.
 
 ---
 
-# 6) Data Retention
+## 5) Your Rights
 
-- Personal data is stored only as long as your account is active.
-- Server data is deleted when accounts are voluntarily deleted or inactive.
-- Minimal logs are retained temporarily for operational and security purposes.
-- Once all servers are deleted and an account removal request is processed, all related personal data is permanently deleted.
+Under the GDPR, you have the following rights:
+- **Access & Portability:** Request a copy of your data.
+- **Rectification:** Correct inaccurate data.
+- **Erasure:** Request account deletion (the "Right to be Forgotten"). 
+- **Restriction:** Limit how we process your data.
+- **Objection:** Object to processing based on legitimate interest.
+
+**Note on Deletion:** To delete your account, please submit a ticket or email **rodo@nikostuff.com**. Upon processing, all hosting data is permanently wiped, barring data we are legally required to keep for tax purposes.
 
 ---
 
-# 7) Updates
+## 6) Cookies
 
-This Privacy Policy may be updated during the beta phase.  
-Users will be notified of material changes via the panel or email.
+We use only **essential cookies** to maintain your session, handle security, and ensure the panel functions correctly.
+- **Session Cookies:** Deleted when you close your browser.
+- **Persistent Cookies:** Used to remember your login status (if selected).
+
+You may disable cookies via your browser settings, though this will prevent the hosting panel from functioning.
+
+---
+
+## 7) Security Measures
+
+- All traffic is encrypted via **SSL/TLS**.
+- Passwords are encrypted using modern **hashing algorithms**.
+- **Two-Factor Authentication (2FA)** is available and highly recommended for all users.
+- Regular software and security patching is performed on all infrastructure.
+
+---
+
+## 8) Changes to this Policy
+
+As the service evolves, we may update this policy. Users with active accounts will be notified of material changes via the dashboard or the email address associated with their account.
