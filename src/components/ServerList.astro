@@ -130,7 +130,8 @@
   };
 
   const cleanOwnerName = (name: string): string => {
-    return name.replace(/_FEAT.{5}$/, "");
+    if (!name) return "Unknown Owner";
+    return name.split("_FEAT")[0].trim();
   };
 
   function fillData(el: HTMLElement, server: ServerInfo) {
@@ -142,8 +143,7 @@
       server.description || "No description provided.",
       50,
     );
-    el.querySelector(".server-owner")!.textContent =
-      cleanOwnerName(server.owner_nickname) || "Unknown Owner";
+    el.querySelector(".server-owner")!.textContent = cleanOwnerName(server.owner_nickname);
     el.querySelector(".server-egg")!.textContent = server.egg || "Standard Egg";
 
     const copyBtn = el.querySelector(
