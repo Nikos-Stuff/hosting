@@ -157,45 +157,47 @@
 
     fillData(clone, server);
 
-    // --- Copy Button Logic ---
     const copyBtn = clone.querySelector(
-      ".copy-btn",
+      ".server-address-btn",
     ) as HTMLButtonElement | null;
     if (copyBtn) {
       if (!server.node_address || !server.node_address.trim()) {
-        copyBtn.style.display = "none"; // hide if IP/port is empty
+        copyBtn.style.display = "none";
       } else {
         copyBtn.style.display = "block";
         copyBtn.onclick = () => copyToClipboard(server.node_address, copyBtn);
       }
     }
 
-    const icon = clone.querySelector(".server-icon-container") as HTMLElement;
-    const nameText = clone.querySelector(".server-name") as HTMLElement;
+    const icon = clone.querySelector(".ph-hard-drives");
 
     clone.addEventListener("mouseenter", () => {
-      gsap.to([icon, nameText], {
-        scale: 1.05,
-        x: 3,
+      gsap.to(clone, {
+        scale: 1.015,
+        x: 4,
         duration: 0.6,
-        ease: "elastic.out(1, 0.6)",
+        ease: "elastic.out(1, 0.7)",
         overwrite: true,
       });
+
+      if (icon) gsap.to(icon, { scale: 1.2, duration: 0.3 });
     });
 
     clone.addEventListener("mouseleave", () => {
-      gsap.to([icon, nameText], {
+      gsap.to(clone, {
         scale: 1,
         x: 0,
         duration: 0.4,
         ease: "power2.out",
         overwrite: true,
       });
+
+      if (icon) gsap.to(icon, { scale: 1, duration: 0.3 });
     });
 
     return clone;
   }
-  
+
   // --- Core Logic ---
   async function refresh_list(): Promise<void> {
     if (isFetching) return;
