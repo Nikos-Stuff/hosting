@@ -229,7 +229,7 @@
 
       const incomingIds = new Set<string>();
 
-      sortedServers.forEach((server) => {
+      for (const server of sortedServers) {
         const compositeId = btoa(
           `${server.name}-${server.owner_nickname}-${server.node_address}`,
         ).replace(/=/g, "");
@@ -284,7 +284,7 @@
         } else {
           fillData(element, server);
         }
-      });
+      };
 
       // Cleanup servers that are no longer in the list
       renderedIds.forEach((id) => {
