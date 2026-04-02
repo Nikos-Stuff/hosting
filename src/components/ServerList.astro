@@ -4,7 +4,7 @@
 
 <div
   id="server-list-container"
-  class="my-6 overflow-y-auto overflow-x-hidden  h-125 hide_scrollbar border border-black/15 dark:border-white/20 rounded-md"
+  class="my-6 overflow-y-auto overflow-x-hidden h-125 hide_scrollbar border border-black/15 dark:border-white/20 rounded-md"
 >
   <div
     id="server-template"
@@ -50,6 +50,7 @@
       </button>
     </div>
   </div>
+  <p class="text-sm opacity-50" id="server_counter"></p>
 </div>
 
 <hr class="border-gray-200 dark:border-zinc-800 my-6" />
@@ -103,8 +104,15 @@
     node_address: string;
   }
 
+  interface ApiMeta {
+    visible_count: number;
+    hidden_count: number;
+  }
+
   interface ApiResponse {
-    [key: string]: any;
+    status: string;
+    meta: ApiMeta;
+    servers: ServerInfo[];
   }
 
   // --- Configuration ---
@@ -119,6 +127,9 @@
   const uuidInput = document.getElementById(
     "toggle-visibility-input",
   ) as HTMLInputElement;
+  const serverCounter = document.getElementById(
+    "server_counter",
+  ) as HTMLElement;
 
   let renderedIds = new Set<string>();
   let isFetching: boolean = false;
@@ -131,7 +142,7 @@
 
   const cleanOwnerName = (name: string): string => {
     if (!name) return "Unknown Owner";
-    return name.replace(/_feat.{5}$/, '');
+    return name.replace(/_feat.{5}$/, "");
   };
 
   function fillData(el: HTMLElement, server: ServerInfo) {
@@ -143,7 +154,9 @@
       server.description || "No description provided.",
       50,
     );
-    el.querySelector(".server-owner")!.textContent = cleanOwnerName(server.owner_nickname);
+    el.querySelector(".server-owner")!.textContent = cleanOwnerName(
+      server.owner_nickname,
+    );
     el.querySelector(".server-egg")!.textContent = server.egg || "Standard Egg";
 
     const copyBtn = el.querySelector(
@@ -215,9 +228,31 @@
     try {
       const response = await fetch(`${endpoint}?list`);
       if (!response.ok) throw new Error("Network response was not ok");
+
       const rawData: ApiResponse = await response.json();
 
-      const sortedServers = Object.values(rawData)
+      if (serverCounter && rawData.meta) {
+        const { visible_count, hidden_count } = rawData.meta;
+        const newText = `Servers: ${visible_count} (${hidden_count} Hidden)`;
+
+        if (serverCounter.textContent !== newText) {
+          gsap.to(serverCounter, {
+            scale: 1.1,
+            opacity: 0.7,
+            duration: 0.15,
+            yoyo: true,
+            repeat: 1,
+            ease: "power2.inOut",
+            onRepeat: () => {
+              serverCounter.textContent = newText;
+            },
+          });
+        }
+      }
+
+      const serversToProcess = rawData.servers || [];
+
+      const sortedServers = serversToProcess
         .filter(
           (item): item is ServerInfo =>
             item &&
@@ -231,7 +266,7 @@
 
       for (const server of sortedServers) {
         const compositeId = btoa(
-          `${server.name}-${server.owner_nickname}-${server.node_address}`,
+          `${server.name}-${server.owner_nickname}`,
         ).replace(/=/g, "");
 
         incomingIds.add(compositeId);
@@ -249,7 +284,6 @@
             scale: 0.9,
             y: 10,
             overflow: "hidden",
-            transformOrigin: "center center",
           });
 
           // Alphabetical insertion logic
@@ -280,13 +314,13 @@
             },
           });
 
-          await new Promise(resolve => setTimeout(resolve, 500));
+          await new Promise((resolve) => setTimeout(resolve, 50));
         } else {
           fillData(element, server);
         }
-      };
+      }
 
-      // Cleanup servers that are no longer in the list
+      // cleanup
       renderedIds.forEach((id) => {
         if (!incomingIds.has(id)) {
           const element = container.querySelector(
@@ -298,7 +332,6 @@
               opacity: 0,
               scale: 0.8,
               height: 0,
-              marginBottom: 0,
               duration: 0.4,
               ease: "power2.in",
               onComplete: () => element.remove(),
