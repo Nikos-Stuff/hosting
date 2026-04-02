@@ -9,10 +9,16 @@
   <!-- Template for each server item -->
   <div
     id="server-template"
-    class="p-4 border-b border-black/15 dark:border-white/20 flex flex-col sm:flex-row gap-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+    class="server-item p-4 border-b border-black/15 dark:border-white/20 flex flex-row items-center gap-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-default"
     style="display: none;"
-    data-name=""
   >
+    <div
+      class="server-icon-container shrink-0 flex items-center justify-center w-10 h-10 bg-black/5 dark:bg-white/5 rounded-lg"
+    >
+      <i class="ph ph-hard-drives text-2xl text-gray-600 dark:text-gray-300"
+      ></i>
+    </div>
+
     <div class="grow">
       <h4 class="server-name font-bold text-md text-black dark:text-white"></h4>
       <p
@@ -22,7 +28,8 @@
       <p class="server-owner text-xs font-medium mt-1 text-blue-500 uppercase">
       </p>
     </div>
-    <div class="shrink-0 text-left sm:text-right">
+
+    <div class="shrink-0 text-right">
       <p class="server-egg text-sm font-semibold"></p>
       <button
         class="server-address-btn group/copy relative text-sm text-gray-500 hover:text-black dark:hover:text-white transition-all duration-300 cursor-pointer p-1 rounded"
@@ -30,7 +37,7 @@
         <i class="ph ph-copy"></i>
         <span class="address-label">[CLICK TO COPY IP]</span>
         <span
-          class="copy-status absolute inset-0 flex items-center justify-center bg-green-500/50 backdrop-blur-md text-white rounded opacity-0 transition-opacity duration-300"
+          class="copy-status absolute inset-0 flex items-center justify-center bg-green-500/50 backdrop-blur-md text-white rounded opacity-0"
           >Copied!</span
         >
       </button>
@@ -148,6 +155,39 @@
     clone.setAttribute("data-id", id);
     clone.style.overflow = "hidden";
     fillData(clone, server);
+
+    // GSAP Hover Logic
+    const icon = clone.querySelector(".server-icon-container") as HTMLElement;
+    const nameText = clone.querySelector(".server-name") as HTMLElement;
+
+    clone.addEventListener("mouseenter", () => {
+      gsap.to([icon, nameText], {
+        scale: 1.05,
+        x: 3,
+        duration: 0.6,
+        ease: "elastic.out(1, 0.6)", 
+        overwrite: true,
+      });
+      // gsap.to(icon.querySelector("i"), {
+      //   color: "#3b82f6", 
+      //   duration: 0.3,
+      // });
+    });
+
+    clone.addEventListener("mouseleave", () => {
+      gsap.to([icon, nameText], {
+        scale: 1,
+        x: 0,
+        duration: 0.4,
+        ease: "power2.out",
+        overwrite: true,
+      });
+      // gsap.to(icon.querySelector("i"), {
+      //   color: "",
+      //   duration: 0.3,
+      // });
+    });
+
     return clone;
   }
 
