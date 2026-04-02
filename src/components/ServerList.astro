@@ -154,9 +154,22 @@
     clone.classList.add("server-item");
     clone.setAttribute("data-id", id);
     clone.style.overflow = "hidden";
+
     fillData(clone, server);
 
-    // GSAP Hover Logic
+    // --- Copy Button Logic ---
+    const copyBtn = clone.querySelector(
+      ".copy-btn",
+    ) as HTMLButtonElement | null;
+    if (copyBtn) {
+      if (!server.node_address || !server.node_address.trim()) {
+        copyBtn.style.display = "none"; // hide if IP/port is empty
+      } else {
+        copyBtn.style.display = "block";
+        copyBtn.onclick = () => copyToClipboard(server.node_address, copyBtn);
+      }
+    }
+
     const icon = clone.querySelector(".server-icon-container") as HTMLElement;
     const nameText = clone.querySelector(".server-name") as HTMLElement;
 
@@ -165,13 +178,9 @@
         scale: 1.05,
         x: 3,
         duration: 0.6,
-        ease: "elastic.out(1, 0.6)", 
+        ease: "elastic.out(1, 0.6)",
         overwrite: true,
       });
-      // gsap.to(icon.querySelector("i"), {
-      //   color: "#3b82f6", 
-      //   duration: 0.3,
-      // });
     });
 
     clone.addEventListener("mouseleave", () => {
@@ -182,15 +191,11 @@
         ease: "power2.out",
         overwrite: true,
       });
-      // gsap.to(icon.querySelector("i"), {
-      //   color: "",
-      //   duration: 0.3,
-      // });
     });
 
     return clone;
   }
-
+  
   // --- Core Logic ---
   async function refresh_list(): Promise<void> {
     if (isFetching) return;
