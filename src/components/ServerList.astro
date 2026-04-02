@@ -4,7 +4,7 @@
 
 <div
   id="server-list-container"
-  class="my-6 overflow-y-auto max-h-125 hide_scrollbar border border-black/15 dark:border-white/20 rounded-md"
+  class="my-6 overflow-y-auto h-125 hide_scrollbar border border-black/15 dark:border-white/20 rounded-md"
 >
   <div
     id="server-template"
@@ -131,7 +131,7 @@
 
   const cleanOwnerName = (name: string): string => {
     if (!name) return "Unknown Owner";
-    return name.split("_FEAT")[0].trim();
+    return name.replace(/_feat.{5}$/, '');
   };
 
   function fillData(el: HTMLElement, server: ServerInfo) {
