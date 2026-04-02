@@ -158,7 +158,7 @@
 
     try {
       const response = await fetch(`${endpoint}?list`);
-      const data: ApiResponse = await response.json();
+      if (!response.ok) throw new Error("Network response was not ok");
       const rawData: ApiResponse = await response.json();
 
       const sortedServers = Object.values(rawData)
@@ -177,6 +177,7 @@
         const compositeId = btoa(
           `${server.name}-${server.owner_nickname}-${server.node_address}`,
         ).replace(/=/g, "");
+
         incomingIds.add(compositeId);
 
         let element = container.querySelector(
@@ -195,7 +196,7 @@
             transformOrigin: "center center",
           });
 
-          // Basic alphabetical insertion logic
+          // Alphabetical insertion logic
           let inserted = false;
           const children = Array.from(container.children) as HTMLElement[];
           for (let child of children) {
@@ -211,7 +212,6 @@
 
           renderedIds.add(compositeId);
 
-          // Animate in
           gsap.to(element, {
             opacity: 1,
             height: "auto",
@@ -224,11 +224,11 @@
             },
           });
         } else {
-          // Update existing data if it changed
           fillData(element, server);
         }
       });
 
+      // Cleanup servers that are no longer in the list
       renderedIds.forEach((id) => {
         if (!incomingIds.has(id)) {
           const element = container.querySelector(
