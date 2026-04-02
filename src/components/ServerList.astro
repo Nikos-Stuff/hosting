@@ -159,18 +159,21 @@
     try {
       const response = await fetch(`${endpoint}?list`);
       const data: ApiResponse = await response.json();
+      const rawData: ApiResponse = await response.json();
 
-      const sortedServers = Object.keys(data)
+      const sortedServers = Object.values(rawData)
         .filter(
-          (key) => data[key] && typeof data[key] === "object" && data[key].name,
+          (item): item is ServerInfo =>
+            item &&
+            typeof item === "object" &&
+            "name" in item &&
+            typeof item.name === "string",
         )
-        .map((key) => ({ ...data[key] }))
         .sort((a, b) => a.name.localeCompare(b.name));
 
       const incomingIds = new Set<string>();
 
       sortedServers.forEach((server) => {
-
         const compositeId = btoa(
           `${server.name}-${server.owner_nickname}-${server.node_address}`,
         ).replace(/=/g, "");
