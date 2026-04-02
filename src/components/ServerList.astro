@@ -129,6 +129,10 @@
     return str.length > n ? str.slice(0, n - 1) + "..." : str;
   };
 
+  const cleanOwnerName = (name: string): string => {
+    return name.replace(/_FEAT.{5}$/, "");
+  };
+
   function fillData(el: HTMLElement, server: ServerInfo) {
     el.querySelector(".server-name")!.textContent = truncate(
       server.name || "Unnamed Server",
@@ -139,7 +143,7 @@
       50,
     );
     el.querySelector(".server-owner")!.textContent =
-      server.owner_nickname || "Unknown Owner";
+      cleanOwnerName(server.owner_nickname) || "Unknown Owner";
     el.querySelector(".server-egg")!.textContent = server.egg || "Standard Egg";
 
     const copyBtn = el.querySelector(
