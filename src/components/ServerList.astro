@@ -279,6 +279,8 @@
               gsap.set(element, { clearProps: "overflow" });
             },
           });
+
+          await new Promise(resolve => setTimeout(resolve, 500));
         } else {
           fillData(element, server);
         }
