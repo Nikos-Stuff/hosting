@@ -319,9 +319,12 @@
     if (!uuid || uuid.length < 10)
       return alert("Please enter a valid Server UUID.");
 
+    const btnTextSpan = toggleBtn.querySelector("span");
+    if (!btnTextSpan) return;
+
     toggleBtn.disabled = true;
-    const originalText = toggleBtn.innerText;
-    toggleBtn.innerText = "Processing...";
+    const originalText = btnTextSpan.innerText;
+    btnTextSpan.innerText = "Processing...";
 
     try {
       const response = await fetch(`${endpoint}?toggle=${uuid}`);
@@ -342,7 +345,7 @@
       alert("Failed to toggle visibility.");
     } finally {
       toggleBtn.disabled = false;
-      toggleBtn.innerText = originalText;
+      btnTextSpan.innerText = originalText;
     }
   });
 
