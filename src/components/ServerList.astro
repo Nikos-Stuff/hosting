@@ -41,7 +41,7 @@
 <hr class="border-gray-200 dark:border-zinc-800 my-6" />
 
 <div
-  class="bg-gray-100 dark:bg-zinc-800/50 p-4 rounded-lg transition-all duration-300"
+  class="bg-gray-100/50 dark:bg-zinc-800/30 p-4 rounded-lg transition-all duration-300"
 >
   <h3 class="font-bold text-lg mb-2">Visibility Settings</h3>
   <p class="text-sm text-gray-500 mb-4">
@@ -90,8 +90,7 @@
   }
 
   interface ApiResponse {
-    [key: string]: ServerInfo | any;
-    global_debug?: object;
+    [key: string]: any;
   }
 
   // --- Configuration ---
@@ -112,6 +111,7 @@
 
   // --- Helpers ---
   const truncate = (str: string, n: number) => {
+    if (!str) return "";
     return str.length > n ? str.slice(0, n - 1) + "..." : str;
   };
 
@@ -161,14 +161,19 @@
       const data: ApiResponse = await response.json();
 
       const sortedServers = Object.keys(data)
-        .filter((key) => key !== "global_debug")
+        .filter(
+          (key) => data[key] && typeof data[key] === "object" && data[key].name,
+        )
         .map((key) => ({ ...data[key] }))
         .sort((a, b) => a.name.localeCompare(b.name));
 
       const incomingIds = new Set<string>();
 
       sortedServers.forEach((server) => {
-        const compositeId = `${server.name}_${server.owner_nickname}`;
+
+        const compositeId = btoa(
+          `${server.name}-${server.owner_nickname}-${server.node_address}`,
+        ).replace(/=/g, "");
         incomingIds.add(compositeId);
 
         let element = container.querySelector(
@@ -181,15 +186,19 @@
           gsap.set(element, {
             opacity: 0,
             height: 0,
-            scale: 0,
-            x: 20,
+            scale: 0.9,
+            y: 10,
             overflow: "hidden",
-            transformOrigin: "top center",
+            transformOrigin: "center center",
           });
-          
+
+          // Basic alphabetical insertion logic
           let inserted = false;
-          for (let child of Array.from(container.children)) {
-            if ((child as HTMLElement).dataset.id! > compositeId) {
+          const children = Array.from(container.children) as HTMLElement[];
+          for (let child of children) {
+            const childName =
+              child.querySelector(".server-name")?.textContent || "";
+            if (childName.localeCompare(server.name) > 0) {
               container.insertBefore(element, child);
               inserted = true;
               break;
@@ -204,14 +213,15 @@
             opacity: 1,
             height: "auto",
             scale: 1,
-            x: 0,
-            duration: 0.6,
-            ease: "power3.out",
+            y: 0,
+            duration: 0.5,
+            ease: "back.out(1.7)",
             onComplete: () => {
               gsap.set(element, { clearProps: "overflow" });
             },
           });
         } else {
+          // Update existing data if it changed
           fillData(element, server);
         }
       });
@@ -223,16 +233,13 @@
           ) as HTMLElement;
           if (element) {
             renderedIds.delete(id);
-
             gsap.to(element, {
               opacity: 0,
-              x: -20,
+              scale: 0.8,
               height: 0,
-              paddingTop: 0,
-              paddingBottom: 0,
               marginBottom: 0,
-              duration: 0.5,
-              ease: "power2.inOut",
+              duration: 0.4,
+              ease: "power2.in",
               onComplete: () => element.remove(),
             });
           }
@@ -249,6 +256,8 @@
   function copyToClipboard(text: string, btn: HTMLButtonElement): void {
     navigator.clipboard.writeText(text).then(() => {
       const status = btn.querySelector(".copy-status") as HTMLElement;
+      if (!status) return;
+
       const tl = gsap.timeline();
       tl.to(btn, { scale: 1.05, duration: 0.1 })
         .to(status, { opacity: 1, duration: 0.2 }, "<")
@@ -259,7 +268,6 @@
 
   toggleBtn.addEventListener("click", async () => {
     const uuid = uuidInput.value.trim();
-
     if (!uuid || uuid.length < 10)
       return alert("Please enter a valid Server UUID.");
 
@@ -276,11 +284,11 @@
       } else {
         gsap.fromTo(
           uuidInput,
-          { backgroundColor: "rgba(34, 197, 94, 0.2)" },
+          { backgroundColor: "rgba(34, 197, 94, 0.3)" },
           { backgroundColor: "transparent", duration: 1 },
         );
         uuidInput.value = "";
-        refresh_list();
+        setTimeout(refresh_list, 500);
       }
     } catch (error) {
       alert("Failed to toggle visibility.");
@@ -290,7 +298,6 @@
     }
   });
 
-  // Initial load and safer 10s interval
   refresh_list();
-  setInterval(refresh_list, 10000);
+  setInterval(refresh_list, 15000);
 </script>
