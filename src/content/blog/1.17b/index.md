@@ -15,6 +15,10 @@ tags:
 
 ## New looks!
 We're slowly reworking our design to be more streamlined!
-As you may have noticed, our emails look a lot cleaner — and that's only the start!
+As you may have noticed, our emails look a lot cleaner—and that's only the start!
+
+## Community Hub
+Explore servers that are hosted on our services! 
+Of course, you can easily opt out at any time if you'd prefer not to be listed.
 
 That's it for now! See you soon!
