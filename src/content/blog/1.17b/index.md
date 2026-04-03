@@ -1,7 +1,7 @@
 ---
 title: "v1.1.7b"
 date: "April 3, 2026"
-time: 3:00
+time: 03:00
 draft: false
 tags:
   - News
