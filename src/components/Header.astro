@@ -7,34 +7,38 @@ import Container from "@components/Container.astro";
 import HeaderIcon from "@components/web_icon.astro";
 ---
 
-<header id="header" class="fixed top-0 w-full h-16 z-40 drop-shadow-2xl">
-  <Container size="lg">
-    <div class="relative h-full w-full">
+<header id="header" class="fixed top-3 w-full h-16 z-40">
+  <Container size="2xl">
+    <div
+      class="relative h-full w-full rounded-2xl border border-white/15 bg-zinc-900/60 backdrop-blur-xl shadow-xl px-4 backdrop-saturate-200"
+    >
       <div
-        class="absolute left-0 top-1/2 -translate-y-1/2 flex gap-1 font-semibold hover:scale-110 transition-all duration-300"
+        class="absolute left-4 top-1/2 -translate-y-1/2 flex gap-1 font-semibold transition-transform duration-300 hover:scale-105"
       >
         <a
           href="/"
-          class="flex gap-3 place-items-center w-fit font-semibold text-current hover:text-white transition-colors duration-300 ease-in-out"
+          class="flex gap-3 items-center w-fit font-semibold text-current hover:text-white transition-colors duration-300 ease-in-out"
         >
           <HeaderIcon />
-          <div>Hosting <span class="text-xs">(Beta Page)</span></div>
+          <div>
+            Hosting <span class="text-xs text-white/70">(Beta Page)</span>
+          </div>
         </a>
       </div>
 
       <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <nav class="hidden lg:flex items-center justify-center text-sm gap-1">
+        <nav class="hidden lg:flex items-center justify-center text-sm gap-1.5">
           {
             LINKS.map((LINK) => (
               <a
                 href={LINK.HREF}
                 class={cn(
-                  "h-8 rounded-full px-3 text-current whitespace-nowrap",
+                  "h-8 rounded-lg px-3 text-current whitespace-nowrap",
                   "flex items-center justify-center",
-                  "transition-colors duration-300 ease-in-out",
+                  "transition-all duration-300 ease-in-out",
                   pathname === LINK.HREF || "/" + subpath?.[0] === LINK.HREF
-                    ? "bg-white text-black hover:bg-[#737373] transition-all duration-300 ease-in-out"
-                    : "hover:bg-white/20 hover:text-white",
+                    ? "bg-white text-black shadow-sm"
+                    : "hover:bg-white/15 hover:text-white",
                 )}
               >
                 {LINK.TEXT}
@@ -44,11 +48,11 @@ import HeaderIcon from "@components/web_icon.astro";
         </nav>
       </div>
 
-      <div class="buttons absolute right-0 top-1/2 -translate-y-1/2 flex gap-1">
+      <div class="buttons absolute right-4 top-1/2 -translate-y-1/2 flex gap-2">
         <button
           data-tooltip="?"
           id="server-latency-pill"
-          class="flex items-center justify-center bg-blue-500/20 border border-white/25 text-sm font-medium px-3 py-1 rounded-full transition-all duration-300"
+          class="flex items-center justify-center bg-blue-500/15 border border-white/20 text-sm font-medium px-3 py-1 rounded-xl transition-all duration-300 hover:bg-blue-500/25"
         >
           Ping: <span id="average-ping" class="ml-1">0</span> ms
         </button>
@@ -56,7 +60,7 @@ import HeaderIcon from "@components/web_icon.astro";
         <div
           data-tooltip="Amount of created accounts"
           id="active-users-pill"
-          class="flex items-center justify-center bg-green-500/20 border border-white/25 text-sm font-medium px-3 py-1 rounded-full transition-all duration-300"
+          class="flex items-center justify-center bg-green-500/15 border border-white/20 text-sm font-medium px-3 py-1 rounded-xl transition-all duration-300 hover:bg-green-500/25"
         >
           Users: <span id="active-users-count" class="ml-1">0</span>
         </div>
@@ -265,7 +269,7 @@ import HeaderIcon from "@components/web_icon.astro";
     // reset the stuff for the new analysis
     jitterDisplay.textContent = `Measuring stats...`;
     pingDisplay.textContent = `--ms`;
-    statusDisplay.textContent = `Initializing...`; 
+    statusDisplay.textContent = `Initializing...`;
 
     popup.classList.remove("hidden");
     popup.classList.add("flex");

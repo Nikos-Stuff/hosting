@@ -4,7 +4,8 @@ const { sub } = Astro.props;
 
 <div
   id="animate"
-  class="animate relative top-0 left-0 w-svw h-svh flex items-center justify-start"
+  class="relative top-0 left-0 w-svw h-svh flex items-center justify-start"
+  style="opacity: 0"
 >
   <div
     id="centerContent"
@@ -32,6 +33,26 @@ const { sub } = Astro.props;
   import { gsap } from "gsap";
 
   function run() {
+    const animateElement = document.querySelector<HTMLElement>("#animate");
+    if (animateElement) {
+      animateElement.style.backgroundColor = "rgba(0, 0, 0, 0)";
+    }
+
+    if (animateElement && animateElement.dataset.entryInit !== "true") {
+      animateElement.dataset.entryInit = "true";
+      gsap.fromTo(
+        animateElement,
+        { y: 80, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 2,
+          ease: "power3.out",
+          clearProps: "transform,opacity",
+        },
+      );
+    }
+
     const texts = [
       "MINECRAFT SERVER",
       "HYTALE SERVER",
@@ -47,7 +68,7 @@ const { sub } = Astro.props;
       "DISCORD BOT": ["#5865F2", "#7289DA", "#818CF8"],
       WEBSITE: ["#06b6d4", "#3b82f6", "#8b5cf6"],
       "TERRARIA SERVER": ["#10b981", "#65a30d", "#22c55e"],
-      "TEAMSPEAK6 SERVER": ["#2563eb", "#0ea5e9", "#38bdf8"],
+      "TS6 SERVER": ["#2563eb", "#0ea5e9", "#38bdf8"],
     };
 
     const fallbackColors = [
@@ -64,6 +85,24 @@ const { sub } = Astro.props;
     const pickColor = (text: string) => {
       const palette = contextColors[text] ?? fallbackColors;
       return palette[Math.floor(Math.random() * palette.length)];
+    };
+
+    const hexToRgba = (hex: string, alpha: number) => {
+      const normalized = hex.replace("#", "");
+      const full =
+        normalized.length === 3
+          ? normalized
+              .split("")
+              .map((char) => char + char)
+              .join("")
+          : normalized;
+
+      const value = Number.parseInt(full, 16);
+      const r = (value >> 16) & 255;
+      const g = (value >> 8) & 255;
+      const b = value & 255;
+
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     };
 
     const typewriterElement = document.querySelector<HTMLElement>("#text_flip");
@@ -94,6 +133,14 @@ const { sub } = Astro.props;
       inner.textContent = currentText;
       gsap.set(inner, { color: nextColor });
 
+      if (animateElement) {
+        gsap.to(animateElement, {
+          backgroundColor: hexToRgba(nextColor, 0.12),
+          duration: 0.6,
+          ease: "power2.out",
+        });
+      }
+
       const tl = gsap.timeline({
         onComplete: () => {
           index = (index + 1) % texts.length;
@@ -118,9 +165,13 @@ const { sub } = Astro.props;
     showNextText();
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", run, { once: true });
+  const startWithDelay = () => {
+    window.setTimeout(run, 100);
+  };
+
+  if (document.readyState === "complete") {
+    startWithDelay();
   } else {
-    run();
+    window.addEventListener("load", startWithDelay, { once: true });
   }
 </script>

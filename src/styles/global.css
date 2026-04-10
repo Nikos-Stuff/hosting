@@ -89,22 +89,6 @@ main {
   @apply flex flex-col flex-1 bg-black;
 }
 
-header {
-  @apply border-b;
-  @apply transition-all duration-300 ease-in-out;
-}
-
-header:not(.scrolled) {
-  @apply scale-90 rounded-2xl;
-  @apply bg-black/20;
-  @apply backdrop-blur-xs border-transparent;
-}
-
-header.scrolled {
-  @apply bg-black/50;
-  @apply border-white/25;
-  @apply backdrop-blur-sm saturate-200;
-}
 
 article {
   @apply prose prose-invert max-w-full pb-12;
