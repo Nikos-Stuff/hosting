@@ -36,6 +36,7 @@ export default defineConfig({
   ],
 
   vite: {
+    assetsInclude: ["**/*.glb"],
     plugins: [
       tailwindcss({
         applyBaseStyles: false,

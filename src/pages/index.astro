@@ -15,10 +15,10 @@ import { Image } from "astro:assets";
 
 import squid_servers from "@assets/hosting/squid_servers.png";
 import playit_gg from "@assets/hosting/playit.png";
-import WhyUs from "@components/WhyUs.astro";
 
 import BlogSummary from "@components/BlogSummary";
 import ServerList from "@components/ServerList.astro";
+import AMDCpuModel from "@assets/3d/amd_cpu.glb?url";
 
 const posts = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
@@ -48,13 +48,13 @@ const posts = (await getCollection("blog"))
     class="fixed inset-0 z-50 items-center justify-center hidden"
   >
     <div
-      class="border border-black/15 dark:border-white/20 bg-white dark:bg-black rounded-lg p-8 flex flex-col items-center justify-center w-96 min-h-64 shadow-2xl text-center"
+      class="border border-white/20 bg-black rounded-lg p-8 flex flex-col items-center justify-center w-96 min-h-64 shadow-2xl text-center"
     >
       <h2 class="text-xl font-semibold mb-5">Ping Analysis</h2>
 
       <div
         id="popup-ping-value"
-        class="text-6xl md:text-7xl font-bold mb-1 text-black dark:text-white"
+        class="text-6xl md:text-7xl font-bold mb-1 text-white"
       >
         --ms
       </div>
@@ -75,15 +75,8 @@ const posts = (await getCollection("blog"))
   </div>
 
   <POD />
-  <!-- Light Mode: Particles -->
-  <div class="absolute inset-0 block dark:hidden">
-    <div id="particles1" class="fixed inset-0"></div>
-    <div id="particles2" class="fixed inset-0"></div>
-    <div id="particles3" class="fixed inset-0"></div>
-  </div>
-
   <!-- Dark Theme: Stars -->
-  <div class="absolute inset-0 hidden dark:block">
+  <div class="absolute inset-0">
     <div id="stars1" class="fixed inset-0"></div>
     <div id="stars2" class="fixed inset-0"></div>
     <div id="stars3" class="fixed inset-0"></div>
@@ -91,7 +84,7 @@ const posts = (await getCollection("blog"))
 
   <!-- Dark Theme: Twinkling Stars / Metors -->
   <div id="galaxy" class="fixed inset-0">
-    <div class="hidden dark:block">
+    <div>
       <TwinklingStars />
       <MeteorShower />
     </div>
@@ -106,16 +99,15 @@ const posts = (await getCollection("blog"))
   >
     <!-- <div id="planetcont" class='animate absolute inset-0 top-3/4 overflow-hidden z-10'> PLANET HAS BEEN REMOVED FOR A TEST NEW LAYOUT 
             <div id="crescent"
-                 class='absolute top-0 left-1/2 -translate-x-1/2 w-[250vw] min-h-[100vh] aspect-square rounded-full p-[1px] bg-gradient-to-b from-black/25 dark:from-white/75 from-0% to-transparent to-5%'>
+                 class='absolute top-0 left-1/2 -translate-x-1/2 w-[250vw] min-h-[100vh] aspect-square rounded-full p-[1px] bg-gradient-to-b from-black/25  from-white/75 from-0% to-transparent to-5%'>
                 <div id="planet"
-                     class='w-full h-full bg-white dark:bg-black rounded-full p-[1px] overflow-hidden flex justify-center'>
-                    <div id="blur" class='w-full h-5 rounded-full bg-neutral-900/25 dark:bg-white/25 blur-2xl'/>
+                     class='w-full h-full bg-white  bg-black rounded-full p-[1px] overflow-hidden flex justify-center'>
+                    <div id="blur" class='w-full h-5 rounded-full bg-neutral-900/25  bg-white/25 blur-2xl'/>
                 </div>
             </div>
         </div> -->
     <DynamicTitle
-      text="HOSTING"
-      sub="Niko's Stuff"
+      sub="Niko's Stuff - Hosting"
       buttons={true}
       typewriter={true}
     />
@@ -125,15 +117,15 @@ const posts = (await getCollection("blog"))
   <div
     hidden
     id="order_blocker"
-    class="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center backdrop-blur-2xl"
+    class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-2xl"
   >
     <div
       data-cursor-hover="true"
       data-cursor-parallax="true"
-      class="border border-black/15 dark:border-white/20 bg-white dark:bg-black rounded-lg p-6 flex flex-col items-center"
+      class="border border-white/20 bg-black rounded-lg p-6 flex flex-col items-center"
     >
       <svg
-        class="animate-spin h-12 w-12 mr-3 fill-black dark:fill-white"
+        class="animate-spin h-12 w-12 mr-3 fill-white"
         viewBox="0 -960 960 960"
       >
         <path
@@ -155,142 +147,128 @@ const posts = (await getCollection("blog"))
   </div>
 
   <div class="relative">
-    <!-- Why Us Section -->
-    <WhyUs />
-
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="24">
-      <section id="features" class="relative animate">
+    <!-- Beefy CPU with 3d model -->
+    <div class="relative w-svw h-svh overflow-hidden bg-black/90">
+      <div
+        class="absolute inset-0 z-10 flex flex-col items-center justify-center px-10 text-center"
+      >
         <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+          class="animate uppercase text-5xl md:text-7xl lg:text-9xl font-black leading-none text-white text-shadow-2xs"
         >
-          Is that even real?
+          BEEFY HARDWARE
         </p>
-
-        <p class="font-bold text-sm mb-2 animate">
-          Yes! Free game server hosting, forever. No catch, no ads, no trials.
-          Here's what we offer:
+        <p class="animate mt-4 max-w-3xl text-sm md:text-base text-white/90">
+          We are not messing around! Using top-of-the-line AMD CPUs - Ensuring
+          maximum performance for your experience.
         </p>
-      </section>
-    </FancyDiv>
+      </div>
 
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="20">
-      <section class="relative animate min-h-43.5 flex items-center">
-        <span
-          aria-hidden="true"
-          class="absolute left-4 top-1/2 -translate-y-1/2 text-[6rem] md:text-[8rem] lg:text-[10rem] font-black leading-none text-black/5 dark:text-white/5 pointer-events-none select-none"
+      <canvas
+        id="cpu_canvas"
+        data-model-url={AMDCpuModel}
+        class="absolute left-0 top-1/2 h-full w-full md:w-[70%] -translate-y-1/2 pointer-events-none"
+      ></canvas>
+    </div>
+
+    <!-- Is that even real? section -->
+    <div id="scroller_wrapper" class="overflow-hidden">
+      <div id="scroller_isthatevenreal" class="h-svh w-full relative">
+        <div
+          class="slide absolute inset-0 flex items-center justify-center p-10"
         >
-          1
-        </span>
-
-        <div class="ml-22 md:ml-30 lg:ml-38">
-          <p
-            class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
-          >
-            No overcomplicated panels
-          </p>
-
-          <p>
-            Enjoy a clean, unmodded Pelican Panel designed for simplicity and
-            ease of use. Focus on what matters — your server — not navigating
-            complex interfaces. Always up to date, with no bloat or
-            distractions. Just pure, straightforward server management.
+          <p class="title text-5xl font-black text-center uppercase">
+            Okay! But is that even real?
           </p>
         </div>
-      </section>
-    </FancyDiv>
 
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="20">
-      <section class="relative animate min-h-43.5 flex items-center">
-        <span
-          aria-hidden="true"
-          class="absolute left-4 top-1/2 -translate-y-1/2 text-[6rem] md:text-[8rem] lg:text-[10rem] font-black leading-none text-black/5 dark:text-white/5 pointer-events-none select-none"
+        <div
+          class="slide absolute inset-0 opacity-0 flex items-center justify-center p-6"
         >
-          2
-        </span>
-
-        <div class="ml-22 md:ml-30 lg:ml-38">
-          <p
-            class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+          <span
+            class="num absolute inset-0 flex items-center justify-center text-[20rem] font-black opacity-10 select-none"
+            >1</span
           >
-            Wide Game Support
-          </p>
-
-          <p>
-            Host a variety of games, including Minecraft (Java & Bedrock),
-            FiveM, Rust, and more coming soon! Our platform supports multiple
-            game types, so you can create the perfect server for your gaming
-            needs.
-          </p>
+          <div
+            class="content relative z-10 flex flex-col md:flex-row items-center gap-8"
+          >
+            <h2 class="text-left-part text-6xl font-bold">01</h2>
+            <p class="text-right-part text-xl max-w-md">
+              Enjoy a clean, unmodded Pelican panel experience. No ads, no
+              popups, just pure hosting goodness.
+            </p>
+          </div>
         </div>
-      </section>
-    </FancyDiv>
 
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="20">
-      <section class="relative animate min-h-43.5 flex items-center">
-        <span
-          aria-hidden="true"
-          class="absolute left-4 top-1/2 -translate-y-1/2 text-[6rem] md:text-[8rem] lg:text-[10rem] font-black leading-none text-black/5 dark:text-white/5 pointer-events-none select-none"
+        <div
+          class="slide absolute inset-0 opacity-0 flex items-center justify-center p-6"
         >
-          3
-        </span>
-
-        <div class="ml-22 md:ml-30 lg:ml-38">
-          <p
-            class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+          <span
+            class="num absolute inset-0 flex items-center justify-center text-[20rem] font-black opacity-10 select-none"
+            >2</span
           >
-            Active 24/7
-          </p>
-
-          <p>
-            Our free hosting is available around the clock, ensuring your
-            friends can join anytime. With reliable uptime, your game servers
-            are always ready for action.
-          </p>
+          <div
+            class="content relative z-10 flex flex-col md:flex-row items-center gap-8"
+          >
+            <h2 class="text-left-part text-6xl font-bold">02</h2>
+            <p class="text-right-part text-xl max-w-md">
+              Host anything! Minecraft, Terraria, Discord bots, websites, you
+              name it!<br />(Psst! If we're missing something, let us know!)
+            </p>
+          </div>
         </div>
-      </section>
-    </FancyDiv>
 
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="24">
-      <section class="relative animate min-h-43.5 flex items-center">
-        <span
-          aria-hidden="true"
-          class="absolute left-4 top-1/2 -translate-y-1/2 text-[6rem] md:text-[8rem] lg:text-[10rem] font-black leading-none text-black/5 dark:text-white/5 pointer-events-none select-none"
+        <div
+          class="slide absolute inset-0 opacity-0 flex items-center justify-center p-6"
         >
-          4
-        </span>
-
-        <div class="ml-22 md:ml-30 lg:ml-38">
-          <p
-            class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+          <span
+            class="num absolute inset-0 flex items-center justify-center text-[20rem] font-black opacity-10 select-none"
+            >3</span
           >
-            Constantly Improving
-          </p>
-
-          <p>
-            We’re committed to enhancing our hosting services. Regular updates
-            and new features are added based on user feedback, ensuring an
-            ever-improving experience.
-          </p>
+          <div
+            class="content relative z-10 flex flex-col md:flex-row items-center gap-8"
+          >
+            <h2 class="text-left-part text-6xl font-bold">03</h2>
+            <p class="text-right-part text-xl max-w-md">
+              Always online! Forget about renewing your server every few hours.
+              Our hosting runs 24/7 with no interruptions.
+            </p>
+          </div>
         </div>
-      </section>
-    </FancyDiv>
+
+        <div
+          class="slide absolute inset-0 opacity-0 flex items-center justify-center p-6"
+        >
+          <span
+            class="num absolute inset-0 flex items-center justify-center text-[20rem] font-black opacity-10 select-none"
+            >4</span
+          >
+          <div
+            class="content relative z-10 flex flex-col md:flex-row items-center gap-8"
+          >
+            <h2 class="text-left-part text-6xl font-bold">04</h2>
+            <p class="text-right-part text-xl max-w-md">
+              And that's not all! We're just getting started. Expect new
+              features, more games, and exciting updates in the near future!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <FancyDiv isAnimated={true} theme="default_big" margin_bottom="24">
       <section class="relative animate">
         <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
         >
           Our hosting vs Other solutions
         </p>
         <p class="font-bold text-sm mb-2 animate">Quick summary of stuff</p>
 
         <div class="overflow-x-auto mt-6 animate rounded-lg">
-          <table class="min-w-full border border-zinc-200 dark:border-zinc-800">
-            <thead class="bg-zinc-100 dark:bg-zinc-900">
+          <table class="min-w-full border border-zinc-200">
+            <thead class="bg-zinc-900">
               <tr>
-                <th
-                  class="px-4 py-3 text-left text-sm font-bold text-zinc-700 dark:text-zinc-300"
-                >
+                <th class="px-4 py-3 text-left text-sm font-bold text-zinc-300">
                   Feature
                 </th>
                 <th
@@ -298,28 +276,22 @@ const posts = (await getCollection("blog"))
                 >
                   Our Hosting
                 </th>
-                <th
-                  class="px-4 py-3 text-left text-sm font-bold text-zinc-600 dark:text-zinc-400"
-                >
+                <th class="px-4 py-3 text-left text-sm font-bold text-zinc-400">
                   Aternos.org
                 </th>
-                <th
-                  class="px-4 py-3 text-left text-sm font-bold text-zinc-600 dark:text-zinc-400"
-                >
+                <th class="px-4 py-3 text-left text-sm font-bold text-zinc-400">
                   Playit.gg
                 </th>
-                <th
-                  class="px-4 py-3 text-left text-sm font-bold text-zinc-600 dark:text-zinc-400"
-                >
+                <th class="px-4 py-3 text-left text-sm font-bold text-zinc-400">
                   Other Free Hosting
                 </th>
               </tr>
             </thead>
 
-            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
+            <tbody class="divide-y divide-zinc-800">
               <tr>
                 <td
-                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
                 >
                   Ads
                 </td>
@@ -331,7 +303,7 @@ const posts = (await getCollection("blog"))
 
               <tr>
                 <td
-                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
                 >
                   Uptime
                 </td>
@@ -343,7 +315,7 @@ const posts = (await getCollection("blog"))
 
               <tr>
                 <td
-                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
                 >
                   CPU
                 </td>
@@ -357,7 +329,7 @@ const posts = (await getCollection("blog"))
 
               <tr>
                 <td
-                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
                 >
                   Cost
                 </td>
@@ -371,7 +343,7 @@ const posts = (await getCollection("blog"))
 
               <tr>
                 <td
-                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
                 >
                   Business model
                 </td>
@@ -386,7 +358,7 @@ const posts = (await getCollection("blog"))
 
               <tr>
                 <td
-                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
                 >
                   Panel
                 </td>
@@ -400,7 +372,7 @@ const posts = (await getCollection("blog"))
 
               <tr>
                 <td
-                  class="px-4 py-3 font-semibold bg-zinc-100 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800"
+                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
                 >
                   Community support
                 </td>
@@ -418,7 +390,7 @@ const posts = (await getCollection("blog"))
     <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
       <section id="features" class="relative animate">
         <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
         >
           Okay! You convinced me. What's next?
         </p>
@@ -433,7 +405,7 @@ const posts = (await getCollection("blog"))
     <FancyDiv isAnimated={true} theme="default_big" margin_bottom="10">
       <section class="relative animate">
         <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
         >
           Support Us! Leave a tip :)
         </p>
@@ -446,10 +418,10 @@ const posts = (await getCollection("blog"))
         <!-- Progress bar of the tip -->
         <div class="flex items-center mb-4">
           <span id="tip_value" class="text-sm text-muted mr-3">0$</span>
-          <div class="flex-1 bg-black/10 dark:bg-white/10 rounded-full h-2">
+          <div class="flex-1 bg-white/10 rounded-full h-2">
             <div
               id="tip_progress_bar"
-              class="bg-black dark:bg-white h-2 rounded-full transition-all duration-500 ease-in-out"
+              class="bg-white h-2 rounded-full transition-all duration-500 ease-in-out"
               style="width: 0%;"
             >
             </div>
@@ -459,11 +431,11 @@ const posts = (await getCollection("blog"))
 
         <button
           id="tip_website_btn"
-          class="rainbow_button group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg dark:bg-black bg-white hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-all duration-300 ease-in-out"
+          class="rainbow_button group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg bg-black hover:bg-black/5 hover: border-white/20 transition-all duration-300 ease-in-out"
           onclick="window.open('https://ko-fi.com/niko96758', '_blank')"
         >
           <span
-            class="w-full z-10 relative group-hover:text-black group-hover:dark:text-white text-center transition-color duration-300"
+            class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300"
           >
             Visit Ko-fi Page
           </span>
@@ -475,7 +447,7 @@ const posts = (await getCollection("blog"))
       <section class="relative animate" id="calculator">
         <!-- OPEN BETA NOTICE -->
         <div
-          class="w-full p-4 mb-5 flex items-start gap-4 border rounded-lg bg-yellow-100/50 border-yellow-300 dark:bg-yellow-900/30 dark:border-yellow-700 transition-all duration-300 ease-in-out"
+          class="w-full p-4 mb-5 flex items-start gap-4 border rounded-lg bg-yellow-900/30 border-yellow-700 transition-all duration-300 ease-in-out"
         >
           <div class="text-3xl mt-0.5 select-none">
             <i class="ph ph-warning animate-pulse"></i>
@@ -506,7 +478,7 @@ const posts = (await getCollection("blog"))
           </div>
         </div>
         <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
         >
           Setup Desk
         </p>
@@ -517,10 +489,10 @@ const posts = (await getCollection("blog"))
         <Calculator />
 
         <!-- Line -->
-        <hr class="border-black/10 dark:border-white/25 animate my-5" />
+        <hr class="border-white/25 animate my-5" />
 
         <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
         >
           Liked the idea? Share your interest!
         </p>
@@ -538,10 +510,10 @@ const posts = (await getCollection("blog"))
             id="place_order_btn"
             href="https://forms.gle/M6DXeg3NzyFWBsn17"
             target="_blank"
-            class="group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-all duration-300 ease-in-out"
+             class="group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out"
           >
             <span
-              class="w-full z-10 relative group-hover:text-black group-hover:dark:text-white text-center transition-color duration-300"
+              class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300"
             >
               Fill Out Interest Form
             </span>
@@ -549,10 +521,10 @@ const posts = (await getCollection("blog"))
         </div>
 
         <!-- Line -->
-        <!-- <hr class="border-black/10 dark:border-white/25 animate my-5" /> -->
+        <!-- <hr class="border-black/10  border-white/25 animate my-5" /> -->
 
         <!-- <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black  text-white animate"
         >
           Zarządzaj Swoimi Usługami
         </p>
@@ -566,9 +538,7 @@ const posts = (await getCollection("blog"))
 
     <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
       <section class="relative animate">
-        <h2
-          class="font-bold text-3xl mb-0 text-black dark:text-white uppercase"
-        >
+        <h2 class="font-bold text-3xl mb-0 text-white uppercase">
           Community Hub
         </h2>
         <p>Explore what’s live! Minecraft servers, Terraria, and much more!</p>
@@ -579,9 +549,7 @@ const posts = (await getCollection("blog"))
 
     <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
       <section class="relative animate">
-        <h2
-          class="font-bold text-3xl mb-0 text-black dark:text-white uppercase"
-        >
+        <h2 class="font-bold text-3xl mb-0 text-white uppercase">
           Other cool solutions
         </h2>
         <p>Check out some interesting tools and projects!</p>
@@ -707,7 +675,7 @@ const posts = (await getCollection("blog"))
 
     <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
       <section class="relative animate">
-        <h2 class="font-bold text-3xl mb-8 text-black dark:text-white">FAQ</h2>
+        <h2 class="font-bold text-3xl mb-8 text-white">FAQ</h2>
 
         <div>
           <Accordion
@@ -771,7 +739,7 @@ const posts = (await getCollection("blog"))
     <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
       <section id="features" class="relative animate">
         <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black dark:text-white animate"
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
         >
           Changelog
         </p>
@@ -865,4 +833,141 @@ const posts = (await getCollection("blog"))
 
   // Update every 5 seconds
   setInterval(updateTipProgress, 5000);
+</script>
+
+<script>
+  import * as THREE from "three";
+  import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+  import { RectAreaLightUniformsLib } from "three/examples/jsm/lights/RectAreaLightUniformsLib.js";
+
+  const scene = new THREE.Scene();
+  RectAreaLightUniformsLib.init();
+
+  const cpuCanvas = document.getElementById("cpu_canvas");
+
+  if (cpuCanvas instanceof HTMLCanvasElement) {
+    const renderer = new THREE.WebGLRenderer({
+      canvas: cpuCanvas,
+      alpha: true,
+      antialias: true,
+    });
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.9;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    const camera = new THREE.PerspectiveCamera(
+      60,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000,
+    );
+    camera.position.set(0, 0, 6);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+    scene.add(ambientLight);
+
+    const sparkleLight = new THREE.SpotLight(
+      0xffffff,
+      130,
+      100,
+      Math.PI / 3,
+      0.35,
+      1,
+    );
+    sparkleLight.position.set(2, 3, 6);
+    sparkleLight.target.position.set(0, 0, 0);
+    scene.add(sparkleLight);
+    scene.add(sparkleLight.target);
+
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.8);
+    scene.add(hemiLight);
+
+    const loader = new GLTFLoader();
+    const modelUrl = cpuCanvas.dataset.modelUrl;
+
+    if (modelUrl) {
+      loader.load(modelUrl, (gltf) => {
+        const model = gltf.scene;
+        model.scale.set(1.4, 1.4, 1.4);
+        model.rotation.x = Math.PI / 4.5;
+
+        model.traverse((obj) => {
+          if (obj instanceof THREE.Mesh) {
+            const materials = Array.isArray(obj.material)
+              ? obj.material
+              : [obj.material];
+
+            materials.forEach((material) => {
+              if (
+                "metalness" in material &&
+                "roughness" in material &&
+                "envMapIntensity" in material
+              ) {
+                material.metalness = 1.0;
+                material.roughness = 0.3;
+                material.envMapIntensity = 1.0;
+              }
+            });
+          }
+        });
+
+        scene.add(model);
+
+        const animate = () => {
+          requestAnimationFrame(animate);
+          model.rotation.y += 0.002;
+          renderer.render(scene, camera);
+        };
+        animate();
+      });
+    }
+
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  }
+</script>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const slides = gsap.utils.toArray<HTMLElement>(".slide");
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: "#scroller_wrapper",
+      start: "top top",
+      end: "+=300%",
+      scrub: 1,
+      pin: true,
+      anticipatePin: 1,
+    },
+  });
+
+  slides.forEach((slide, i) => {
+    if (i === 0) {
+      tl.to(slide, { opacity: 0, duration: 1 });
+    } else {
+      const num = slide.querySelector(".num");
+      const leftPart = slide.querySelector(".text-left-part");
+      const rightPart = slide.querySelector(".text-right-part");
+
+      tl.fromTo(slide, { opacity: 0 }, { opacity: 1, duration: 0.5 })
+        .from(leftPart, { x: -100, opacity: 0, duration: 1 }, "<")
+        .from(rightPart, { x: 100, opacity: 0, duration: 1 }, "<")
+        .from(num, { scale: 0.8, opacity: 0, duration: 1.2 }, "-=0.5");
+
+      if (i < slides.length - 1) {
+        tl.to(slide, { opacity: 0, duration: 1, delay: 0.5 });
+      }
+    }
+  });
 </script>

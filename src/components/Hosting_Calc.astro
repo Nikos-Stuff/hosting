@@ -7,7 +7,7 @@
       <div
         data-tooltip="Selecting a nearby server reduces ping and improves speed."
         id="location_selected"
-        class="border border-black/15 dark:border-white/20 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center select-none hover:bg-black/5 dark:hover:bg-white/10 transition-all duration-300 ease-in-out"
+        class="border border-white/20 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center select-none hover:bg-white/10 transition-all duration-300 ease-in-out"
       >
         <div>
           <span class="fi fi-xx mr-5"></span>Click to choose location
@@ -16,10 +16,10 @@
 
       <div
         id="location_options"
-        class="hide_scrollbar absolute w-full rounded-lg mt-1 overflow-auto max-h-0 transition-all duration-300 z-51 dark:bg-black bg-white shadow-lg"
+        class="hide_scrollbar absolute w-full rounded-lg mt-1 overflow-auto max-h-0 transition-all duration-300 z-51 bg-black shadow-lg"
       >
         <div
-          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
+          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-white/10"
           data-location_name="europe_free"
           data-tooltip="Ryzen 9 5950X based servers located in Europe"
         >
@@ -29,7 +29,7 @@
         </div>
 
         <div
-          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
+          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-white/10"
           data-location_name="us_free"
           data-tooltip="EPYC based servers located in the United States"
         >
@@ -47,7 +47,7 @@
       <div
         data-tooltip="Pick a server type for the game you want to run."
         id="egg_selected"
-        class="border border-black/15 dark:border-white/20 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center select-none hover:bg-black/5 dark:hover:bg-white/10 transition-all duration-300 ease-in-out"
+        class="border border-white/20 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center select-none hover:bg-white/10 transition-all duration-300 ease-in-out"
       >
         Click to choose egg
       </div>
@@ -61,7 +61,7 @@
 
       <div
         id="egg_options"
-        class="hide_scrollbar absolute w-full rounded-lg mt-1 overflow-auto max-h-0 transition-all duration-300 z-50 dark:bg-black bg-white shadow-lg"
+        class="hide_scrollbar absolute w-full rounded-lg mt-1 overflow-auto max-h-0 transition-all duration-300 z-50 bg-black shadow-lg"
       >
         <div
           class="p-3 grid grid-cols-3 md:grid-cols-6 gap-2 justify-items-center"
@@ -70,10 +70,10 @@
             hidden
             id="egg_template"
             data-egg_id="?"
-            class="flex flex-col items-center px-2 py-3 rounded-lg cursor-pointer hover:bg-black/5 dark:hover:bg-white/10 select-none transition-all"
+            class="flex flex-col items-center px-2 py-3 rounded-lg cursor-pointer hover:bg-white/10 select-none transition-all"
           >
             <figure
-              class="w-16 h-16 rounded-md overflow-hidden bg-black/5 dark:bg-white/5 flex items-center justify-center"
+              class="w-16 h-16 rounded-md overflow-hidden bg-white/5 flex items-center justify-center"
             >
               <img src="" alt="Loading" class="w-full h-full object-cover" />
             </figure>
@@ -90,17 +90,17 @@
       <div
         data-tooltip="Subplans are different server configurations with varying performance and prices. Choose one that fits your needs."
         id="subplan_selected"
-        class="border border-black/15 dark:border-white/20 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center select-none hover:bg-black/5 dark:hover:bg-white/10 transition-all duration-300 ease-in-out"
+        class="border border-white/20 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center select-none hover:bg-white/10 transition-all duration-300 ease-in-out"
       >
         <div>Click to choose subplan</div>
       </div>
 
       <div
         id="subplan_options"
-        class="hide_scrollbar absolute w-full rounded-lg mt-1 overflow-auto max-h-0 transition-all duration-300 z-51 dark:bg-black bg-white shadow-lg"
+        class="hide_scrollbar absolute w-full rounded-lg mt-1 overflow-auto max-h-0 transition-all duration-300 z-51 bg-black shadow-lg"
       >
         <div
-          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
+          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-white/10"
           data-subplan_name="free"
           data-tooltip="Good old free plan. Specifications are scaled based on the egg you choose."
         >
@@ -108,7 +108,7 @@
         </div>
 
         <div
-          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
+          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-white/10"
           data-subplan_name="friends"
           data-tooltip="Enhanced performance with more resources for growing projects </br> Performance: ★★★☆☆"
         >
@@ -116,7 +116,7 @@
         </div>
 
         <div
-          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
+          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-white/10"
           data-subplan_name="advanced"
           data-tooltip="Premium performance with the most resources for large projects </br> Performance: ★★★★★"
         >
@@ -135,11 +135,10 @@
         placeholder="example@xyz.com"
         class="w-full p-4 mt-5 border rounded-lg
               bg-transparent
-             border-black/15 dark:border-white/20
-             hover:bg-black/5 hover:dark:bg-white/10
+             border-white/20 hover:bg-white/10
                focus:outline-none
-             focus:border-black/40 dark:focus:border-white/40
-               focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20
+             focus:border-white/40
+               focus:ring-2 focus:ring-white/20
                focus:ring-offset-0
                transition-all duration-300 ease-out"
       />
@@ -166,18 +165,18 @@
       <p class="block text-sm font-medium mb-1">Overall Avaiable Resources:</p>
       <div
         id="availability_bar"
-        class="w-full bg-black/5 dark:bg-white/5 rounded-md h-5 relative"
+        class="w-full bg-white/5 rounded-md h-5 relative"
         data-tooltip="-"
       >
         <div
           id="availability_after_bar"
-          class="absolute h-full rounded-md transition-all duration-300 bg-gray-900 dark:bg-gray-400"
+          class="absolute h-full rounded-md transition-all duration-300 bg-gray-400"
           style="width: 0%; opacity: 0.5; z-index: 2;"
         >
         </div>
         <div
           id="availability_base_bar"
-          class="relative h-full rounded-md transition-all duration-300 bg-black dark:bg-white"
+          class="relative h-full rounded-md transition-all duration-300 bg-white"
           style="width: 0%; z-index: 1;"
         >
         </div>
@@ -189,18 +188,18 @@
         <div>
           <p class="text-xs mb-1">CPU</p>
           <div
-            class="w-full bg-black/5 dark:bg-white/5 rounded-full h-2 relative"
+            class="w-full bg-white/5 rounded-full h-2 relative"
             data-tooltip="-"
           >
             <div
               id="boost_cpu_bar"
-              class="absolute h-full rounded-full transition-all duration-300 bg-purple-900 dark:bg-purple-400"
+              class="absolute h-full rounded-full transition-all duration-300 bg-purple-400"
               style="width: 0%"
             >
             </div>
             <div
               id="cpu_bar"
-              class="relative h-full rounded-full transition-all duration-300 bg-black dark:bg-white"
+              class="relative h-full rounded-full transition-all duration-300 bg-white"
               style="width: 0%"
             >
             </div>
@@ -210,18 +209,18 @@
         <div>
           <p class="text-xs mb-1">RAM</p>
           <div
-            class="w-full bg-black/5 dark:bg-white/5 rounded-full h-2 relative"
+            class="w-full bg-white/5 rounded-full h-2 relative"
             data-tooltip="-"
           >
             <div
               id="boost_ram_bar"
-              class="absolute h-full rounded-full transition-all duration-300 bg-purple-900 dark:bg-purple-400"
+              class="absolute h-full rounded-full transition-all duration-300 bg-purple-400"
               style="width: 0%"
             >
             </div>
             <div
               id="ram_bar"
-              class="relative h-full rounded-full transition-all duration-300 bg-black dark:bg-white"
+              class="relative h-full rounded-full transition-all duration-300 bg-white"
               style="width: 0%"
             >
             </div>
@@ -231,18 +230,18 @@
         <div>
           <p class="text-xs mb-1">SSD Storage</p>
           <div
-            class="w-full bg-black/5 dark:bg-white/5 rounded-full h-2 relative"
+            class="w-full bg-white/5 rounded-full h-2 relative"
             data-tooltip="-"
           >
             <div
               id="boost_ssd_bar"
-              class="absolute h-full rounded-full transition-all duration-300 bg-purple-900 dark:bg-purple-400"
+              class="absolute h-full rounded-full transition-all duration-300 bg-purple-400"
               style="width: 0%"
             >
             </div>
             <div
               id="ssd_bar"
-              class="relative h-full rounded-full transition-all duration-300 bg-black dark:bg-white"
+              class="relative h-full rounded-full transition-all duration-300 bg-white"
               style="width: 0%"
             >
             </div>
@@ -259,10 +258,10 @@
       <div class="animate">
         <button
           id="place_order_btn"
-          class="group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-all duration-300 ease-in-out"
+          class="group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out"
         >
           <span
-            class="w-full z-10 relative group-hover:text-black group-hover:dark:text-white text-center transition-color duration-300"
+            class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300"
           >
             Get My Server!
           </span>
@@ -272,12 +271,12 @@
           target="_blank"
           id="place_order_btn"
           class="group w-full h-5 p-4 mt-2 gap-3 flex
-          items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10
-          border-black/15 dark:border-white/20 transition-all duration-300
+          items-center border rounded-lg hover:bg-white/10
+          border-white/20 transition-all duration-300
           ease-in-out"
         >
           <span
-            class="w-full z-10 relative group-hover:text-black group-hover:dark:text-white text-center transition-color duration-300"
+            class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300"
           >
             Manage Subscriptions
           </span>
