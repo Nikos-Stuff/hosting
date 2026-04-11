@@ -11,7 +11,7 @@ const { sub } = Astro.props;
     id="centerContent"
     class="relative w-svw h-svh flex items-center justify-start"
   >
-    <div id="contentWrapper" class="p-4 md:p-10 w-full text-left">
+    <div id="contentWrapper" class="p-4 md:p-10 w-full text-left z-1">
       <p
         id="subtitle"
         class="text-xl md:text-2xl lg:text-3xl font-semibold opacity-75"
@@ -26,6 +26,13 @@ const { sub } = Astro.props;
         free
       </p>
     </div>
+  </div>
+
+  <!-- Background tilted div in 3d space -->
+  <div
+    class="absolute top-0 right-0 w-full h-full rounded-xl border-2 border-white/25 scale-50 pointer-events-none bg-black/80"
+    style="transform: translateX(35%) perspective(800px) rotateX(0deg) rotateY(-10deg);"
+  >
   </div>
 </div>
 
