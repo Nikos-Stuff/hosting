@@ -1,15 +1,59 @@
 ---
 const { sub } = Astro.props;
+import { Image } from "astro:assets";
+
+import minecraft_icon from "@assets/hosting_icons/minecraft.png";
+import hytale_icon from "@assets/hosting_icons/hytale.png";
+import discord_icon from "@assets/hosting_icons/discord.png";
+import website_icon from "@assets/hosting_icons/website.png";
+import terraria_icon from "@assets/hosting_icons/terraria.png";
+import ts6_icon from "@assets/hosting_icons/ts6.png";
+
+const carouselItems = [
+  {
+    label: "MINECRAFT SERVER",
+    image: minecraft_icon,
+    colors: ["#166534", "#3f6212", "#14532d"],
+  },
+  {
+    label: "HYTALE SERVER",
+    image: hytale_icon,
+    colors: ["#92400e", "#9a3412", "#a16207"],
+  },
+  {
+    label: "DISCORD BOT",
+    image: discord_icon,
+    colors: ["#3730A3", "#4338CA", "#312E81"],
+  },
+  {
+    label: "WEBSITE",
+    image: website_icon,
+    colors: ["#155e75", "#1d4ed8", "#5b21b6"],
+  },
+  {
+    label: "TERRARIA SERVER",
+    image: terraria_icon,
+    colors: ["#047857", "#3f6212", "#166534"],
+  },
+  {
+    label: "TS6 SERVER",
+    image: ts6_icon,
+    colors: ["#1e40af", "#0369a1", "#075985"],
+  },
+];
 ---
 
 <div
   id="animate"
   class="relative top-0 left-0 w-svw h-svh flex items-center justify-start"
   style="opacity: 0"
+  data-carousel-items={JSON.stringify(
+    carouselItems.map(({ label, colors }) => ({ label, colors })),
+  )}
 >
   <div
     id="centerContent"
-    class="relative w-svw h-svh flex items-center justify-start"
+    class="relative w-svw h-svh flex items-center justify-start pointer-events-none"
   >
     <div id="contentWrapper" class="p-4 md:p-10 w-full text-left z-1">
       <p
@@ -28,19 +72,76 @@ const { sub } = Astro.props;
     </div>
   </div>
 
-  <!-- Background tilted div in 3d space -->
   <div
-    class="absolute top-0 right-0 w-full h-full rounded-xl border-2 border-white/25 scale-50 pointer-events-none bg-black/80"
+    class="absolute top-0 right-0 w-full h-full rounded-xl border-2 border-white/25 scale-50 bg-black/45"
     style="transform: translateX(35%) perspective(800px) rotateX(0deg) rotateY(-10deg);"
   >
+    <div class="relative w-full h-full overflow-hidden rounded-xl">
+      <div id="hero-carousel-track" class="absolute inset-0 flex h-full w-full">
+        {
+          carouselItems.map((item) => (
+            <div class="relative min-w-full h-full p-2 box-border">
+              <Image
+                src={item.image}
+                alt={`${item.label} placeholder`}
+                class="w-full h-full object-contain opacity-100 rounded-lg"
+                style={`background: linear-gradient(135deg, ${item.colors.join(", ")})`}
+              />
+              <div class="absolute inset-2 rounded-lg bg-linear-to-t from-black/45 via-black/20 to-transparent" />
+            </div>
+          ))
+        }
+      </div>
+
+      <div
+        class="absolute inset-0 z-10 bg-linear-to-l from-black/55 via-black/25 to-transparent"
+      >
+      </div>
+
+      <div
+        class="absolute inset-x-0 bottom-0 h-40 z-20 bg-linear-to-t from-black/85 via-black/45 to-transparent"
+      >
+      </div>
+
+      <div
+        class="absolute bottom-5 left-1/2 -translate-x-1/2 w-[94%] md:w-[86%] lg:w-[74%] flex flex-col md:flex-row gap-5 z-30"
+      >
+        <a
+          href="https://panel.nikostuff.com"
+          target="_blank"
+          class="group w-full min-h-16 md:min-h-20 px-8 md:px-10 py-6 mt-2 flex items-center justify-center border rounded-xl hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out backdrop-blur-xl select-none"
+        >
+          <span
+            class="w-full z-10 relative text-xl md:text-2xl font-semibold text-center group-hover:text-white transition-colors duration-300"
+          >
+            Open Panel
+          </span>
+        </a>
+
+        <a
+          href="#calculator"
+          class="group w-full min-h-16 md:min-h-20 px-8 md:px-10 py-6 mt-2 flex items-center justify-center border rounded-xl bg-emerald-500/20 hover:bg-emerald-500/35 border-emerald-300/40 transition-all duration-300 ease-in-out backdrop-blur-xl select-none"
+        >
+          <span
+            class="w-full z-10 relative text-xl md:text-2xl font-semibold text-center text-emerald-100 group-hover:text-white transition-colors duration-300"
+          >
+            Order Server
+          </span>
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
   import { gsap } from "gsap";
 
+  type CarouselItem = { label: string; colors: string[] };
+
   function run() {
+    const track = document.getElementById("hero-carousel-track");
     const animateElement = document.querySelector<HTMLElement>("#animate");
+
     if (animateElement) {
       animateElement.style.backgroundColor = "rgba(0, 0, 0, 0)";
     }
@@ -60,23 +161,29 @@ const { sub } = Astro.props;
       );
     }
 
-    const texts = [
-      "MINECRAFT SERVER",
-      "HYTALE SERVER",
-      "DISCORD BOT",
-      "WEBSITE",
-      "TERRARIA SERVER",
-      "TS6 SERVER",
-    ];
+    const carouselItems: CarouselItem[] = JSON.parse(
+      animateElement?.dataset.carouselItems ?? "[]",
+    );
 
-    const contextColors: Record<string, string[]> = {
-      "MINECRAFT SERVER": ["#22c55e", "#84cc16", "#16a34a"],
-      "HYTALE SERVER": ["#f59e0b", "#f97316", "#fde047"],
-      "DISCORD BOT": ["#5865F2", "#7289DA", "#818CF8"],
-      WEBSITE: ["#06b6d4", "#3b82f6", "#8b5cf6"],
-      "TERRARIA SERVER": ["#10b981", "#65a30d", "#22c55e"],
-      "TS6 SERVER": ["#2563eb", "#0ea5e9", "#38bdf8"],
-    };
+    const texts =
+      ((window as any).__HOSTING_TEXTS__ as string[] | undefined) ??
+      carouselItems.map((item) => item.label);
+
+    const contextColors: Record<string, string[]> = Object.fromEntries(
+      carouselItems.map((item) => [item.label, item.colors]),
+    );
+
+    Object.keys(contextColors).forEach((key) => {
+      contextColors[key] = contextColors[key].map((color) => {
+        const value = Number.parseInt(color.replace("#", ""), 16);
+        const r = Math.min(((value >> 16) & 255) + 30, 255);
+        const g = Math.min(((value >> 8) & 255) + 30, 255);
+        const b = Math.min((value & 255) + 30, 255);
+        return `#${((1 << 24) + (r << 16) + (g << 8) + b)
+          .toString(16)
+          .slice(1)}`;
+      });
+    });
 
     const fallbackColors = [
       "#22c55e",
@@ -89,18 +196,64 @@ const { sub } = Astro.props;
       "#ec4899",
     ];
 
-    const pickColor = (text: string) => {
+    const slide_mapping: Record<string, number> = Object.fromEntries(
+      carouselItems.map((item, i) => [item.label, i + 1]),
+    );
+
+    const slides = track
+      ? (Array.from(track.children) as HTMLElement[])
+      : ([] as HTMLElement[]);
+
+    let currentSlide = 0;
+
+    function updateCarousel(text: string) {
+      const nextSlide = (slide_mapping[text] || 1) - 1;
+      const offset = nextSlide * -100;
+
+      if (!track || !slides.length || nextSlide === currentSlide) return;
+
+      const previousSlide = currentSlide;
+
+      gsap.killTweensOf([track, slides[previousSlide], slides[nextSlide]]);
+
+      gsap
+        .timeline()
+        .to(slides[previousSlide], {
+          scale: 0.95,
+          duration: 0.2,
+          ease: "power2.inOut",
+        })
+        .to(
+          track,
+          {
+            xPercent: offset,
+            duration: 1.1,
+            ease: "power3.inOut",
+          },
+          "<0.05",
+        )
+        .fromTo(
+          slides[nextSlide],
+          { scale: 0.95 },
+          { scale: 1, duration: 0.5, ease: "power2.out" },
+          "<0.55",
+        );
+
+      currentSlide = nextSlide;
+    }
+
+    const pickColor = (text: string): string => {
       const palette = contextColors[text] ?? fallbackColors;
       return palette[Math.floor(Math.random() * palette.length)];
     };
 
-    const hexToRgba = (hex: string, alpha: number) => {
+    const hexToRgba = (hex: string, alpha: number): string => {
       const normalized = hex.replace("#", "");
       const full =
         normalized.length === 3
           ? normalized
               .split("")
-              .map((char) => char + char)
+              .map((char: string) => char + char)
               .join("")
           : normalized;
 
@@ -139,6 +292,8 @@ const { sub } = Astro.props;
 
       inner.textContent = currentText;
       gsap.set(inner, { color: nextColor });
+
+      updateCarousel(currentText);
 
       if (animateElement) {
         gsap.to(animateElement, {
