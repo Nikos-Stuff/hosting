@@ -17,7 +17,7 @@ export default function BlogCard({ entry }: Props) {
       )}
 
       {/* our beloved mdd */}
-      <div class="max-w-full prose-invert">
+      <div class="max-w-full prose prose-invert">
         <div innerHTML={entry.rendered?.html}></div>
       </div>
 
