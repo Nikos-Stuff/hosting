@@ -39,22 +39,24 @@
         class="hide_scrollbar h-52 overflow-auto rounded-lg border border-white/20 bg-black/40 p-3"
       >
         <div
-          class="p-3 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 justify-items-center"
+          class="p-3 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 justify-items-center auto-rows-fr items-stretch"
         >
           <div
             hidden
             id="egg_template"
             data-egg_id="?"
-            class="flex flex-col items-center px-2 py-3 rounded-lg cursor-pointer hover:bg-white/10 select-none transition-all border border-transparent w-24"
+            class="flex h-full w-24 flex-col items-center px-2 py-3 rounded-lg cursor-pointer hover:bg-white/10 select-none transition-all border border-transparent"
           >
             <figure
               class="w-16 h-16 rounded-sm overflow-hidden bg-white/5 flex items-center justify-center shrink-0"
             >
               <img src="" alt="Loading" class="w-full h-full object-cover" />
             </figure>
-            <span class="text-sm mt-2 text-center w-full truncate"
-              >Downloading...</span
+            <span
+              class="text-sm mt-2 text-center w-full whitespace-normal wrap-break-word leading-tight flex-1 flex items-center justify-center"
             >
+              Downloading...
+            </span>
           </div>
         </div>
       </div>
