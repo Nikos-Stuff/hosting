@@ -1,80 +1,54 @@
-<!-- TODO: Remake it into stepped full screen carousel experience. -->
 <div>
   <div class="space-y-4 animate">
-    <!-- Custom Dropdown location -->
-    <div class="relative" id="location_dropdown">
+    <!-- Custom Dropdown grid -->
+    <div class="space-y-2" id="location_dropdown">
       <p class="block text-sm font-medium mb-1">Choose Location:</p>
-
-      <div
-        data-tooltip="Selecting a nearby server reduces ping and improves speed."
-        id="location_selected"
-        class="border border-white/20 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center select-none hover:bg-white/10 transition-all duration-300 ease-in-out"
-      >
-        <div>
-          <span class="fi fi-xx mr-5"></span>Click to choose location
-        </div>
-      </div>
-
+      <!-- Scrollable locations grid -->
       <div
         id="location_options"
-        class="hide_scrollbar absolute w-full rounded-lg mt-1 overflow-auto max-h-0 transition-all duration-300 z-51 bg-black shadow-lg"
+        class="hide_scrollbar max-h-52 overflow-auto rounded-lg border border-white/20 bg-black/40 p-3"
       >
-        <div
-          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-white/10"
-          data-location_name="europe_free"
-          data-tooltip="Ryzen 9 5950X based servers located in Europe"
-        >
-          <div>
-            <span class="fi fi-eu mr-5"></span>Europe
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div
+            class="px-3 py-4 rounded-lg cursor-pointer hover:bg-white/10 transition-all duration-300 text-center select-none flex flex-col items-center justify-center"
+            data-location_name="europe_free"
+            data-tooltip="Ryzen 9 5950X based servers located in Europe"
+          >
+            <span class="fi fi-eu text-2xl mb-2 rounded-sm"></span>
+            <span class="text-sm">Europe</span>
           </div>
-        </div>
 
-        <div
-          class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-white/10"
-          data-location_name="us_free"
-          data-tooltip="EPYC based servers located in the United States"
-        >
-          <div>
-            <span class="fi fi-us mr-5"></span>United States
+          <div
+            class="px-3 py-4 rounded-lg cursor-pointer hover:bg-white/10 transition-all duration-300 text-center select-none flex flex-col items-center justify-center"
+            data-location_name="us_free"
+            data-tooltip="EPYC based servers located in the United States"
+          >
+            <span class="fi fi-us text-2xl mb-2 rounded-sm"></span>
+            <span class="text-sm">United States</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Custom Dropdown Eggs -->
-    <div class="hide_scrollbar relative" id="egg_dropdown">
+    <!-- Eggs grid -->
+    <div class="space-y-2" id="egg_dropdown">
       <p class="block text-sm font-medium mb-1">Select "egg":</p>
 
       <div
-        data-tooltip="Pick a server type for the game you want to run."
-        id="egg_selected"
-        class="border border-white/20 rounded-lg px-4 py-3 cursor-pointer flex justify-between items-center select-none hover:bg-white/10 transition-all duration-300 ease-in-out"
-      >
-        Click to choose egg
-      </div>
-      <a
-        href="https://forms.gle/KXNLmxLib8ERo9vT7"
-        target="_blank"
-        class="text-xs italic"
-      >
-        We're missing something? Let us know!
-      </a>
-
-      <div
         id="egg_options"
-        class="hide_scrollbar absolute w-full rounded-lg mt-1 overflow-auto max-h-0 transition-all duration-300 z-50 bg-black shadow-lg"
+        class="hide_scrollbar h-52 overflow-auto rounded-lg border border-white/20 bg-black/40 p-3"
       >
         <div
-          class="p-3 grid grid-cols-3 md:grid-cols-6 gap-2 justify-items-center"
+          class="p-3 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 justify-items-center"
         >
           <div
             hidden
             id="egg_template"
             data-egg_id="?"
-            class="flex flex-col items-center px-2 py-3 rounded-lg cursor-pointer hover:bg-white/10 select-none transition-all"
+            class="flex flex-col items-center px-2 py-3 rounded-lg cursor-pointer hover:bg-white/10 select-none transition-all border border-transparent"
           >
             <figure
-              class="w-16 h-16 rounded-md overflow-hidden bg-white/5 flex items-center justify-center"
+              class="w-16 h-16 rounded-sm overflow-hidden bg-white/5 flex items-center justify-center"
             >
               <img src="" alt="Loading" class="w-full h-full object-cover" />
             </figure>
@@ -82,6 +56,14 @@
           </div>
         </div>
       </div>
+
+      <a
+        href="https://forms.gle/KXNLmxLib8ERo9vT7"
+        target="_blank"
+        class="text-xs italic"
+      >
+        We're missing something? Let us know!
+      </a>
     </div>
 
     <!-- Subplan dropdown -->
@@ -161,105 +143,175 @@
       </div>
     </div>
 
+    <!-- Line -->
+    <hr class="border-white/25 animate my-5" />
+
     <!-- Server specs preview ( CPU / RAM / SSD bars ) -->
-    <div id="specs_preview" class="space-y-3">
-      <p class="block text-sm font-medium mb-1">Overall Available Resources:</p>
-      <div
-        id="availability_bar"
-        class="w-full bg-white/5 rounded-md h-5 relative"
-        data-tooltip="-"
-      >
-        <div
-          id="availability_after_bar"
-          class="absolute h-full rounded-md transition-all duration-300 bg-gray-400"
-          style="width: 0%; opacity: 0.5; z-index: 2;"
-        >
-        </div>
-        <div
-          id="availability_base_bar"
-          class="relative h-full rounded-md transition-all duration-300 bg-white"
-          style="width: 0%; z-index: 1;"
-        >
-        </div>
-      </div>
-      <p id="can_deploy" class="text-xs opacity-50">-</p>
+    <div id="specs_preview" class="animate space-y-4">
+      <div class="flex items-start gap-4">
+        <div class="flex-1">
+          <p class="block text-sm font-medium mb-2">Server Specs Preview:</p>
 
-      <p class="block text-sm font-medium mb-1">Server Specs Preview:</p>
-      <div class="space-y-2">
-        <div>
-          <p class="text-xs mb-1">CPU</p>
-          <div
-            class="w-full bg-white/5 rounded-full h-2 relative"
-            data-tooltip="-"
-          >
-            <div
-              id="boost_cpu_bar"
-              class="absolute h-full rounded-full transition-all duration-300 bg-purple-400"
-              style="width: 0%"
-            >
+          <div class="h-28 flex flex-col justify-between">
+            <div>
+              <div
+                class="w-full bg-white/5 rounded-md h-5 relative overflow-hidden"
+                data-tooltip="-"
+              >
+                <div
+                  id="boost_cpu_bar"
+                  class="absolute h-full rounded-md transition-all duration-300 bg-purple-400/70"
+                  style="width: 0%"
+                >
+                </div>
+                <div
+                  id="cpu_bar"
+                  class="relative h-full rounded-md transition-all duration-300 bg-white"
+                  style="width: 0%"
+                >
+                </div>
+                <span
+                  class="absolute inset-0 z-10 flex items-center justify-center text-[11px] font-semibold text-white"
+                  style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);"
+                >
+                  CPU
+                </span>
+              </div>
             </div>
-            <div
-              id="cpu_bar"
-              class="relative h-full rounded-full transition-all duration-300 bg-white"
-              style="width: 0%"
-            >
+
+            <div>
+              <div
+                class="w-full bg-white/5 rounded-md h-5 relative overflow-hidden"
+                data-tooltip="-"
+              >
+                <div
+                  id="boost_ram_bar"
+                  class="absolute h-full rounded-md transition-all duration-300 bg-purple-400/70"
+                  style="width: 0%"
+                >
+                </div>
+                <div
+                  id="ram_bar"
+                  class="relative h-full rounded-md transition-all duration-300 bg-white"
+                  style="width: 0%"
+                >
+                </div>
+                <span
+                  class="absolute inset-0 z-10 flex items-center justify-center text-[11px] font-semibold text-white"
+                  style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);"
+                >
+                  RAM
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <div
+                class="w-full bg-white/5 rounded-md h-5 relative overflow-hidden"
+                data-tooltip="-"
+              >
+                <div
+                  id="boost_ssd_bar"
+                  class="absolute h-full rounded-md transition-all duration-300 bg-purple-400/70"
+                  style="width: 0%"
+                >
+                </div>
+                <div
+                  id="ssd_bar"
+                  class="relative h-full rounded-md transition-all duration-300 bg-white"
+                  style="width: 0%"
+                >
+                </div>
+                <span
+                  class="absolute inset-0 z-10 flex items-center justify-center text-[11px] font-semibold text-white"
+                  style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);"
+                >
+                  SSD STORAGE
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div>
-          <p class="text-xs mb-1">RAM</p>
+        <div class="w-36 shrink-0">
+          <p class="block text-sm font-medium mb-2 text-center">Availability</p>
+
           <div
-            class="w-full bg-white/5 rounded-full h-2 relative"
+            id="availability_circle"
+            class="relative w-28 h-28 mx-auto"
             data-tooltip="-"
           >
+            <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+              <!-- Track -->
+              <circle
+                cx="50"
+                cy="50"
+                r="42"
+                stroke="rgba(255,255,255,0.15)"
+                stroke-width="10"
+                fill="none"></circle>
+
+              <!-- Current availability (white, drawn first) -->
+              <circle
+                id="availability_base_circle"
+                cx="50"
+                cy="50"
+                r="42"
+                stroke="white"
+                stroke-width="10"
+                stroke-linecap="round"
+                fill="none"
+                stroke-dasharray="0 999"
+                style="transition: stroke-dasharray 500ms ease, stroke-dashoffset 500ms ease;"
+              ></circle>
+
+              <!-- After-order availability (gray, drawn on top so it is visible) -->
+              <circle
+                id="availability_after_circle"
+                cx="50"
+                cy="50"
+                r="42"
+                stroke="rgb(156 163 175)"
+                stroke-opacity="0.95"
+                stroke-width="10"
+                stroke-linecap="round"
+                fill="none"
+                stroke-dasharray="0 999"
+                style="transition: stroke-dasharray 500ms ease, stroke-dashoffset 500ms ease;"
+              ></circle>
+            </svg>
+
             <div
-              id="boost_ram_bar"
-              class="absolute h-full rounded-full transition-all duration-300 bg-purple-400"
-              style="width: 0%"
+              id="availability_percent_text"
+              class="absolute inset-0 flex items-center justify-center text-sm font-semibold"
             >
-            </div>
-            <div
-              id="ram_bar"
-              class="relative h-full rounded-full transition-all duration-300 bg-white"
-              style="width: 0%"
-            >
+              0%
             </div>
           </div>
-        </div>
 
-        <div>
-          <p class="text-xs mb-1">SSD Storage</p>
-          <div
-            class="w-full bg-white/5 rounded-full h-2 relative"
-            data-tooltip="-"
-          >
-            <div
-              id="boost_ssd_bar"
-              class="absolute h-full rounded-full transition-all duration-300 bg-purple-400"
-              style="width: 0%"
-            >
-            </div>
-            <div
-              id="ssd_bar"
-              class="relative h-full rounded-full transition-all duration-300 bg-white"
-              style="width: 0%"
-            >
-            </div>
+          <p id="can_deploy" class="text-xs opacity-50 text-center mt-2">-</p>
+
+          <!-- hidden compatibility bars for existing JS -->
+          <div hidden id="availability_bar" data-tooltip="-">
+            <div id="availability_after_bar" style="width: 0%"></div>
+            <div id="availability_base_bar" style="width: 0%"></div>
           </div>
         </div>
       </div>
 
       <!-- Total cost -->
-      <div class="flex justify-between items-center">
+      <div class="animate flex justify-between items-center">
         <p class="text-lg font-semibold">Monthly Cost:</p>
         <p id="estimated_cost" class="text-4xl font-bold">-</p>
       </div>
 
+      <!-- Line -->
+      <hr class="border-white/25 animate my-5" />
+
       <div class="animate">
         <button
           id="place_order_btn"
-          class="group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out"
+          class="group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg rounded-b-sm hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out"
         >
           <span
             class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300"
@@ -267,14 +319,11 @@
             Get My Server!
           </span>
         </button>
+
         <a
           href="https://billing.stripe.com/p/login/6oUaEWa7abrm9GSdzBdAk00"
           target="_blank"
-          id="place_order_btn"
-          class="group w-full h-5 p-4 mt-2 gap-3 flex
-          items-center border rounded-lg hover:bg-white/10
-          border-white/20 transition-all duration-300
-          ease-in-out"
+          class="group w-full h-5 p-4 mt-2 gap-3 flex items-center border rounded-lg rounded-t-sm hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out"
         >
           <span
             class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300"
@@ -282,6 +331,7 @@
             Manage Subscriptions
           </span>
         </a>
+
         <a href="/legal">
           <small>
             By creating a server, you agree to our <strong
@@ -292,447 +342,454 @@
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    // ------------------------------
-    // DOM ELEMENT REFERENCES
-    // ------------------------------
-    const locationDropdown = document.getElementById(
-      "location_dropdown",
-    ) as HTMLElement | null;
-    const locationSelected = document.getElementById(
-      "location_selected",
-    ) as HTMLElement | null;
-    const locationOptions = document.getElementById(
-      "location_options",
-    ) as HTMLElement | null;
+<script>
+  // ------------------------------
+  // DOM ELEMENT REFERENCES
+  // ------------------------------
+  const locationOptions = document.getElementById(
+    "location_options",
+  ) as HTMLElement | null;
 
-    const eggDropdown = document.getElementById(
-      "egg_dropdown",
-    ) as HTMLElement | null;
-    const eggSelected = document.getElementById(
-      "egg_selected",
-    ) as HTMLElement | null;
-    const eggOptions = document.getElementById(
-      "egg_options",
-    ) as HTMLElement | null;
-    const eggTemplate = document.getElementById(
-      "egg_template",
-    ) as HTMLElement | null;
+  const eggOptions = document.getElementById(
+    "egg_options",
+  ) as HTMLElement | null;
+  const eggTemplate = document.getElementById(
+    "egg_template",
+  ) as HTMLElement | null;
 
-    const subplanDropdown = document.getElementById(
-      "subplan_dropdown",
-    ) as HTMLElement | null;
-    const subplanSelected = document.getElementById(
-      "subplan_selected",
-    ) as HTMLElement | null;
-    const subplanOptions = document.getElementById(
-      "subplan_options",
-    ) as HTMLElement | null;
+  const subplanDropdown = document.getElementById(
+    "subplan_dropdown",
+  ) as HTMLElement | null;
+  const subplanSelected = document.getElementById(
+    "subplan_selected",
+  ) as HTMLElement | null;
+  const subplanOptions = document.getElementById(
+    "subplan_options",
+  ) as HTMLElement | null;
 
-    const clientEmailInput = document.getElementById(
-      "client_email",
-    ) as HTMLInputElement | null;
-    const placeOrderBtn = document.getElementById(
-      "place_order_btn",
-    ) as HTMLElement | null;
-    const order_blocker = document.getElementById(
-      "order_blocker",
-    ) as HTMLElement | null;
-    const order_status = document.getElementById(
-      "order_activity",
-    ) as HTMLElement | null;
+  const clientEmailInput = document.getElementById(
+    "client_email",
+  ) as HTMLInputElement | null;
+  const placeOrderBtn = document.getElementById(
+    "place_order_btn",
+  ) as HTMLElement | null;
+  const orderBlocker = document.getElementById(
+    "order_blocker",
+  ) as HTMLElement | null;
+  const orderStatus = document.getElementById(
+    "order_activity",
+  ) as HTMLElement | null;
 
-    const cpuBar = document.getElementById("cpu_bar") as HTMLElement | null;
-    const ramBar = document.getElementById("ram_bar") as HTMLElement | null;
-    const ssdBar = document.getElementById("ssd_bar") as HTMLElement | null;
+  const cpuBar = document.getElementById("cpu_bar") as HTMLElement | null;
+  const ramBar = document.getElementById("ram_bar") as HTMLElement | null;
+  const ssdBar = document.getElementById("ssd_bar") as HTMLElement | null;
 
-    const boostCpuBar = document.getElementById(
-      "boost_cpu_bar",
-    ) as HTMLElement | null;
-    const boostRamBar = document.getElementById(
-      "boost_ram_bar",
-    ) as HTMLElement | null;
-    const boostSsdBar = document.getElementById(
-      "boost_ssd_bar",
-    ) as HTMLElement | null;
+  const boostCpuBar = document.getElementById(
+    "boost_cpu_bar",
+  ) as HTMLElement | null;
+  const boostRamBar = document.getElementById(
+    "boost_ram_bar",
+  ) as HTMLElement | null;
+  const boostSsdBar = document.getElementById(
+    "boost_ssd_bar",
+  ) as HTMLElement | null;
 
-    const availabilityBar = document.getElementById(
-      "availability_base_bar",
-    ) as HTMLElement | null;
-    const availabilityAfterBar = document.getElementById(
-      "availability_after_bar",
-    ) as HTMLElement | null;
-    const candeployText = document.getElementById(
-      "can_deploy",
-    ) as HTMLElement | null;
+  const availabilityBar = document.getElementById(
+    "availability_base_bar",
+  ) as HTMLElement | null;
+  const availabilityAfterBar = document.getElementById(
+    "availability_after_bar",
+  ) as HTMLElement | null;
 
-    const estimatedCost = document.getElementById(
-      "estimated_cost",
-    ) as HTMLElement | null;
-    // ------------------------------
+  const availabilityBaseCircle = document.getElementById(
+    "availability_base_circle",
+  ) as SVGCircleElement | null;
+  const availabilityAfterCircle = document.getElementById(
+    "availability_after_circle",
+  ) as SVGCircleElement | null;
+  const availabilityPercentText = document.getElementById(
+    "availability_percent_text",
+  ) as HTMLElement | null;
+  const availabilityCircle = document.getElementById(
+    "availability_circle",
+  ) as HTMLElement | null;
 
-    const egg_list = "https://api.nikostuff.com/HostingPelicanData?list_eggs"; // API for eggs
-    const order_api =
-      "https://api.nikostuff.com/HostingOrderManager?place_order"; // API for placing / renewing stuff
-    const specs_api =
-      "https://api.nikostuff.com/HostingOrderManager?retrive_data"; // api for retriving specs / cost data based on selected options
-    // specs api returns:
-    // { "ram": 2, "disk": 5, "cpu": 100, "availability": 80, "price": 0, boost: { "ram": 0, "disk": 0, "cpu": 0 } }
+  const canDeployText = document.getElementById(
+    "can_deploy",
+  ) as HTMLElement | null;
+  const estimatedCost = document.getElementById(
+    "estimated_cost",
+  ) as HTMLElement | null;
+  // ------------------------------
 
-    const data_storage: {
-      egg_id: string;
-      client_email: string;
-      location: string;
-      subplan: string;
-      turnstile_token: string;
-    } = {
-      egg_id: "",
-      client_email: "",
-      subplan: "",
-      location: "",
-      turnstile_token: "",
-    };
+  const egg_list = "https://api.nikostuff.com/HostingPelicanData?list_eggs";
+  const order_api = "https://api.nikostuff.com/HostingOrderManager?place_order";
+  const specs_api =
+    "https://api.nikostuff.com/HostingOrderManager?retrive_data";
 
-    // ------------------------------
-    // UPDATE STATS AND COST FUNCTION
-    // ------------------------------
-    async function updateSpecsAndCost() {
-      if (
-        !data_storage.egg_id ||
-        !data_storage.location ||
-        !data_storage.subplan
-      )
-        return;
+  const data_storage = {
+    egg_id: "",
+    client_email: "",
+    location: "",
+    subplan: "",
+    turnstile_token: "",
+  };
 
-      try {
-        const res = await fetch(specs_api, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            egg_id: data_storage.egg_id,
-            location: data_storage.location,
-            subplan: data_storage.subplan,
-          }),
-        });
+  const AVAILABILITY_RADIUS = 42;
+  const AVAILABILITY_CIRCUMFERENCE = 2 * Math.PI * AVAILABILITY_RADIUS;
 
-        if (!res.ok) throw new Error("Failed to fetch specs and cost");
+  function setStatus(text: string) {
+    if (orderStatus) orderStatus.textContent = text;
+  }
 
-        const data = await res.json();
+  function setSelectedEggOption(selectedOption: Element) {
+    eggOptions?.querySelectorAll(".egg_option").forEach((option) => {
+      if (!(option instanceof HTMLElement)) return;
+      option.classList.remove(
+        "border-white/40",
+        "bg-white/10",
+        "ring-1",
+        "ring-white/30",
+      );
+      option.classList.add("border-transparent");
+    });
 
-        const canDeploy =
-          typeof data.can_deploy === "boolean" ? data.can_deploy : false;
-
-        const cpuBaseRaw = Math.max(0, Number(data.cpu) || 0);
-        const cpuBoostRaw = Math.max(0, Number(data.boost?.cpu) || 0);
-        const cpuTotalRaw = cpuBaseRaw + cpuBoostRaw;
-
-        const cpuMaxTotal = 800; // top limit
-        const cpuBase = Math.min(100, (cpuBaseRaw / cpuMaxTotal) * 100);
-        const cpuTotal = Math.min(100, (cpuTotalRaw / cpuMaxTotal) * 100);
-
-        const ramBaseRaw = Math.max(0, Number(data.ram) || 0);
-        const ramBoostRaw = Math.max(0, Number(data.boost?.ram) || 0);
-        const ramBase = Math.max(0, Math.min(100, ramBaseRaw));
-        const ramBoost = Math.max(0, Math.min(100, ramBoostRaw));
-        const ramTotal = Math.max(0, Math.min(100, ramBase + ramBoost));
-
-        const ssdBaseRaw = Math.max(0, Number(data.disk) || 0);
-        const ssdBoostRaw = Math.max(0, Number(data.boost?.disk) || 0);
-        const ssdBase = Math.max(0, Math.min(100, ssdBaseRaw));
-        const ssdBoost = Math.max(0, Math.min(100, ssdBoostRaw));
-        const ssdTotal = Math.max(0, Math.min(100, ssdBase + ssdBoost));
-
-        // CPU
-        if (cpuBar) {
-          cpuBar.style.width = `${cpuBase}%`;
-          cpuBar.parentElement?.setAttribute(
-            "data-tooltip",
-            `${cpuBaseRaw}%+${cpuBoostRaw}% CPU (total ${cpuTotalRaw}% CPU)`,
-          );
-        }
-        if (boostCpuBar) {
-          boostCpuBar.style.width = `${cpuTotal}%`;
-        }
-
-        // RAM
-        if (ramBar) {
-          ramBar.style.width = `${ramBase}%`;
-          ramBar.parentElement?.setAttribute(
-            "data-tooltip",
-            `${ramBaseRaw}+${ramBoostRaw} GB RAM (total ${ramTotal} GB)`,
-          );
-        }
-        if (boostRamBar) {
-          boostRamBar.style.width = `${ramTotal}%`;
-        }
-
-        // SSD
-        if (ssdBar) {
-          ssdBar.style.width = `${ssdBase}%`;
-          ssdBar.parentElement?.setAttribute(
-            "data-tooltip",
-            `${ssdBaseRaw}+${ssdBoostRaw} GB Storage (total ${ssdTotal} GB) </br> *Expandable storage - free of charge. Contact us via ticketing system after placing the order if you need more storage!`,
-          );
-        }
-        if (boostSsdBar) {
-          boostSsdBar.style.width = `${ssdTotal}%`;
-        }
-
-        if (estimatedCost) {
-          estimatedCost.textContent = `$${data.price}`;
-        }
-        if (availabilityBar) {
-          const availability = Math.max(
-            0,
-            Math.min(100, Number(data.availability) || 0),
-          );
-          availabilityBar.style.width = `${availability}%`;
-          availabilityBar.parentElement?.setAttribute(
-            "data-tooltip",
-            `${availability}% Available Resources ( After this order, ${Math.max(
-              0,
-              Math.min(100, Number(data.availability_after) || 0),
-            )}% will be available )`,
-          );
-        }
-
-        if (availabilityAfterBar) {
-          const availabilityAfter = Math.max(
-            0,
-            Math.min(100, Number(data.availability_after) || 0),
-          );
-          availabilityAfterBar.style.width = `${availabilityAfter}%`;
-        }
-
-        if (candeployText) {
-          candeployText.textContent = canDeploy
-            ? "Your server can be deployed!"
-            : "Your server cannot be deployed due to insufficient resources.";
-        }
-      } catch (err) {
-        console.error("Error updating specs and cost:", err);
-      }
+    if (selectedOption instanceof HTMLElement) {
+      selectedOption.classList.remove("border-transparent");
+      selectedOption.classList.add(
+        "border-white/40",
+        "bg-white/10",
+        "ring-1",
+        "ring-white/30",
+      );
     }
+  }
 
-    // ------------------------------
-    // CLIENT EMAIL INPUT HANDLING (debounce 2s)
-    // ------------------------------
-    let emailTimer: ReturnType<typeof setTimeout> | undefined = undefined;
-    function commitEmail() {
-      if (!clientEmailInput) return;
-      const val = clientEmailInput.value.trim();
-      data_storage.client_email = val;
-    }
-    clientEmailInput?.addEventListener("input", () => {
-      if (emailTimer) clearTimeout(emailTimer);
-      emailTimer = setTimeout(commitEmail, 2000);
-    });
-    // also commit on blur immediately
-    clientEmailInput?.addEventListener("blur", () => {
-      if (emailTimer) clearTimeout(emailTimer);
-      commitEmail();
-    });
-
-    // ------------------------------
-    // Cloudflare Turnstile callbacks
-    // ------------------------------
-    (window as any).onTurnstileSuccess = (token: string) => {
-      data_storage.turnstile_token = token || "";
-    };
-    (window as any).onTurnstileExpired = () => {
-      data_storage.turnstile_token = "";
-    };
-
-    // ------------------------------
-    // FETCH EGGS
-    // ------------------------------
-
-    type Egg = {
-      id: number;
-      name: string;
-      desc: string;
-      image: string;
-    };
-
-    async function fetchEggs() {
-      try {
-        const res = await fetch(egg_list);
-        if (!res.ok) throw new Error("Błąd pobierania jajek");
-
-        const data = await res.json();
-        const grid = eggOptions?.querySelector(".p-3");
-        if (!grid) return;
-
-        // Create egg options
-        const eggs = Object.values(data).filter(
-          (item): item is Egg =>
-            typeof item === "object" && item !== null && "id" in item,
-        );
-
-        for (const egg of eggs) {
-          const eggOption = eggTemplate?.cloneNode(true);
-          if (!(eggOption instanceof HTMLElement)) continue;
-
-          eggOption.id = "";
-          eggOption.classList.add("egg_option");
-          eggOption.dataset.egg_id = String(egg.id);
-          eggOption.dataset.tooltip = egg.desc;
-          eggOption.hidden = false;
-
-          const img = eggOption.querySelector("img");
-          if (img) {
-            img.src = egg.image || "/imgs/plc.png";
-            img.alt = egg.name || "";
-          }
-
-          const label = eggOption.querySelector("span");
-          if (label) label.textContent = egg.name || "";
-
-          grid.appendChild(eggOption);
-        }
-
-        // Add click listeners for eggs
-        eggOptions?.querySelectorAll(".egg_option")?.forEach((option) => {
-          option.addEventListener("click", () => {
-            if (!eggSelected || !eggOptions) return;
-            const txt = option.querySelector("span")?.textContent?.trim() || "";
-            eggSelected.textContent = txt;
-            eggOptions.classList.remove("max-h-60");
-            const selectedEggId = option.getAttribute("data-egg_id") || "";
-            // store selected egg for ordering
-            data_storage.egg_id = selectedEggId;
-          });
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    // ------------------------------
-    // DROPDOWN TOGGLE HANDLERS
-    // ------------------------------
-    eggSelected?.addEventListener("click", () => {
-      eggOptions?.classList.toggle("max-h-60");
-    });
-
-    locationSelected?.addEventListener("click", () => {
-      locationOptions?.classList.toggle("max-h-60");
-    });
-
-    subplanSelected?.addEventListener("click", () => {
-      subplanOptions?.classList.toggle("max-h-60");
-    });
-    // ------------------------------
-
-    // Click outside to close dropdowns
-    document.addEventListener("click", (e) => {
-      const target = e.target;
-      if (!(target instanceof Node) || !locationDropdown?.contains(target)) {
-        locationOptions?.classList.remove("max-h-60");
-      }
-      if (!(target instanceof Node) || !eggDropdown?.contains(target)) {
-        eggOptions?.classList.remove("max-h-60");
-      }
-      if (!(target instanceof Node) || !subplanDropdown?.contains(target)) {
-        subplanOptions?.classList.remove("max-h-60");
-      }
-    });
-
-    setInterval(updateSpecsAndCost, 2000);
-
-    // ------------------------------
-    // LOCATION OPTION SELECT
-    // ------------------------------
+  function setSelectedLocationOption(selectedOption: Element) {
     locationOptions
       ?.querySelectorAll("[data-location_name]")
-      ?.forEach((option) => {
-        option.addEventListener("click", () => {
-          if (!locationSelected || !locationOptions) return;
-          locationSelected.innerHTML = option.innerHTML;
-          // store selected location for cost calc
-          const selected = option.getAttribute("data-location_name") || "";
-          locationOptions.classList.remove("max-h-60");
-          // add to data storage for ordering
-          data_storage.location = selected;
-        });
+      .forEach((option) => {
+        if (!(option instanceof HTMLElement)) return;
+        option.classList.remove(
+          "border-white/40",
+          "bg-white/10",
+          "ring-1",
+          "ring-white/30",
+        );
+        option.classList.add("border", "border-transparent");
       });
 
-    // ------------------------------
-    // SUBPLAN OPTION SELECT
-    // ------------------------------
-    subplanOptions
-      ?.querySelectorAll("[data-subplan_name]")
-      ?.forEach((option) => {
-        option.addEventListener("click", () => {
-          if (!subplanSelected || !subplanOptions) return;
-          subplanSelected.innerHTML = option.innerHTML;
-          // store selected subplan for cost calc
-          const selected = option.getAttribute("data-subplan_name") || "";
-          subplanOptions.classList.remove("max-h-60");
-          // add to data storage for ordering
-          data_storage.subplan = selected;
-        });
+    if (selectedOption instanceof HTMLElement) {
+      selectedOption.classList.remove("border-transparent");
+      selectedOption.classList.add(
+        "border",
+        "border-white/40",
+        "bg-white/10",
+        "ring-1",
+        "ring-white/30",
+      );
+    }
+  }
+
+  // ------------------------------
+  // UPDATE STATS AND COST FUNCTION
+  // ------------------------------
+  async function updateSpecsAndCost() {
+    if (!data_storage.egg_id || !data_storage.location || !data_storage.subplan)
+      return;
+
+    try {
+      const res = await fetch(specs_api, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          egg_id: data_storage.egg_id,
+          location: data_storage.location,
+          subplan: data_storage.subplan,
+        }),
       });
 
-    placeOrderBtn?.addEventListener("click", async () => {
-      // ensure latest email committed before sending
-      if (emailTimer) clearTimeout(emailTimer);
-      commitEmail();
+      if (!res.ok) throw new Error("Failed to fetch specs and cost");
+      const data = await res.json();
 
-      console.log("Placing order with data:", data_storage);
-      // Simply unhide the order blocker and send the data to the order API without any further handling for now ( everything is server side )
-      if (order_blocker) order_blocker.removeAttribute("hidden");
-      if (!order_status) return;
-      try {
-        order_status.textContent = "Waiting for API response...";
-        const res = await fetch(order_api, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data_storage),
-        });
+      const canDeploy =
+        typeof data.can_deploy === "boolean" ? data.can_deploy : false;
 
-        if (!res.ok)
-          throw new Error("Unknown error... (Can't reach the target URL)");
+      const cpuBaseRaw = Math.max(0, Number(data.cpu) || 0);
+      const cpuBoostRaw = Math.max(0, Number(data.boost?.cpu) || 0);
+      const cpuTotalRaw = cpuBaseRaw + cpuBoostRaw;
+      const cpuMaxTotal = 800;
+      const cpuBase = Math.min(100, (cpuBaseRaw / cpuMaxTotal) * 100);
+      const cpuTotal = Math.min(100, (cpuTotalRaw / cpuMaxTotal) * 100);
 
-        const data = await res.json();
+      const ramBaseRaw = Math.max(0, Number(data.ram) || 0);
+      const ramBoostRaw = Math.max(0, Number(data.boost?.ram) || 0);
+      const ramBase = Math.max(0, Math.min(100, ramBaseRaw));
+      const ramTotal = Math.max(0, Math.min(100, ramBaseRaw + ramBoostRaw));
 
-        if (data.error) throw new Error(data.error);
+      const ssdBaseRaw = Math.max(0, Number(data.disk) || 0);
+      const ssdBoostRaw = Math.max(0, Number(data.boost?.disk) || 0);
+      const ssdBase = Math.max(0, Math.min(100, ssdBaseRaw));
+      const ssdTotal = Math.max(0, Math.min(100, ssdBaseRaw + ssdBoostRaw));
 
-        // Redirect to payment / order page
-        if (data.status === "task_created") {
-          order_status.textContent =
-            "Action completed successfully! Redirecting...";
-          setTimeout(() => {
-            if (order_blocker) order_blocker.setAttribute("hidden", "true");
-            // api should return "redirect_url" in response, but if not, fallback to panel homepage
-            const redirectUrl =
-              typeof data.redirect_url === "string"
-                ? data.redirect_url
-                : "https://panel.nikostuff.com";
-            window.location.href = redirectUrl;
-          }, 3000);
-        } else {
-          if (order_blocker) order_blocker.setAttribute("hidden", "true");
-          alert("Oops. Something went wrong. Please try again later.");
-        }
-      } catch (err) {
-        console.error(err);
-        if (order_blocker) order_blocker.setAttribute("hidden", "true");
-        const errMsg =
-          err && typeof err === "object" && "message" in err
-            ? (err as any).message
-            : String(err);
-        alert("Failed to place order: " + errMsg);
+      if (cpuBar) {
+        cpuBar.style.width = `${cpuBase}%`;
+        cpuBar.parentElement?.setAttribute(
+          "data-tooltip",
+          `${cpuBaseRaw}%+${cpuBoostRaw}% CPU (total ${cpuTotalRaw}% CPU)`,
+        );
+      }
+      if (boostCpuBar) boostCpuBar.style.width = `${cpuTotal}%`;
+
+      if (ramBar) {
+        ramBar.style.width = `${ramBase}%`;
+        ramBar.parentElement?.setAttribute(
+          "data-tooltip",
+          `${ramBaseRaw}+${ramBoostRaw} GB RAM (total ${ramBaseRaw + ramBoostRaw} GB)`,
+        );
+      }
+      if (boostRamBar) boostRamBar.style.width = `${ramTotal}%`;
+
+      if (ssdBar) {
+        ssdBar.style.width = `${ssdBase}%`;
+        ssdBar.parentElement?.setAttribute(
+          "data-tooltip",
+          `${ssdBaseRaw}+${ssdBoostRaw} GB Storage (total ${ssdBaseRaw + ssdBoostRaw} GB) </br> *Expandable storage - free of charge. Contact us via ticketing system after placing the order if you need more storage!`,
+        );
+      }
+      if (boostSsdBar) boostSsdBar.style.width = `${ssdTotal}%`;
+
+      if (estimatedCost) estimatedCost.textContent = `$${data.price}`;
+
+      const availability = Math.max(
+        0,
+        Math.min(100, Number(data.availability) || 0),
+      );
+      const availabilityAfter = Math.max(
+        0,
+        Math.min(100, Number(data.availability_after) || 0),
+      );
+
+      if (availabilityBar) availabilityBar.style.width = `${availability}%`;
+      if (availabilityAfterBar)
+        availabilityAfterBar.style.width = `${availabilityAfter}%`;
+
+      if (availabilityCircle) {
+        availabilityCircle.setAttribute(
+          "data-tooltip",
+          `${availability}% Available Resources ( After this order, ${availabilityAfter}% will be available )`,
+        );
       }
 
-      // Refresh Turnstile
-      (window as any).turnstile.reset();
+      if (availabilityBaseCircle) {
+        const dash = (availability / 100) * AVAILABILITY_CIRCUMFERENCE;
+        availabilityBaseCircle.setAttribute("stroke-dasharray", `${dash} 999`);
+      }
+
+      if (availabilityAfterCircle) {
+        const dashAfter =
+          (availabilityAfter / 100) * AVAILABILITY_CIRCUMFERENCE;
+        availabilityAfterCircle.setAttribute(
+          "stroke-dasharray",
+          `${dashAfter} 999`,
+        );
+      }
+
+      if (availabilityPercentText)
+        availabilityPercentText.textContent = `${availability}%`;
+
+      if (canDeployText) {
+        canDeployText.textContent = canDeploy
+          ? "Your server can be deployed!"
+          : "Your server cannot be deployed due to insufficient resources.";
+      }
+    } catch (err) {
+      console.error("Error updating specs and cost:", err);
+    }
+  }
+
+  // ------------------------------
+  // CLIENT EMAIL INPUT HANDLING
+  // ------------------------------
+  let emailTimer: ReturnType<typeof setTimeout> | undefined;
+  function commitEmail() {
+    if (!clientEmailInput) return;
+    data_storage.client_email = clientEmailInput.value.trim();
+  }
+
+  clientEmailInput?.addEventListener("input", () => {
+    if (emailTimer) clearTimeout(emailTimer);
+    emailTimer = setTimeout(commitEmail, 2000);
+  });
+
+  clientEmailInput?.addEventListener("blur", () => {
+    if (emailTimer) clearTimeout(emailTimer);
+    commitEmail();
+  });
+
+  // ------------------------------
+  // Cloudflare Turnstile callbacks
+  // ------------------------------
+  (window as any).onTurnstileSuccess = (token: string) => {
+    data_storage.turnstile_token = token || "";
+  };
+  (window as any).onTurnstileExpired = () => {
+    data_storage.turnstile_token = "";
+  };
+
+  // ------------------------------
+  // FETCH EGGS
+  // ------------------------------
+  type Egg = { id: number; name: string; desc: string; image: string };
+
+  async function fetchEggs() {
+    try {
+      const res = await fetch(egg_list);
+      if (!res.ok) throw new Error("Failed to fetch eggs");
+
+      const data = await res.json();
+      const grid = eggOptions?.querySelector(".p-3");
+      if (!grid || !eggTemplate) return;
+
+      grid.querySelectorAll(".egg_option").forEach((el) => el.remove());
+
+      const eggs = Object.values(data).filter(
+        (item): item is Egg =>
+          typeof item === "object" && item !== null && "id" in item,
+      );
+
+      for (const egg of eggs) {
+        const eggOption = eggTemplate.cloneNode(true);
+        if (!(eggOption instanceof HTMLElement)) continue;
+
+        eggOption.id = "";
+        eggOption.classList.add("egg_option", "border", "border-transparent");
+        eggOption.dataset.egg_id = String(egg.id);
+        eggOption.dataset.tooltip = egg.desc;
+        eggOption.hidden = false;
+
+        const img = eggOption.querySelector("img");
+        if (img) {
+          img.src = egg.image || "/imgs/plc.png";
+          img.alt = egg.name || "";
+        }
+
+        const label = eggOption.querySelector("span");
+        if (label) label.textContent = egg.name || "";
+
+        eggOption.addEventListener("click", () => {
+          data_storage.egg_id = eggOption.getAttribute("data-egg_id") || "";
+          setSelectedEggOption(eggOption);
+          updateSpecsAndCost();
+        });
+
+        grid.appendChild(eggOption);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  // ------------------------------
+  // DROPDOWN HANDLERS
+  // ------------------------------
+  subplanSelected?.addEventListener("click", () => {
+    subplanOptions?.classList.toggle("max-h-60");
+  });
+
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!(target instanceof Node) || !subplanDropdown?.contains(target)) {
+      subplanOptions?.classList.remove("max-h-60");
+    }
+  });
+
+  setInterval(updateSpecsAndCost, 2000);
+
+  // ------------------------------
+  // LOCATION PICKER SELECT
+  // ------------------------------
+  locationOptions
+    ?.querySelectorAll("[data-location_name]")
+    .forEach((option) => {
+      if (option instanceof HTMLElement)
+        option.classList.add("border", "border-transparent");
+
+      option.addEventListener("click", () => {
+        data_storage.location = option.getAttribute("data-location_name") || "";
+        setSelectedLocationOption(option);
+        updateSpecsAndCost();
+      });
     });
 
-    // ------------------------------
-    // INITIAL CALCULATION / EGGS INIT
-    // ------------------------------
-    fetchEggs();
-  </script>
-</div>
+  // ------------------------------
+  // SUBPLAN OPTION SELECT
+  // ------------------------------
+  subplanOptions?.querySelectorAll("[data-subplan_name]").forEach((option) => {
+    option.addEventListener("click", () => {
+      if (!subplanSelected || !subplanOptions) return;
+      subplanSelected.innerHTML = option.innerHTML;
+      data_storage.subplan = option.getAttribute("data-subplan_name") || "";
+      subplanOptions.classList.remove("max-h-60");
+      updateSpecsAndCost();
+    });
+  });
+
+  // ------------------------------
+  // PLACE ORDER
+  // ------------------------------
+  placeOrderBtn?.addEventListener("click", async () => {
+    if (emailTimer) clearTimeout(emailTimer);
+    commitEmail();
+
+    if (orderBlocker) orderBlocker.removeAttribute("hidden");
+
+    try {
+      setStatus("Waiting for API response...");
+
+      const res = await fetch(order_api, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data_storage),
+      });
+
+      if (!res.ok)
+        throw new Error("Unknown error... (Can't reach the target URL)");
+
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+
+      if (data.status === "task_created") {
+        setStatus("Action completed successfully! Redirecting...");
+        setTimeout(() => {
+          if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
+          const redirectUrl =
+            typeof data.redirect_url === "string"
+              ? data.redirect_url
+              : "https://panel.nikostuff.com";
+          window.location.href = redirectUrl;
+        }, 3000);
+      } else {
+        if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
+        alert("Oops. Something went wrong. Please try again later.");
+      }
+    } catch (err) {
+      console.error(err);
+      if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
+      const errMsg =
+        err && typeof err === "object" && "message" in err
+          ? (err as any).message
+          : String(err);
+      alert("Failed to place order: " + errMsg);
+    }
+
+    if ((window as any).turnstile?.reset) (window as any).turnstile.reset();
+  });
+
+  // ------------------------------
+  // INIT
+  // ------------------------------
+  fetchEggs();
+</script>
