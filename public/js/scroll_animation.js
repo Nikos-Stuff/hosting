@@ -25,7 +25,7 @@ function run() {
     },
     {
       root: null, // Use the viewport as the root
-      rootMargin: "-250px 0px", // Add a 200px margin at the top and bottom
+      rootMargin: "-350px 0px", // Increased from -250px to trigger higher up the page
       threshold: [0], // Trigger callback when element is fully out or in view
     }
   );
