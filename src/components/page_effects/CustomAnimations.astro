@@ -6,7 +6,7 @@
 
   function animateElement(element: HTMLElement) {
     if (element.dataset.scroll_animated) return;
-    element.dataset.scroll_animated = "true"; 
+    element.dataset.scroll_animated = "true";
 
     gsap.to(element, {
       opacity: 1,
@@ -15,8 +15,8 @@
       ease: "elastic.out(1, 0.7)",
       scrollTrigger: {
         trigger: element,
-        start: "top 85%",
-        end: "bottom 30%",
+        start: "top 80%",
+        end: "bottom 40%",
         toggleActions: "play none none reverse",
         //markers: true,
       },
@@ -58,7 +58,7 @@
     initAnimations();
     setupMutationObserver();
     console.log(
-      "Scroll animations initialized and observing for new elements."
+      "Scroll animations initialized and observing for new elements.",
     );
   });
 </script>
