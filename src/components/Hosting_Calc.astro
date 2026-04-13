@@ -45,14 +45,16 @@
             hidden
             id="egg_template"
             data-egg_id="?"
-            class="flex flex-col items-center px-2 py-3 rounded-lg cursor-pointer hover:bg-white/10 select-none transition-all border border-transparent"
+            class="flex flex-col items-center px-2 py-3 rounded-lg cursor-pointer hover:bg-white/10 select-none transition-all border border-transparent w-24"
           >
             <figure
-              class="w-16 h-16 rounded-sm overflow-hidden bg-white/5 flex items-center justify-center"
+              class="w-16 h-16 rounded-sm overflow-hidden bg-white/5 flex items-center justify-center shrink-0"
             >
               <img src="" alt="Loading" class="w-full h-full object-cover" />
             </figure>
-            <span class="text-sm mt-2 text-center">Downloading...</span>
+            <span class="text-sm mt-2 text-center w-full truncate"
+              >Downloading...</span
+            >
           </div>
         </div>
       </div>
