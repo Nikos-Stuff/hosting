@@ -20,9 +20,7 @@ import HeaderIcon from "@components/web_icon.astro";
           class="flex gap-3 items-center w-fit font-semibold text-current hover:text-white transition-colors duration-300 ease-in-out"
         >
           <HeaderIcon />
-          <div>
-            Hosting
-          </div>
+          <div>Hosting</div>
         </a>
       </div>
 
@@ -92,8 +90,9 @@ import HeaderIcon from "@components/web_icon.astro";
 
   const pill = document.getElementById("active-users-count");
   const pingSpan = document.getElementById("average-ping");
+  const locations = document.getElementById("location_options");
 
-  if (!pill || !pingSpan) throw new Error("Required elements not found");
+  if (!pill || !pingSpan || !locations) throw new Error("Required elements not found");
 
   let currentUsers = Number(pill.textContent) || 0;
   let currentPing = Number(pingSpan.textContent) || 0;
@@ -140,12 +139,11 @@ import HeaderIcon from "@components/web_icon.astro";
     }
   };
 
-  // -- PING LOGIC --
-
   interface Node {
     name: string;
     url: string;
     region: string;
+    locationName: string;
   }
 
   interface NodeWithPing extends Node {
@@ -153,9 +151,31 @@ import HeaderIcon from "@components/web_icon.astro";
   }
 
   const nodes: Node[] = [
-    { name: "EU #0", url: "https://eunode0.nikostuff.com", region: "EU" },
-    { name: "US #0", url: "https://usnode0.nikostuff.com", region: "US" },
+    {
+      name: "EU #0",
+      url: "https://eunode0.nikostuff.com",
+      region: "EU",
+      locationName: "europe_free",
+    },
+    {
+      name: "US #0",
+      url: "https://usnode0.nikostuff.com",
+      region: "US",
+      locationName: "us_free",
+    },
   ];
+
+  const updateLocationPing = (node: NodeWithPing) => {
+    if (!locations) return;
+
+    const pingEl = locations.querySelector<HTMLElement>(
+      `[data-location_name="${node.locationName}"] .ping`,
+    );
+
+    if (!pingEl) return;
+    pingEl.textContent =
+      node.ping === Infinity ? "Ping: Timeout" : `Ping: ${node.ping}ms`;
+  };
 
   const nodeHistoryMap = new Map<string, number[]>();
 
@@ -188,7 +208,6 @@ import HeaderIcon from "@components/web_icon.astro";
             ? history.reduce((a, b) => a + b) / history.length
             : ping;
 
-        // Only accept if it's not a massive spike or if it's our first measurement
         if (ping < avg * 3 || history.length === 0) {
           history.push(ping);
           if (history.length > 5) history.shift();
@@ -213,13 +232,14 @@ import HeaderIcon from "@components/web_icon.astro";
         })),
       );
 
+      results.forEach(updateLocationPing);
+
       const validNodes = results.filter((n) => n.ping !== Infinity);
       if (!validNodes.length) return;
 
       const recommendedNode = validNodes.reduce((best, node) =>
         node.ping < best.ping ? node : best,
       );
-      console.log("Recommended:", recommendedNode.name);
 
       const latencyPill = document.getElementById("server-latency-pill");
       if (latencyPill) {
@@ -263,10 +283,8 @@ import HeaderIcon from "@components/web_icon.astro";
     const statusDisplay = document.getElementById("popup-status-text");
     const jitterDisplay = document.getElementById("popup-jitter-value");
 
-    if (!popup || !modal || !pingDisplay || !statusDisplay || !jitterDisplay)
-      return;
+    if (!modal || !pingDisplay || !statusDisplay || !jitterDisplay) return;
 
-    // reset the stuff for the new analysis
     jitterDisplay.textContent = `Measuring stats...`;
     pingDisplay.textContent = `--ms`;
     statusDisplay.textContent = `Initializing...`;
@@ -294,21 +312,17 @@ import HeaderIcon from "@components/web_icon.astro";
     for (const node of nodes) {
       let totalPing = 0;
       let successfulPings = 0;
-
-      // CREATE LOCAL HISTORY FOR THIS SPECIFIC ANALYSIS
       const localHistory: number[] = [];
 
       for (let i = 1; i <= 10; i++) {
         statusDisplay.textContent = `Testing ${node.name} (${node.region}) - Attempt ${i}/10`;
 
-        // PASS THE LOCAL HISTORY
         const ping = await pingNode(node.url, localHistory);
 
         if (ping !== Infinity) {
           totalPing += ping;
           successfulPings++;
 
-          // "Tick" Animation
           gsap.fromTo(
             pingDisplay,
             { scale: 1.1, color: "#3b82f6" },
@@ -316,6 +330,7 @@ import HeaderIcon from "@components/web_icon.astro";
           );
           pingDisplay.textContent = `${ping}ms`;
         }
+
         await sleep(500);
       }
 
@@ -332,14 +347,14 @@ import HeaderIcon from "@components/web_icon.astro";
 
       if (successfulPings > 0) {
         const avg = Math.round(totalPing / successfulPings);
+        updateLocationPing({ ...node, ping: avg });
+
         if (avg < bestOverall.ping) {
           bestOverall = { ping: avg, name: node.name, region: node.region };
         }
       }
 
-      // wait a bit before next node
       await sleep(3500);
-      // reset the jitter display & ping display for the next node
 
       jitterDisplay.textContent = `Measuring stats...`;
       pingDisplay.textContent = `--ms`;
