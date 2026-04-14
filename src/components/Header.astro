@@ -92,7 +92,8 @@ import HeaderIcon from "@components/web_icon.astro";
   const pingSpan = document.getElementById("average-ping");
   const locations = document.getElementById("location_options");
 
-  if (!pill || !pingSpan || !locations) throw new Error("Required elements not found");
+  if (!pill || !pingSpan || !locations)
+    throw new Error("Required elements not found");
 
   let currentUsers = Number(pill.textContent) || 0;
   let currentPing = Number(pingSpan.textContent) || 0;
@@ -177,6 +178,115 @@ import HeaderIcon from "@components/web_icon.astro";
       node.ping === Infinity ? "Ping: Timeout" : `Ping: ${node.ping}ms`;
   };
 
+  // WebSocket-based pinging for more accurate RTT measurements.
+  const wsClients = new Map<string, any>();
+
+  const makeWsUrl = (baseUrl: string) => {
+    try {
+      const u = new URL(baseUrl);
+      u.protocol = u.protocol === "https:" ? "wss:" : "ws:";
+      u.pathname = "/ws";
+      return u.toString();
+    } catch {
+      return baseUrl;
+    }
+  };
+
+  const createWsClient = (baseUrl: string) => {
+    const wsUrl = makeWsUrl(baseUrl);
+    let ws: WebSocket | null = null;
+    let connected = false;
+    let seq = 0;
+    const pending = new Map<number, (val: number) => void>();
+    let backoff = 1000;
+
+    const connect = () => {
+      try {
+        ws = new WebSocket(wsUrl);
+      } catch (e) {
+        ws = null;
+        scheduleReconnect();
+        return;
+      }
+
+      ws.addEventListener("open", () => {
+        connected = true;
+        backoff = 1000;
+      });
+
+      ws.addEventListener("message", (ev) => {
+        try {
+          const msg = JSON.parse(ev.data as string);
+          if (msg && msg.type === "pong" && typeof msg.id === "number") {
+            const resolver = pending.get(msg.id);
+            if (resolver) {
+              pending.delete(msg.id);
+              // server may echo our tSent; prefer performance.now delta if provided
+              const now = performance.now();
+              const ping = msg.tSentClient
+                ? Math.round(now - msg.tSentClient)
+                : msg.ping;
+              resolver(ping === undefined ? Infinity : ping);
+            }
+          }
+        } catch (e) {
+          // ignore
+        }
+      });
+
+      ws.addEventListener("close", () => {
+        connected = false;
+        scheduleReconnect();
+      });
+
+      ws.addEventListener("error", () => {
+        try {
+          ws?.close();
+        } catch {}
+      });
+    };
+
+    const scheduleReconnect = () => {
+      setTimeout(() => connect(), backoff + Math.random() * 500);
+      backoff = Math.min(backoff * 2, 30000);
+    };
+
+    connect();
+
+    const ping = (timeout = 2500) =>
+      new Promise<number>((resolve) => {
+        if (!connected || !ws) return resolve(Infinity);
+        const id = ++seq;
+        const tClient = performance.now();
+        const payload = {
+          type: "ping",
+          id,
+          tSentClient: tClient,
+        };
+        pending.set(id, (val: number) => resolve(val));
+        try {
+          ws.send(JSON.stringify(payload));
+        } catch (e) {
+          pending.delete(id);
+          return resolve(Infinity);
+        }
+
+        setTimeout(() => {
+          if (pending.has(id)) {
+            pending.delete(id);
+            resolve(Infinity);
+          }
+        }, timeout);
+      });
+
+    return { ping, close: () => ws?.close() };
+  };
+
+  const getWsClient = (url: string) => {
+    if (!wsClients.has(url)) wsClients.set(url, createWsClient(url));
+    return wsClients.get(url);
+  };
+
   const nodeHistoryMap = new Map<string, number[]>();
 
   const getHistoryForNode = (url: string): number[] => {
@@ -187,40 +297,27 @@ import HeaderIcon from "@components/web_icon.astro";
   let pingRunning = false;
 
   const pingNode = async (url: string, history: number[], retries = 3) => {
+    // Prefer WebSocket ping if server supports it, fallback to fetch-style HEAD if not
+    const client = getWsClient(url);
     for (let attempt = 0; attempt < retries; attempt++) {
-      const start = performance.now();
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 8000);
-
       try {
-        await fetch(url, {
-          method: "HEAD",
-          mode: "no-cors",
-          cache: "no-store",
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeout);
-        const ping = Math.round(performance.now() - start);
-
-        const avg =
-          history.length > 0
-            ? history.reduce((a, b) => a + b) / history.length
-            : ping;
-
-        if (ping < avg * 3 || history.length === 0) {
+        const ping = await client.ping();
+        if (ping !== Infinity) {
+          // keep short history
           history.push(ping);
-          if (history.length > 5) history.shift();
-          return ping;
+          if (history.length > 8) history.shift();
+          return Math.round(ping);
         }
       } catch {
-        clearTimeout(timeout);
+        // ignore and retry
       }
+      await new Promise((r) => setTimeout(r, 300 + attempt * 200));
     }
     return Infinity;
   };
 
   const updatePing = async () => {
+    if (document.hidden) return;
     if (pingRunning) return;
     pingRunning = true;
 
@@ -249,8 +346,14 @@ import HeaderIcon from "@components/web_icon.astro";
         );
       }
 
-      animateValue(pingSpan, currentPing, recommendedNode.ping, 500);
-      currentPing = recommendedNode.ping;
+      // Smooth display with a lightweight EWMA to avoid jitter
+      const alpha = 0.35;
+      const smoothed = Math.round(
+        alpha * recommendedNode.ping + (1 - alpha) * currentPing ||
+          recommendedNode.ping,
+      );
+      animateValue(pingSpan, currentPing, smoothed, 400);
+      currentPing = smoothed;
 
       console.table(
         results.map(({ name, region, ping }) => ({
