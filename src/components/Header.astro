@@ -346,14 +346,20 @@ import HeaderIcon from "@components/web_icon.astro";
         );
       }
 
-      // Smooth display with a lightweight EWMA to avoid jitter
-      const alpha = 0.35;
-      const smoothed = Math.round(
-        alpha * recommendedNode.ping + (1 - alpha) * currentPing ||
-          recommendedNode.ping,
-      );
-      animateValue(pingSpan, currentPing, smoothed, 400);
-      currentPing = smoothed;
+      // use rounded value there too
+      if (recommendedNode.ping === Infinity) {
+        pingSpan.textContent = "Timeout";
+        currentPing = Infinity;
+      } else {
+        const targetPing = Math.round(recommendedNode.ping);
+        animateValue(
+          pingSpan,
+          Number.isFinite(currentPing) ? currentPing : 0,
+          targetPing,
+          400,
+        );
+        currentPing = targetPing;
+      }
 
       console.table(
         results.map(({ name, region, ping }) => ({
