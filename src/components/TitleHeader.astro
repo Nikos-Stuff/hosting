@@ -50,13 +50,14 @@ const carouselItems = [
   data-carousel-items={JSON.stringify(
     carouselItems.map(({ label, colors }) => ({ label, colors })),
   )}
+  data-cursor-hover="true"
+  data-cursor-parallax="true"
 >
   <div
     id="centerContent"
     class="relative w-svw h-svh flex items-center justify-start pointer-events-none origin-left
            transform-[translateX(0%)_perspective(800px)_rotateY(40deg)]
-           lg:transform-[translateX(0%)_perspective(800px)_rotateY(20deg)]
-           "
+           lg:transform-[translateX(0%)_perspective(800px)_rotateY(20deg)]"
   >
     <div id="contentWrapper" class="p-4 md:p-10 w-full text-left z-1">
       <p
