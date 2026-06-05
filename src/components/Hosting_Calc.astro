@@ -648,7 +648,13 @@
   // ------------------------------
   // FETCH EGGS
   // ------------------------------
-  type Egg = { id: number; name: string; desc: string; image: string };
+  type Egg = {
+    id: number;
+    tags: string[];
+    name: string;
+    desc: string;
+    image: string;
+  };
 
   async function fetchEggs() {
     try {
@@ -656,45 +662,86 @@
       if (!res.ok) throw new Error("Failed to fetch eggs");
 
       const data = await res.json();
-      const grid = eggOptions?.querySelector(".p-3");
-      if (!grid || !eggTemplate) return;
+      const container = eggOptions?.querySelector(".p-3");
+      if (!container || !eggTemplate) return;
 
-      grid.querySelectorAll(".egg_option").forEach((el) => el.remove());
+      container
+        .querySelectorAll(".egg_option, .category_header")
+        .forEach((el) => el.remove());
 
       const eggs = Object.values(data).filter(
         (item): item is Egg =>
           typeof item === "object" && item !== null && "id" in item,
       );
 
-      for (const egg of eggs) {
-        const eggOption = eggTemplate.cloneNode(true);
-        if (!(eggOption instanceof HTMLElement)) continue;
+      const grouped = eggs.reduce(
+        (acc, egg) => {
+          // accessing the first element of the array
+          const category =
+            egg.tags && egg.tags.length > 0 ? egg.tags[0] : "Other";
+          if (!acc[category]) acc[category] = [];
+          acc[category].push(egg);
+          return acc;
+        },
+        {} as Record<string, Egg[]>,
+      );
 
-        eggOption.id = "";
-        eggOption.classList.add("egg_option", "border", "border-transparent");
-        eggOption.dataset.egg_id = String(egg.id);
-        eggOption.dataset.tooltip = egg.desc;
-        eggOption.hidden = false;
+      const sortedCategories = Object.keys(grouped).sort();
 
-        const img = eggOption.querySelector("img");
-        if (img) {
-          img.src = egg.image || "/imgs/plc.png";
-          img.alt = egg.name || "";
+      for (const category of sortedCategories) {
+        // create Category Header
+        const header = document.createElement("div");
+        header.className =
+          "col-span-full flex items-center mt-6 mb-2 category_header";
+
+        const headerText = document.createElement("h3");
+        headerText.className =
+          "text-lg font-bold text-white/70 capitalize mr-4 shrink-0";
+        headerText.textContent = category;
+
+        const headerLine = document.createElement("div");
+        headerLine.className = "h-px bg-white/20 flex-grow";
+
+        header.appendChild(headerText);
+        header.appendChild(headerLine);
+        container.appendChild(header);
+
+        // sort items within category
+        const sortedEggs = grouped[category].sort((a, b) =>
+          a.name.localeCompare(b.name),
+        );
+
+        // append items
+        for (const egg of sortedEggs) {
+          const eggOption = eggTemplate.cloneNode(true);
+          if (!(eggOption instanceof HTMLElement)) continue;
+
+          eggOption.id = "";
+          eggOption.classList.add("egg_option", "border", "border-transparent");
+          eggOption.dataset.egg_id = String(egg.id);
+          eggOption.dataset.tooltip = egg.desc;
+          eggOption.hidden = false;
+
+          const img = eggOption.querySelector("img");
+          if (img) {
+            img.src = egg.image || "/imgs/plc.png";
+            img.alt = egg.name || "";
+          }
+
+          const label = eggOption.querySelector("span");
+          if (label) label.textContent = egg.name || "";
+
+          eggOption.addEventListener("click", () => {
+            data_storage.egg_id = eggOption.getAttribute("data-egg_id") || "";
+            setSelectedEggOption(eggOption);
+            updateSpecsAndCost();
+          });
+
+          container.appendChild(eggOption);
         }
-
-        const label = eggOption.querySelector("span");
-        if (label) label.textContent = egg.name || "";
-
-        eggOption.addEventListener("click", () => {
-          data_storage.egg_id = eggOption.getAttribute("data-egg_id") || "";
-          setSelectedEggOption(eggOption);
-          updateSpecsAndCost();
-        });
-
-        grid.appendChild(eggOption);
       }
     } catch (e) {
-      console.error(e);
+      console.error("Error fetching eggs:", e);
     }
   }
 
