@@ -329,6 +329,11 @@ import HeaderIcon from "@components/web_icon.astro";
 
     popup.classList.remove("hidden");
     popup.classList.add("flex");
+
+    gsap.set(popup, {
+      backgroundColor: "rgba(0,0,0,0)",
+      backdropFilter: "blur(0px)",
+    });
     gsap.to(popup, {
       backgroundColor: "rgba(0,0,0,0.5)",
       backdropFilter: "blur(16px)",
@@ -347,29 +352,40 @@ import HeaderIcon from "@components/web_icon.astro";
         success = 0;
       const history: number[] = [];
       for (let i = 1; i <= 10; i++) {
-        statusDisplay.textContent = `Testing ${node.name} - ${i}/10`;
+        statusDisplay.textContent = `Testing ${node.name} (${node.region}) - ${i}/10`;
         const p = await pingNode(node.url, history);
         if (p !== Infinity) {
           total += p;
           success++;
+          gsap.fromTo(
+            pingDisplay,
+            { scale: 1.1, color: "#3b82f6" },
+            { scale: 1, color: "inherit", duration: 0.2 },
+          );
           pingDisplay.textContent = `${p}ms`;
         }
         await sleep(500);
       }
+
       if (success > 1) {
         const diffs = history.slice(1).map((v, i) => Math.abs(v - history[i]));
         const jitter = Math.round(diffs.reduce((a, b) => a + b) / diffs.length);
         jitterDisplay.textContent = `Jitter: ${jitter}ms`;
       }
+
       if (success > 0) {
         const avg = Math.round(total / success);
         if (avg < bestOverall.ping)
           bestOverall = { ping: avg, name: node.name, region: node.region };
       }
-      await sleep(3500);
+      await sleep(2000);
     }
 
-    statusDisplay.textContent = `Best: ${bestOverall.name}`;
+    statusDisplay.textContent = `Best: ${bestOverall.name} (${bestOverall.region})`;
+    pingDisplay.textContent = `${bestOverall.ping}ms`;
+    jitterDisplay.textContent = `Analysis Complete`;
+    gsap.to(pingDisplay, { scale: 1.2, duration: 0.3, yoyo: true, repeat: 1 });
+
     await sleep(5000);
     gsap.to(popup, {
       backgroundColor: "rgba(0,0,0,0)",
