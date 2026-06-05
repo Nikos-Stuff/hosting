@@ -689,10 +689,11 @@
       const sortedCategories = Object.keys(grouped).sort();
 
       for (const category of sortedCategories) {
-        // create Category Header
+        // test
         const header = document.createElement("div");
-        header.className =
-          "col-span-full flex items-center mt-6 mb-2 category_header";
+
+        header.style.gridColumn = "1 / -1";
+        header.className = "flex items-center mt-6 mb-2 w-full category_header";
 
         const headerText = document.createElement("h3");
         headerText.className =
