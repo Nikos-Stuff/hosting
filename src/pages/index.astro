@@ -10,6 +10,7 @@ import DynamicTitle from "@components/TitleHeader.astro";
 import FancyDiv from "@components/FancyDiv.astro";
 import Accordion from "@components/Accordion.astro";
 import Calculator from "@components/Hosting_Calc.astro";
+import AvailabilityTracker from "@components/AvailabilityTracker.astro";
 
 import { Image } from "astro:assets";
 
@@ -442,7 +443,7 @@ const posts = (await getCollection("blog"))
       </section>
     </FancyDiv>
 
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
+    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="10">
       <section class="relative animate" id="calculator">
         <!-- OPEN BETA NOTICE -->
         <div
@@ -522,6 +523,21 @@ const posts = (await getCollection("blog"))
         </p>
 
         <ExtendService /> -->
+      </section>
+    </FancyDiv>
+
+    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
+      <section class="relative animate">
+        <p
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
+        >
+          Server Availability Tracker
+        </p>
+        <p class="font-bold text-sm mb-2 animate">
+          Check the current availability of our hosting nodes ( only EU )
+        </p>
+
+        <AvailabilityTracker />
       </section>
     </FancyDiv>
 

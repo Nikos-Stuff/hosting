@@ -1,0 +1,103 @@
+<div>
+  <div class="space-y-2">
+    <div
+      id="availability_grid"
+      class="hide_scrollbar h-96 overflow-auto rounded-lg border border-white/20 bg-black/40 p-3"
+    >
+      <div
+        id="container"
+        class="p-3 grid grid-cols-3 gap-4 justify-items-center items-start"
+      >
+      </div>
+    </div>
+  </div>
+</div>
+
+<template id="availability_template">
+  <div
+    class="flex h-38 w-full flex-col items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 transition-all"
+  >
+    <div class="flex flex-col items-center">
+      <div class="status-dot h-1 w-5 rounded-full mb-2"></div>
+      <span class="name font-bold text-sm text-center"></span>
+    </div>
+    <div class="text-xs text-gray-400 text-center space-y-1">
+      <div class="price font-semibold text-white hidden"></div>
+      <div class="specs"></div>
+      <div class="traffic"></div>
+    </div>
+  </div>
+</template>
+
+<script>
+  interface HostingSpecs {
+    cores: number;
+    memory: string;
+    disk: string;
+  }
+
+  interface HostingItem {
+    name: string;
+    available: boolean;
+    price: string;
+    specs: HostingSpecs;
+    traffic: string;
+  }
+
+  interface ApiResponse {
+    [key: string]:
+      | HostingItem
+      | {
+          execution_time_ms: number;
+          memory_used_bytes: number;
+          memory_peak_bytes: number;
+        };
+  }
+
+  async function updateAvailability(): Promise<void> {
+    try {
+      const response: Response = await fetch(
+        "https://api.nikostuff.com/HostingAvailability",
+      );
+      const data: ApiResponse = await response.json();
+      const container: HTMLElement | null =
+        document.getElementById("container");
+      const templateElement: HTMLTemplateElement | null =
+        document.getElementById("availability_template") as HTMLTemplateElement;
+
+      if (!container || !templateElement) return;
+
+      container.innerHTML = "";
+
+      Object.keys(data).forEach((key: string) => {
+        if (key === "global_debug") return;
+
+        const item = data[key] as HostingItem;
+        const template = templateElement.content.cloneNode(
+          true,
+        ) as DocumentFragment;
+
+        const nameEl = template.querySelector(".name") as HTMLElement;
+        const priceEl = template.querySelector(".price") as HTMLElement;
+        const specsEl = template.querySelector(".specs") as HTMLElement;
+        const trafficEl = template.querySelector(".traffic") as HTMLElement;
+        const dotEl = template.querySelector(".status-dot") as HTMLElement;
+
+        if (nameEl) nameEl.textContent = item.name;
+        if (priceEl) priceEl.textContent = item.price;
+        if (specsEl)
+          specsEl.textContent = `${item.specs.cores} Cores / ${item.specs.memory} RAM`;
+        if (trafficEl) trafficEl.textContent = `${item.traffic} Traffic`;
+        if (dotEl)
+          dotEl.classList.add(item.available ? "bg-green-500" : "bg-red-500");
+
+        container.appendChild(template);
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  updateAvailability();
+  setInterval(updateAvailability, 5000);
+</script>
