@@ -15,16 +15,23 @@
 
 <template id="availability_template">
   <div
-    class="flex min-h-38 w-full flex-col items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 transition-all"
+    class="flex w-full flex-col items-start p-4 rounded-xl bg-white/5 border border-white/10 transition-all hover:scale-[1.02] hover:border-white/20"
   >
-    <div class="flex flex-col items-center">
-      <div class="status-dot h-1 w-5 rounded-full mb-2"></div>
-      <span class="name font-bold text-sm text-center"></span>
+    <div
+      class="status-pill flex items-center h-5 gap-1.5 px-2 rounded-full text-[10px] font-bold uppercase tracking-wider mb-3 whitespace-nowrap"
+    >
+      <i class="status-icon text-[12px] flex items-center justify-center"></i>
+      <span class="status-text leading-none"></span>
     </div>
-    <div class="text-xs text-gray-400 text-center space-y-1">
-      <div class="price font-semibold text-white hidden"></div>
-      <div class="specs"></div>
-      <div class="traffic"></div>
+
+    <div class="mb-3">
+      <span class="name font-bold text-sm text-white"></span>
+    </div>
+
+    <div class="text-[11px] text-gray-400 text-left w-full">
+      <div class="flex items-center gap-2">
+        <span class="specs font-medium"></span>
+      </div>
     </div>
   </div>
 </template>
@@ -78,18 +85,33 @@
         ) as DocumentFragment;
 
         const nameEl = template.querySelector(".name") as HTMLElement;
-        const priceEl = template.querySelector(".price") as HTMLElement;
         const specsEl = template.querySelector(".specs") as HTMLElement;
-        const trafficEl = template.querySelector(".traffic") as HTMLElement;
-        const dotEl = template.querySelector(".status-dot") as HTMLElement;
+        const statusIcon = template.querySelector(
+          ".status-icon",
+        ) as HTMLElement;
+        const statusText = template.querySelector(
+          ".status-text",
+        ) as HTMLElement;
+        const pillEl = template.querySelector(".status-pill") as HTMLElement;
 
         if (nameEl) nameEl.textContent = item.name;
-        if (priceEl) priceEl.textContent = item.price;
         if (specsEl)
           specsEl.textContent = `${item.specs.cores} Cores / ${item.specs.memory} RAM`;
-        if (trafficEl) trafficEl.textContent = `${item.traffic} Traffic`;
-        if (dotEl)
-          dotEl.classList.add(item.available ? "bg-green-500" : "bg-red-500");
+
+        if (pillEl) {
+          pillEl.className =
+            "status-pill flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-3";
+
+          if (item.available) {
+            statusText.textContent = "Ready";
+            statusIcon.className = "status-icon ph ph-check-circle";
+            pillEl.classList.add("bg-green-500/10", "text-green-400");
+          } else {
+            statusText.textContent = "Unavailable";
+            statusIcon.className = "status-icon ph ph-x-circle";
+            pillEl.classList.add("bg-red-500/10", "text-red-400");
+          }
+        }
 
         container.appendChild(template);
       });
