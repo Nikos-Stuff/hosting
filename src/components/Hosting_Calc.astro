@@ -557,7 +557,7 @@
       const ssdBase = Math.max(0, Math.min(100, ssdBaseRaw));
       const ssdTotal = Math.max(0, Math.min(100, ssdBaseRaw + ssdBoostRaw));
 
-      if (cpuText) cpuText.textContent = `CPU - ${cpuTotal}%`;
+      if (cpuText) cpuText.textContent = `CPU - ${cpuTotalRaw}%`;
       if (ramText) ramText.textContent = `RAM - ${ramTotal} GB`;
       if (ssdText) ssdText.textContent = `SSD STORAGE - ${ssdTotal} GB`;
 
