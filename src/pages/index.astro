@@ -453,12 +453,12 @@ const posts = (await getCollection("blog"))
           </div>
 
           <div class="leading-relaxed">
-            <p class="font-semibold text-lg mb-1">
-              Limited availability
-            </p>
+            <p class="font-semibold text-lg mb-1">Limited availability</p>
 
             <p class="text-sm opacity-90">
-              Due to high demand - our servers might be currently full. We are working on adding more nodes to our locations and improving our infrastructure to accommodate more users.
+              Due to high demand - our servers might be currently full. We are
+              working on adding more nodes to our locations and improving our
+              infrastructure to accommodate more users.
             </p>
 
             <p class="text-sm opacity-80 mt-2">
@@ -682,7 +682,12 @@ const posts = (await getCollection("blog"))
         <h2 class="font-bold text-3xl mb-8 text-white">FAQ</h2>
 
         <div>
-         <Accordion
+          <Accordion
+            title="Are you really nonprofit?"
+            details="Yes! We operate on a nonprofit, value-for-value sustaining model. We have no ads, no trackers, and sell zero user data. 100% of the funds generated from our subplans and Ko-fi supporters go directly into maintaining and improving our hosting services. Our mission is to provide free, reliable hosting to gamers and communities around the world without any financial barriers."
+          />
+
+          <Accordion
             title="Do you delete inactive servers?"
             details="Because our Free plan uses the same high-end hardware as our paid tiers, we have to keep things tidy. All you need to do is hop into the panel at least once every 7 days to keep your server live.
 If life gets busy and you forget, don't sweat it—you’ve got a 72-hour safety net to log in before your server is deleted."
