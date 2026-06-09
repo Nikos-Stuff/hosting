@@ -14,14 +14,11 @@
     <div
       class="server-icon-container shrink-0 flex items-center justify-center w-10 h-10 bg-white/5 rounded-lg"
     >
-      <i class="ph ph-hard-drives text-2xl text-gray-300"
-      ></i>
+      <i class="ph ph-hard-drives text-2xl text-gray-300"></i>
     </div>
 
     <div class="grow min-w-0">
-      <h4
-        class="server-name font-bold text-md text-white truncate break-all"
-      >
+      <h4 class="server-name font-bold text-md text-white truncate break-all">
       </h4>
       <p
         class="server-description text-sm text-gray-500 line-clamp-1 overflow-hidden truncate break-all"
@@ -36,8 +33,7 @@
     <div
       class="shrink-0 flex flex-row md:flex-col justify-between md:items-end items-center gap-2 border-t md:border-t-0 pt-2 md:pt-0 border-white/5"
     >
-      <p class="server-egg text-sm font-semibold text-white">
-      </p>
+      <p class="server-egg text-sm font-semibold text-white"></p>
       <button
         class="server-address-btn group/copy relative text-xs sm:text-sm text-gray-500 hover:text-white transition-all duration-300 cursor-pointer p-1 rounded"
       >
@@ -55,9 +51,7 @@
 
 <hr class="border-zinc-800 my-6" />
 
-<div
-  class="bg-zinc-800/30 p-4 rounded-lg transition-all duration-300"
->
+<div class="bg-zinc-800/30 p-4 rounded-lg transition-all duration-300">
   <h3 class="font-bold text-lg mb-2">Visibility Settings</h3>
   <p class="text-sm text-gray-500 mb-4">
     Don't want your server shown here? Enter your Server UUID (found in your
@@ -130,6 +124,13 @@
   const serverCounter = document.getElementById(
     "server_counter",
   ) as HTMLElement;
+
+  const safeBtoa = (str: string): string => {
+    // Converts the string into UTF-8 bytes, then encodes those bytes to Base64
+    const bytes = new TextEncoder().encode(str);
+    const binString = String.fromCodePoint(...bytes);
+    return btoa(binString);
+  };
 
   let renderedIds = new Set<string>();
   let isFetching: boolean = false;
@@ -265,7 +266,7 @@
       const incomingIds = new Set<string>();
 
       for (const server of sortedServers) {
-        const compositeId = btoa(
+        const compositeId = safeBtoa(
           `${server.name}-${server.owner_nickname}`,
         ).replace(/=/g, "");
 
