@@ -483,6 +483,9 @@
     if (orderStatus) orderStatus.textContent = text;
   }
 
+  // Track if we have already alerted the user to prevent continuous alert spamming
+  let isCurrentlyRateLimited = false;
+
   function setSelectedEggOption(selectedOption: Element) {
     eggOptions?.querySelectorAll(".egg_option").forEach((option) => {
       if (!(option instanceof HTMLElement)) return;
@@ -576,26 +579,37 @@
         }),
       });
 
-      if (!res.ok)
+      if (!res.ok && res.status !== 429)
         throw new Error(
           `Failed to fetch specs and cost. Status: ${res.status}`,
         );
 
-      // skip processing entirely if browser exposes an OPTIONS preflight step content-type ( or somethin )
       const contentType = res.headers.get("content-type");
       if (contentType && contentType.includes("text/html")) {
         return;
       }
 
-      // read the stream exactly ONCE
       const textData = await res.text();
 
       if (!textData || textData.trim() === "") {
         throw new Error("Server returned an empty response body.");
       }
 
-      // parse safely from the verified string object instead of repeating streams
       const data = JSON.parse(textData);
+
+      if (data.result === "Rate limited" || res.status === 429) {
+        if (!isCurrentlyRateLimited) {
+          isCurrentlyRateLimited = true;
+          triggerCustomAlert(
+            "Rate Limited",
+            "You are making requests too quickly. Please wait a moment before trying again.",
+            "warn",
+          );
+        }
+        return;
+      }
+
+      isCurrentlyRateLimited = false;
 
       const canDeploy =
         typeof data.can_deploy === "boolean" ? data.can_deploy : false;
@@ -693,7 +707,6 @@
           : "Your server cannot be deployed due to insufficient resources.";
       }
     } catch (err: any) {
-      // background loop adjustments
       if (!isBackgroundPolling) {
         triggerCustomAlert(
           "Failed to update pricing",
@@ -879,7 +892,7 @@
         body: JSON.stringify(data_storage),
       });
 
-      if (!res.ok)
+      if (!res.ok && res.status !== 429)
         throw new Error(
           `Server returned status ${res.status} (Can't reach the target URL)`,
         );
@@ -892,6 +905,17 @@
       }
 
       const data = JSON.parse(textData);
+
+      if (data.result === "Rate limited" || res.status === 429) {
+        if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
+        triggerCustomAlert(
+          "Order Throttled",
+          "Your order submission was rate limited. Please hold on a moment and click place order again.",
+          "warn",
+        );
+        return;
+      }
+
       if (data.error) throw new Error(data.error);
 
       if (data.status === "task_created") {
