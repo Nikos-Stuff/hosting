@@ -388,9 +388,6 @@
     "egg_template",
   ) as HTMLElement | null;
 
-  const subplanContainer = document.getElementById(
-    "subplan_container",
-  ) as HTMLElement | null;
   const subplanOptions = document.getElementById(
     "subplan_options",
   ) as HTMLElement | null;
@@ -564,7 +561,7 @@
   // ------------------------------
   // UPDATE STATS AND COST FUNCTION
   // ------------------------------
-  async function updateSpecsAndCost() {
+  async function updateSpecsAndCost(isBackgroundPolling = false) {
     if (!data_storage.egg_id || !data_storage.location || !data_storage.subplan)
       return;
 
@@ -583,12 +580,21 @@
         throw new Error(
           `Failed to fetch specs and cost. Status: ${res.status}`,
         );
+
+      // skip processing entirely if browser exposes an OPTIONS preflight step content-type ( or somethin )
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("text/html")) {
+        return;
+      }
+
+      // read the stream exactly ONCE
       const textData = await res.text();
 
-      if (!textData) {
+      if (!textData || textData.trim() === "") {
         throw new Error("Server returned an empty response body.");
       }
 
+      // parse safely from the verified string object instead of repeating streams
       const data = JSON.parse(textData);
 
       const canDeploy =
@@ -687,8 +693,15 @@
           : "Your server cannot be deployed due to insufficient resources.";
       }
     } catch (err: any) {
-      triggerCustomAlert("Failed to update pricing", err, "error");
-      console.error(err);
+      // background loop adjustments
+      if (!isBackgroundPolling) {
+        triggerCustomAlert(
+          "Failed to update pricing",
+          err.message || err,
+          "error",
+        );
+      }
+      console.error("Specs loop caught an error context:", err);
     }
   }
 
@@ -807,7 +820,7 @@
           eggOption.addEventListener("click", () => {
             data_storage.egg_id = eggOption.getAttribute("data-egg_id") || "";
             setSelectedEggOption(eggOption);
-            updateSpecsAndCost();
+            updateSpecsAndCost(false);
           });
 
           container.appendChild(eggOption);
@@ -830,7 +843,7 @@
       option.addEventListener("click", () => {
         data_storage.location = option.getAttribute("data-location_name") || "";
         setSelectedLocationOption(option);
-        updateSpecsAndCost();
+        updateSpecsAndCost(false);
       });
     });
 
@@ -844,7 +857,7 @@
     option.addEventListener("click", () => {
       data_storage.subplan = option.getAttribute("data-subplan_name") || "";
       setSelectedSubplanOption(option);
-      updateSpecsAndCost();
+      updateSpecsAndCost(false);
     });
   });
 
@@ -937,8 +950,8 @@
       setSelectedSubplanOption(defaultSubplan);
     }
 
-    updateSpecsAndCost();
+    updateSpecsAndCost(false);
 
-    setInterval(updateSpecsAndCost, 2000);
+    setInterval(() => updateSpecsAndCost(true), 2000);
   });
 </script>
