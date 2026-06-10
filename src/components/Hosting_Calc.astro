@@ -679,6 +679,7 @@
       }
     } catch (err: any) {
       triggerCustomAlert("Failed to update pricing", err, "error");
+      console.error(err);
     }
   }
 
