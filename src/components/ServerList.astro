@@ -376,7 +376,11 @@
   toggleBtn.addEventListener("click", async () => {
     const uuid = uuidInput.value.trim();
     if (!uuid || uuid.length < 10)
-      return alert("Please enter a valid Server UUID.");
+      return triggerCustomAlert(
+        "Serverlist Error",
+        "Please enter a valid Server UUID.",
+        "info",
+      );
 
     const btnTextSpan = toggleBtn.querySelector("span");
     if (!btnTextSpan) return;
@@ -390,7 +394,7 @@
       const result = await response.json();
 
       if (result.error) {
-        alert(`Error: ${result.error}`);
+        triggerCustomAlert("Serverlist Error", result.error, "error");
       } else {
         gsap.fromTo(
           uuidInput,
@@ -401,7 +405,11 @@
         setTimeout(refresh_list, 500);
       }
     } catch (error) {
-      alert("Failed to toggle visibility.");
+      triggerCustomAlert(
+        "Serverlist Error",
+        "Failed to toggle visibility.",
+        "warn",
+      );
     } finally {
       toggleBtn.disabled = false;
       btnTextSpan.innerText = originalText;

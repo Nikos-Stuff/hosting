@@ -89,9 +89,8 @@ import FancyDiv from "@components/FancyDiv.astro";
          cursor-pointer transition-all duration-300 ease-in-out"
               >
                 <span>Choose File…</span>
-                <span
-                  id="file_input_text"
-                  class="text-gray-400">No file chosen</span
+                <span id="file_input_text" class="text-gray-400"
+                  >No file chosen</span
                 >
               </label>
             </div>
@@ -154,10 +153,7 @@ import FancyDiv from "@components/FancyDiv.astro";
               transition-all duration-300 ease-in-out hide_scrollbar"
             >
               <div id="log_messages">Waiting for file...</div>
-              <div
-                id="progress-line"
-                class="text-gray-300 whitespace-pre"
-              >
+              <div id="progress-line" class="text-gray-300 whitespace-pre">
                 <!-- progress will update here -->
               </div>
             </div>
@@ -165,9 +161,7 @@ import FancyDiv from "@components/FancyDiv.astro";
             <!-- Resources usage bars -->
             <div class="mt-4 flex gap-4">
               <div class="flex-1">
-                <div
-                  class="w-full bg-gray-700 rounded-full h-[0.3px]"
-                >
+                <div class="w-full bg-gray-700 rounded-full h-[0.3px]">
                   <div
                     id="cpu_usage"
                     class="bg-white h-[0.3px] rounded-full transition-all duration-500 ease-in-out"
@@ -178,9 +172,7 @@ import FancyDiv from "@components/FancyDiv.astro";
               </div>
 
               <div class="flex-1">
-                <div
-                  class="w-full bg-gray-700 rounded-full h-[0.3px]"
-                >
+                <div class="w-full bg-gray-700 rounded-full h-[0.3px]">
                   <div
                     id="progress_bar"
                     class="bg-white h-[0.3px] rounded-full transition-all duration-500 ease-in-out"
@@ -742,6 +734,18 @@ import FancyDiv from "@components/FancyDiv.astro";
 
   // ---------------------------------------------------------------
 
+  // Alert trigger displayer
+  function triggerCustomAlert(
+    title: string,
+    description: string,
+    state: "success" | "error" | "warn" | "info" = "error",
+  ) {
+    const alertEvent = new CustomEvent("app:show_alert", {
+      detail: { title, description, state },
+    });
+    window.dispatchEvent(alertEvent);
+  }
+
   async function sendNotification(title: string, description: any) {
     if (!("Notification" in window)) {
       console.warn("Notifications are not supported in this browser.");
@@ -753,24 +757,22 @@ import FancyDiv from "@components/FancyDiv.astro";
       if (permission !== "granted") return;
     }
 
-    const favicon = "/notify.webp"
+    const favicon = "/notify.webp";
 
     new Notification(title, {
       body: description,
       icon: favicon,
-      tag: "conversion-status"
+      tag: "conversion-status",
     });
   }
 
   function updateCircleColor(circle: HTMLDivElement, status: string) {
-    const classesToRemove = Array.from(circle.classList).filter(
-      (c) => c.startsWith("bg-"),
+    const classesToRemove = Array.from(circle.classList).filter((c) =>
+      c.startsWith("bg-"),
     );
     circle.classList.remove(...classesToRemove);
 
-    const newClasses = STATUS_COLORS[status] || [
-      "bg-gray-600",
-    ];
+    const newClasses = STATUS_COLORS[status] || ["bg-gray-600"];
     circle.classList.add(...newClasses);
   }
 
@@ -1263,14 +1265,17 @@ import FancyDiv from "@components/FancyDiv.astro";
       URL.revokeObjectURL(a.href);
 
       log("Done! ZIP downloaded.", "success");
-      sendNotification("Ready to go!", "Your server side modpack is ready to go! Have Fun!");
+      sendNotification(
+        "Ready to go!",
+        "Your server side modpack is ready to go! Have Fun!",
+      );
 
       already_running = false;
       reset_phase_progress();
     } catch (err: any) {
       console.error(err);
       log(err.message || "Unknown error", "error");
-      alert("Conversion failed — see log");
+      triggerCustomAlert("Failed to convert", "See log for more info", "error");
       already_running = false;
     }
   }
@@ -1292,7 +1297,7 @@ import FancyDiv from "@components/FancyDiv.astro";
   convertBtn.addEventListener("click", async () => {
     const file = fileInput.files?.[0];
     if (!file) {
-      alert("Please select a .mrpack file");
+      triggerCustomAlert("Failed to convert", "Please select a .mrpack file", "warn");
       return;
     }
 
@@ -1304,7 +1309,7 @@ import FancyDiv from "@components/FancyDiv.astro";
   url_input!.addEventListener("change", async () => {
     const url = url_input!.value.trim();
     if (!url) {
-      alert("Please enter a Modrinth modpack URL");
+      triggerCustomAlert("Failed to convert", "Please enter a Modrinth modpack URL", "warn");
       return;
     }
 
@@ -1323,7 +1328,7 @@ import FancyDiv from "@components/FancyDiv.astro";
     } else if (modpackMatch) {
       modpackId = modpackMatch[1];
     } else {
-      alert("Invalid Modrinth modpack URL");
+      triggerCustomAlert("Failed to convert", "Invalid Modrinth modpack URL", "warn");
       return;
     }
 
