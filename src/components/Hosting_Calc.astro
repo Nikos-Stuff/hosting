@@ -899,8 +899,8 @@
           if (statusRes.ok) {
             const statusData = await statusRes.json();
             // If the server returns a valid status string, update your UI text dynamically
-            if (statusData && statusData.status) {
-              setStatus(statusData.status);
+            if (statusData && statusData.result) {
+              setStatus(statusData.result);
             }
           }
         } catch (statusErr) {
