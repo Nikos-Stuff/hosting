@@ -221,6 +221,18 @@
     return clone;
   }
 
+  // Alert trigger displayer
+  function triggerCustomAlert(
+    title: string,
+    description: string,
+    state: "success" | "error" | "warn" | "info" = "error",
+  ) {
+    const alertEvent = new CustomEvent("app:show_alert", {
+      detail: { title, description, state },
+    });
+    window.dispatchEvent(alertEvent);
+  }
+
   // --- Core Logic ---
   async function refresh_list(): Promise<void> {
     if (isFetching) return;
@@ -340,8 +352,8 @@
           }
         }
       });
-    } catch (error) {
-      console.error("Fetch error:", error);
+    } catch (error: any) {
+      triggerCustomAlert("Serverlist Error", error, "error");
     } finally {
       isFetching = false;
     }

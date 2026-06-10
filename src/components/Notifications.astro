@@ -1,0 +1,250 @@
+---
+// Notifications.astro
+---
+
+<div
+  id="toast_container"
+  class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center pointer-events-none gap-2 w-full max-w-sm px-4 perspective-[1000px] transition-all duration-300"
+>
+</div>
+
+<template id="toast_blueprint">
+  <div
+    class="absolute bottom-0 w-full p-4 rounded-xl border backdrop-blur-md flex items-start gap-3 shadow-2xl pointer-events-auto select-none transition-colors duration-300"
+  >
+    <i class="toast-icon ph text-2xl shrink-0 mt-0.5"></i>
+
+    <div class="flex-1 min-w-0">
+      <h4 class="toast-title text-sm font-semibold text-white leading-tight">
+      </h4>
+      <p
+        class="toast-desc text-xs text-white/60 mt-0.5 whitespace-normal wrap-break-word leading-normal"
+      >
+      </p>
+    </div>
+
+    <button
+      class="text-white/30 hover:text-white transition-colors text-xs shrink-0 font-medium focus:outline-none"
+    >
+      Dismiss
+    </button>
+  </div>
+</template>
+
+<script>
+  import { gsap } from "gsap";
+
+  interface ToastDetail {
+    title: string;
+    description: string;
+    state: "success" | "error" | "warn" | "info";
+  }
+
+  interface ActiveToastItem {
+    element: HTMLElement;
+    timeoutId: ReturnType<typeof setTimeout> | null;
+    createdAt: number;
+    duration: number;
+  }
+
+  const container = document.getElementById("toast_container");
+  const blueprint = document.getElementById("toast_blueprint") as HTMLTemplateElement | null;
+
+  let activeToasts: ActiveToastItem[] = [];
+  let isContainerHovered = false;
+  const GAP_SPACING = 12;
+
+  const stateConfig = {
+    success: {
+      bg: ["bg-emerald-950/40", "border-emerald-500/30", "text-emerald-400"],
+      icon: "ph-check-circle",
+    },
+    error: {
+      bg: ["bg-rose-950/40", "border-rose-500/30", "text-rose-400"],
+      icon: "ph-x-circle",
+    },
+    warn: {
+      bg: ["bg-amber-950/40", "border-amber-500/30", "text-amber-400"],
+      icon: "ph-warning",
+    },
+    info: {
+      bg: ["bg-blue-950/40", "border-blue-500/30", "text-blue-400"],
+      icon: "ph-info",
+    },
+  };
+
+  // ----------------------------------------------------
+  // Dynamic Height & Cascade Layout Engine
+  // ----------------------------------------------------
+  function updateToastLayout() {
+    let accumulatedHeight = 0;
+
+    activeToasts.forEach((item, index) => {
+      const toast = item.element;
+      
+      if (isContainerHovered) {
+        gsap.to(toast, {
+          y: -accumulatedHeight,
+          scale: 1,
+          opacity: 1,
+          duration: 0.4,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        
+        accumulatedHeight += toast.offsetHeight + GAP_SPACING;
+      } else {
+        const scaleFactor = Math.max(0.85, 1 - index * 0.05);
+        const yOffset = -index * 8;
+        const opacityFactor = index === 0 ? 1 : index === 1 ? 0.8 : index === 2 ? 0.4 : 0;
+
+        gsap.to(toast, {
+          y: yOffset,
+          scale: scaleFactor,
+          opacity: opacityFactor,
+          duration: 0.4,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        
+        // Match base item height for collapsed layout tracking
+        if (index === 0) accumulatedHeight = toast.offsetHeight;
+      }
+      toast.style.zIndex = String(100 - index);
+    });
+
+    // Adjust container boundary shapes on the fly to bridge hitboxes safely
+    if (container) {
+      if (isContainerHovered && activeToasts.length > 0) {
+        container.style.height = `${accumulatedHeight}px`;
+        container.classList.remove("pointer-events-none");
+        container.classList.add("pointer-events-auto");
+      } else {
+        container.style.height = "";
+        container.classList.remove("pointer-events-auto");
+        container.classList.add("pointer-events-none");
+      }
+    }
+  }
+
+  // ----------------------------------------------------
+  // Smart Lifetime/Dismiss Tracking
+  // ----------------------------------------------------
+  function startToastTimer(item: ActiveToastItem) {
+    if (item.timeoutId) return;
+    
+    item.timeoutId = setTimeout(() => {
+      dismissToast(item.element);
+    }, item.duration);
+  }
+
+  function pauseToastTimer(item: ActiveToastItem) {
+    if (!item.timeoutId) return;
+    
+    clearTimeout(item.timeoutId);
+    item.timeoutId = null;
+    
+    const elapsed = Date.now() - item.createdAt;
+    item.duration = Math.max(1000, item.duration - elapsed);
+  }
+
+  // ----------------------------------------------------
+  // Create and Setup Toast DOM Block
+  // ----------------------------------------------------
+  function createToast(title: string, description: string, state: ToastDetail["state"]) {
+    if (!container || !blueprint) return;
+
+    const config = stateConfig[state] || stateConfig.info;
+    const templateClone = blueprint.content.cloneNode(true) as DocumentFragment;
+    const toast = templateClone.querySelector("div") as HTMLElement;
+
+    const iconEl = toast.querySelector(".toast-icon");
+    const titleEl = toast.querySelector(".toast-title");
+    const descEl = toast.querySelector(".toast-desc");
+
+    if (titleEl) titleEl.textContent = title;
+    if (descEl) descEl.textContent = description;
+    if (iconEl) iconEl.classList.add(config.icon);
+    
+    toast.classList.add(...config.bg);
+
+    const newToastItem: ActiveToastItem = {
+      element: toast,
+      timeoutId: null,
+      createdAt: Date.now(),
+      duration: 6000,
+    };
+
+    activeToasts.unshift(newToastItem);
+    container.appendChild(toast);
+
+    if (isContainerHovered) {
+      gsap.fromTo(toast,
+        { y: 60, scale: 0.9, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.2)", onComplete: updateToastLayout }
+      );
+      pauseToastTimer(newToastItem);
+    } else {
+      gsap.fromTo(toast,
+        { y: 60, scale: 0.9, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.2)" }
+      );
+      startToastTimer(newToastItem);
+      updateToastLayout();
+    }
+
+    toast.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === "BUTTON" || target.closest("button")) {
+        e.stopPropagation(); // Stop element bubbled clicks from triggering other cards
+        if (newToastItem.timeoutId) clearTimeout(newToastItem.timeoutId);
+        dismissToast(toast);
+      }
+    });
+  }
+
+  function dismissToast(toastElement: HTMLElement) {
+    // Instantly remove from calculations array so it doesn't snap backwards mid-animation
+    activeToasts = activeToasts.filter((item) => item.element !== toastElement);
+
+    gsap.to(toastElement, {
+      scale: 0.8,
+      opacity: 0,
+      y: "+=20",
+      duration: 0.25,
+      ease: "power2.in",
+      onComplete: () => {
+        toastElement.remove();
+      },
+    });
+
+    // Recalculate remaining list items cleanly
+    updateToastLayout();
+  }
+
+  // ----------------------------------------------------
+  // Interactive Listeners
+  // ----------------------------------------------------
+  container?.addEventListener("mouseenter", () => {
+    isContainerHovered = true;
+    activeToasts.forEach(pauseToastTimer);
+    updateToastLayout();
+  });
+
+  container?.addEventListener("mouseleave", () => {
+    isContainerHovered = false;
+    activeToasts.forEach((item) => {
+      item.createdAt = Date.now();
+      startToastTimer(item);
+    });
+    updateToastLayout();
+  });
+
+  window.addEventListener("app:show_alert", (e) => {
+    const customEvent = e as CustomEvent<ToastDetail>;
+    if (!customEvent.detail) return;
+
+    const { title, description, state } = customEvent.detail;
+    createToast(title, description, state);
+  });
+</script>

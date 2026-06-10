@@ -127,7 +127,7 @@ import HeaderIcon from "@components/web_icon.astro";
       url: "https://indnode0.nikostuff.com",
       region: "IND",
       locationName: "india_free",
-    }
+    },
   ];
 
   const wsClients = new Map<string, any>();
@@ -151,6 +151,18 @@ import HeaderIcon from "@components/web_icon.astro";
     requestAnimationFrame(tick);
   };
 
+  // Alert trigger displayer
+  function triggerCustomAlert(
+    title: string,
+    description: string,
+    state: "success" | "error" | "warn" | "info" = "error",
+  ) {
+    const alertEvent = new CustomEvent("app:show_alert", {
+      detail: { title, description, state },
+    });
+    window.dispatchEvent(alertEvent);
+  }
+
   const fetchJSON = async (url: string) => {
     const res = await fetch(url);
     if (!res.ok) throw new Error("Fetch failed");
@@ -171,8 +183,8 @@ import HeaderIcon from "@components/web_icon.astro";
         animateValue(pill, currentUsers, active_users, 500);
         currentUsers = active_users;
       }
-    } catch (e) {
-      console.error("Active users update failed:", e);
+    } catch (e : any) {
+      triggerCustomAlert("Failed to update status", e, "warn")
     }
   };
 

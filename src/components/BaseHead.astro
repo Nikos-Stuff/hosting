@@ -13,6 +13,7 @@ const { title, description, image = "/open-graph.jpg" } = Astro.props;
 import CursorEffect from "@components/page_effects/CursorHoverEffect.astro";
 import PageAnimations from "@components/page_effects/CustomAnimations.astro";
 import TooltipHandler from "@components/Tooltip_Handler.astro";
+import Notifications from "@components/Notifications.astro";
 ---
 
 <!-- Preconnect -->
@@ -65,6 +66,8 @@ import TooltipHandler from "@components/Tooltip_Handler.astro";
 <PageAnimations />
 <CursorEffect />
 <TooltipHandler />
+<Notifications />
+
 <!--<script is:inline async src="/js/bg.js"/>-->
 <!--<script is:inline data-astro-rerun async src="/js/typewriter.js"/>-->
 
