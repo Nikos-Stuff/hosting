@@ -579,8 +579,17 @@
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to fetch specs and cost");
-      const data = await res.json();
+      if (!res.ok)
+        throw new Error(
+          `Failed to fetch specs and cost. Status: ${res.status}`,
+        );
+      const textData = await res.text();
+
+      if (!textData) {
+        throw new Error("Server returned an empty response body.");
+      }
+
+      const data = JSON.parse(textData);
 
       const canDeploy =
         typeof data.can_deploy === "boolean" ? data.can_deploy : false;
@@ -858,9 +867,18 @@
       });
 
       if (!res.ok)
-        throw new Error("Unknown error... (Can't reach the target URL)");
+        throw new Error(
+          `Server returned status ${res.status} (Can't reach the target URL)`,
+        );
 
-      const data = await res.json();
+      const textData = await res.text();
+      if (!textData) {
+        throw new Error(
+          "Server processed the order but returned an empty response body.",
+        );
+      }
+
+      const data = JSON.parse(textData);
       if (data.error) throw new Error(data.error);
 
       if (data.status === "task_created") {
