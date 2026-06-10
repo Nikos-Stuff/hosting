@@ -465,6 +465,8 @@
 
   const egg_list = "https://api.nikostuff.com/HostingPelicanData?list_eggs";
   const order_api = "https://api.nikostuff.com/HostingOrderManager?place_order";
+  const status_api =
+    "https://api.nikostuff.com/HostingOrderManager?place_order_status";
   const specs_api =
     "https://api.nikostuff.com/HostingOrderManager?retrive_data";
 
@@ -883,14 +885,39 @@
 
     if (orderBlocker) orderBlocker.removeAttribute("hidden");
 
+    // Declare the interval variable outside the try block so finally can access it
+    let statusInterval: any = null;
+
     try {
       setStatus("Waiting for API response...");
 
+      // 1. START THE POLLING LOOP HERE
+      // This runs every 1000ms while the POST request below is chugging along
+      statusInterval = setInterval(async () => {
+        try {
+          const statusRes = await fetch(status_api);
+          if (statusRes.ok) {
+            const statusData = await statusRes.json();
+            // If the server returns a valid status string, update your UI text dynamically
+            if (statusData && statusData.status) {
+              setStatus(statusData.status);
+            }
+          }
+        } catch (statusErr) {
+          // Silent catch: if a single status ping fails, don't break the whole app
+          console.error("Error fetching status update:", statusErr);
+        }
+      }, 1000);
+
+      // 2. YOUR ORIGINAL POST REQUEST RUNS HERE
       const res = await fetch(order_api, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data_storage),
       });
+
+      // The main request finished! Stop the status loop immediately
+      clearInterval(statusInterval);
 
       if (!res.ok && res.status !== 429)
         throw new Error(
@@ -937,6 +964,9 @@
         );
       }
     } catch (err) {
+      // Make sure the background polling loop stops if an error occurs
+      if (statusInterval) clearInterval(statusInterval);
+
       if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
       const errMsg =
         err && typeof err === "object" && "message" in err
