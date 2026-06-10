@@ -1,0 +1,244 @@
+<div>
+  <div class="space-y-6 animate">
+    <div class="space-y-2 animate">
+      <div class="flex justify-between items-center text-sm font-medium">
+        <label for="q_players" class="flex items-center gap-2 text-white/80">
+          <i class="ph ph-users text-lg"></i>
+          Expected Player Count?
+        </label>
+        <span id="q_players_val" class="font-bold text-white"
+          >1 - 5 players</span
+        >
+      </div>
+      <input
+        id="q_players"
+        type="range"
+        min="1"
+        max="4"
+        step="1"
+        value="1"
+        class="w-full accent-white h-2 bg-white/10 rounded-lg appearance-none cursor-pointer"
+      />
+      <div class="flex justify-between text-[10px] text-white/40 px-1">
+        <span>Small Group</span>
+        <span>Community (50+)</span>
+      </div>
+    </div>
+
+    <div class="space-y-2 animate">
+      <div class="flex justify-between items-center text-sm font-medium">
+        <label for="q_mods" class="flex items-center gap-2 text-white/80">
+          <i class="ph ph-plugs-connected text-lg"></i>
+          Addons, Mods, or Plugins?
+        </label>
+        <span id="q_mods_val" class="font-bold text-white">Vanilla / None</span>
+      </div>
+      <input
+        id="q_mods"
+        type="range"
+        min="1"
+        max="4"
+        step="1"
+        value="1"
+        class="w-full accent-white h-2 bg-white/10 rounded-lg appearance-none cursor-pointer"
+      />
+      <div class="flex justify-between text-[10px] text-white/40 px-1">
+        <span>Vanilla</span>
+        <span>Heavy Modpack (150+)</span>
+      </div>
+    </div>
+
+    <div class="space-y-2 animate">
+      <div class="flex justify-between items-center text-sm font-medium">
+        <label for="q_world" class="flex items-center gap-2 text-white/80">
+          <i class="ph ph-globe text-lg"></i>
+          World Size & Map Type?
+        </label>
+        <span id="q_world_val" class="font-bold text-white"
+          >Standard / Fresh Map</span
+        >
+      </div>
+      <input
+        id="q_world"
+        type="range"
+        min="1"
+        max="3"
+        step="1"
+        value="1"
+        class="w-full accent-white h-2 bg-white/10 rounded-lg appearance-none cursor-pointer"
+      />
+      <div class="flex justify-between text-[10px] text-white/40 px-1">
+        <span>Standard</span>
+        <span>Massive / Long-term</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="border-white/25 animate my-5" />
+
+  <div class="grid grid-cols-3 gap-3 text-center text-xs pt-1 animate">
+    <div
+      class="bg-white/5 border border-white/10 rounded-lg p-3 flex flex-col items-center justify-center gap-1"
+    >
+      <i class="ph ph-cpu text-lg text-white/60"></i>
+      <span class="block text-white/40">CPU Needed</span>
+      <span id="spec_cpu" class="font-bold text-base text-white">100%</span>
+    </div>
+    <div
+      class="bg-white/5 border border-white/10 rounded-lg p-3 flex flex-col items-center justify-center gap-1"
+    >
+      <i class="ph ph-memory text-lg text-white/60"></i>
+      <span class="block text-white/40">RAM Suggested</span>
+      <span id="spec_ram" class="font-bold text-base text-white">2 GB</span>
+    </div>
+    <div
+      class="bg-white/5 border border-white/10 rounded-lg p-3 flex flex-col items-center justify-center gap-1"
+    >
+      <i class="ph ph-hard-drive text-lg text-white/60"></i>
+      <span class="block text-white/40">SSD Storage</span>
+      <span id="spec_ssd" class="font-bold text-base text-white">10 GB</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { gsap } from "gsap";
+
+  document.addEventListener("DOMContentLoaded", (): void => {
+    const pSlider = document.getElementById(
+      "q_players",
+    ) as HTMLInputElement | null;
+    const mSlider = document.getElementById(
+      "q_mods",
+    ) as HTMLInputElement | null;
+    const wSlider = document.getElementById(
+      "q_world",
+    ) as HTMLInputElement | null;
+
+    const pText = document.getElementById(
+      "q_players_val",
+    ) as HTMLSpanElement | null;
+    const mText = document.getElementById(
+      "q_mods_val",
+    ) as HTMLSpanElement | null;
+    const wText = document.getElementById(
+      "q_world_val",
+    ) as HTMLSpanElement | null;
+
+    const specCpu = document.getElementById(
+      "spec_cpu",
+    ) as HTMLSpanElement | null;
+    const specRam = document.getElementById(
+      "spec_ram",
+    ) as HTMLSpanElement | null;
+    const specSsd = document.getElementById(
+      "spec_ssd",
+    ) as HTMLSpanElement | null;
+
+    if (
+      !pSlider ||
+      !mSlider ||
+      !wSlider ||
+      !pText ||
+      !mText ||
+      !wText ||
+      !specCpu ||
+      !specRam ||
+      !specSsd
+    ) {
+      return;
+    }
+
+    const playerLabels: Record<number, string> = {
+      1: "1 - 5 players (Friends)",
+      2: "6 - 20 players (Small Group)",
+      3: "21 - 50 players (Community)",
+      4: "50+ players (Large Network)",
+    };
+
+    const modLabels: Record<number, string> = {
+      1: "Vanilla / Pure Native",
+      2: "Lightly Modded (<30 Plugins)",
+      3: "Medium Modded (30 - 100 Mods)",
+      4: "Heavy Modpacks (100+ Mods)",
+    };
+
+    const worldLabels: Record<number, string> = {
+      1: "Standard / Fresh Map",
+      2: "Expanded Map / Exploration",
+      3: "Massive / Long-term World",
+    };
+
+    const currentSpecs = { cpu: 100, ram: 2, ssd: 10 };
+
+    function calculateSystemRequirements(): void {
+      const pIdx: number = parseInt(pSlider!.value, 10);
+      const mIdx: number = parseInt(mSlider!.value, 10);
+      const wIdx: number = parseInt(wSlider!.value, 10);
+
+      if (pText) pText.textContent = playerLabels[pIdx];
+      if (mText) mText.textContent = modLabels[mIdx];
+      if (wText) wText.textContent = worldLabels[wIdx];
+
+      let targetCpu = 100;
+      let targetRam = 2;
+      let targetSsd = 10;
+
+      if (pIdx === 2) {
+        targetCpu += 50;
+        targetRam += 2;
+      }
+      if (pIdx === 3) {
+        targetCpu += 100;
+        targetRam += 4;
+      }
+      if (pIdx === 4) {
+        targetCpu += 300;
+        targetRam += 10;
+      }
+
+      if (mIdx === 2) {
+        targetRam += 2;
+        targetCpu += 25;
+      }
+      if (mIdx === 3) {
+        targetRam += 4;
+        targetCpu += 50;
+      }
+      if (mIdx === 4) {
+        targetRam += 12;
+        targetCpu += 100;
+      }
+
+      if (wIdx === 2) {
+        targetSsd += 25;
+        targetRam += 1;
+      }
+      if (wIdx === 3) {
+        targetSsd += 90;
+        targetRam += 2;
+      }
+
+      gsap.to(currentSpecs, {
+        cpu: targetCpu,
+        ram: targetRam,
+        ssd: targetSsd,
+        duration: 0.4,
+        ease: "power2.out",
+        onUpdate: () => {
+          if (specCpu) specCpu.textContent = `${Math.round(currentSpecs.cpu)}%`;
+          if (specRam)
+            specRam.textContent = `${Math.round(currentSpecs.ram)} GB`;
+          if (specSsd)
+            specSsd.textContent = `${Math.round(currentSpecs.ssd)} GB`;
+        },
+      });
+    }
+
+    pSlider.addEventListener("input", calculateSystemRequirements);
+    mSlider.addEventListener("input", calculateSystemRequirements);
+    wSlider.addEventListener("input", calculateSystemRequirements);
+
+    calculateSystemRequirements();
+  });
+</script>

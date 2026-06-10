@@ -20,6 +20,7 @@ import playit_gg from "@assets/hosting/playit.png";
 import BlogSummary from "@components/BlogSummary";
 import ServerList from "@components/ServerList.astro";
 import AMDCpuModel from "@assets/3d/amd_cpu.glb?url";
+import SpecsCalculator from "@components/SpecsCalculator.astro";
 
 const posts = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
@@ -476,6 +477,16 @@ const posts = (await getCollection("blog"))
         </p>
 
         <Calculator />
+
+        <!-- Line -->
+        <hr class="border-white/25 animate my-5" />
+
+        <p
+          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
+        >
+          Requirement Estimator
+        </p>
+        <SpecsCalculator />
 
         <!-- Line -->
         <hr class="border-white/25 animate my-5" />
