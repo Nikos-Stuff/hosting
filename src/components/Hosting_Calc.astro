@@ -891,32 +891,28 @@
     try {
       setStatus("Waiting for API response...");
 
-      // 1. START THE POLLING LOOP HERE
-      // This runs every 1000ms while the POST request below is chugging along
+
       statusInterval = setInterval(async () => {
         try {
           const statusRes = await fetch(status_api);
           if (statusRes.ok) {
             const statusData = await statusRes.json();
-            // If the server returns a valid status string, update your UI text dynamically
+          
             if (statusData && statusData.result) {
               setStatus(statusData.result);
             }
           }
         } catch (statusErr) {
-          // Silent catch: if a single status ping fails, don't break the whole app
           console.error("Error fetching status update:", statusErr);
         }
-      }, 1000);
+      }, 500);
 
-      // 2. YOUR ORIGINAL POST REQUEST RUNS HERE
       const res = await fetch(order_api, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data_storage),
       });
 
-      // The main request finished! Stop the status loop immediately
       clearInterval(statusInterval);
 
       if (!res.ok && res.status !== 429)
