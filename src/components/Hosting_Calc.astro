@@ -885,20 +885,19 @@
 
     if (orderBlocker) orderBlocker.removeAttribute("hidden");
 
-    // Declare the interval variable outside the try block so finally can access it
     let statusInterval: any = null;
+    let isOrderFinished = false;
 
     try {
       setStatus("Waiting for API response...");
-
 
       statusInterval = setInterval(async () => {
         try {
           const statusRes = await fetch(status_api);
           if (statusRes.ok) {
             const statusData = await statusRes.json();
-          
-            if (statusData && statusData.result) {
+
+            if (!isOrderFinished && statusData && statusData.result) {
               setStatus(statusData.result);
             }
           }
@@ -913,6 +912,7 @@
         body: JSON.stringify(data_storage),
       });
 
+      isOrderFinished = true;
       clearInterval(statusInterval);
 
       if (!res.ok && res.status !== 429)
@@ -960,7 +960,7 @@
         );
       }
     } catch (err) {
-      // Make sure the background polling loop stops if an error occurs
+      isOrderFinished = true;
       if (statusInterval) clearInterval(statusInterval);
 
       if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
