@@ -15,10 +15,6 @@ export const LEGAL: Site = {
 
 // Links
 export const LINKS: Links = [
-  { 
-    TEXT: "Go back to main page", 
-    HREF: "https://nikostuff.com", 
-  },
   {
     TEXT: "Pack Converter",
     HREF: "/pack_converter",
@@ -26,6 +22,10 @@ export const LINKS: Links = [
   {
     TEXT: "Server Checker",
     HREF: "/server_checker",
+  },
+  { 
+    TEXT: "Status", 
+    HREF: "https://status.nikostuff.com", 
   }
 ]
 
