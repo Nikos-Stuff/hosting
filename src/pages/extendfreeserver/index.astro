@@ -4,7 +4,7 @@ import FancyDiv from "@components/FancyDiv.astro";
 import POD from "@components/POD.astro";
 ---
 
-<PageLayout title="Free Server Renew" description="Free Server Renew">
+<PageLayout title="Free Server Renewal" description="Free Server Renewal">
     <POD />
     <div class="relative w-full flex items-center justify-center pt-60 px-4">
         <FancyDiv isAnimated={true} theme="default_big" class="w-full">
@@ -15,7 +15,9 @@ import POD from "@components/POD.astro";
                 <div
                     class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20"
                 >
-                    <i class="ph ph-arrows-counter-clockwise text-3xl animate-spin-slow"></i>
+                    <i
+                        class="ph ph-arrows-counter-clockwise text-3xl animate-spin-slow"
+                    ></i>
                 </div>
 
                 <h1 class="text-2xl font-bold tracking-tight text-white">
@@ -25,15 +27,30 @@ import POD from "@components/POD.astro";
                 <div
                     class="mt-3 inline-block rounded-lg bg-zinc-900/60 px-4 py-2 text-xs font-mono text-zinc-400 break-all border border-zinc-800"
                 >
-                    <span class="text-zinc-500 select-none">ID:</span>
+                    <span class="text-zinc-500 select-none">ID: </span>
                     <span id="uuid-display">Loading ID...</span>
                 </div>
 
-                <p class="mt-6 text-sm text-zinc-300">
-                    Are you sure you want to do this?
-                </p>
+                <div class="mt-6 space-y-3 text-sm text-zinc-300">
+                    <p>Are you sure you want to renew this server?</p>
 
-                <div class="mt-8 flex flex-col sm:flex-row gap-3 w-full items-center justify-center">
+                    <p class="text-xs text-zinc-400 max-w-xs mx-auto">
+                        Feel free to share this link with friends or team
+                        members! This is a public renewal shortcut and does not
+                        expose any private server details or credentials.
+                    </p>
+
+                    <p
+                        class="text-xs text-amber-500/80 bg-amber-500/5 border border-amber-500/10 rounded-md py-1.5 px-3 inline-block"
+                    >
+                        <strong>Rate Limit:</strong> Maximum 2 renewals every 24 hours
+                        per ID.
+                    </p>
+                </div>
+
+                <div
+                    class="mt-8 flex flex-col sm:flex-row gap-3 w-full items-center justify-center"
+                >
                     <button
                         id="btn-no"
                         class="group w-full p-4 gap-3 flex items-center border rounded-lg hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out text-center cursor-pointer justify-center"
