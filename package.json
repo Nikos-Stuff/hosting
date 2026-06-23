@@ -15,15 +15,15 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
-    "@astrojs/mdx": "6.0.3",
-    "@astrojs/node": "^10.1.4",
+    "@astrojs/mdx": "7.0.0",
+    "@astrojs/node": "^11.0.0",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
-    "@astrojs/solid-js": "6.0.1",
+    "@astrojs/solid-js": "7.0.0",
     "@playform/inline": "^0.1.4",
-    "@tailwindcss/vite": "^4.3.0",
+    "@tailwindcss/vite": "^4.3.1",
     "@types/js-yaml": "^4.0.9",
-    "astro": "6.4.6",
+    "astro": "7.0.1",
     "clsx": "^2.1.1",
     "flag-icons": "^7.5.0",
     "fuse.js": "^7.4.2",
@@ -31,17 +31,17 @@
     "js-yaml": "^4.2.0",
     "jszip": "^3.10.1",
     "node-fetch": "^3.3.2",
-    "sharp": "^0.35.1",
+    "sharp": "^0.35.2",
     "solid-js": "^1.9.13",
     "tailwind-merge": "^3.6.0",
-    "tailwindcss": "^4.3.0",
+    "tailwindcss": "^4.3.1",
     "three": "^0.184.0",
     "typescript": "^6.0.3"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.20",
     "@types/three": "^0.184.1",
-    "vite": "^7.3.5"
+    "vite": "^8.1.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
