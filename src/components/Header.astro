@@ -183,8 +183,8 @@ import HeaderIcon from "@components/web_icon.astro";
         animateValue(pill, currentUsers, active_users, 500);
         currentUsers = active_users;
       }
-    } catch (e : any) {
-      triggerCustomAlert("Failed to update status", e, "warn")
+    } catch (e: any) {
+      triggerCustomAlert("Failed to update status", e, "warn");
     }
   };
 
@@ -302,12 +302,19 @@ import HeaderIcon from "@components/web_icon.astro";
 
       const valid = results.filter((n) => n.ping !== Infinity);
       if (valid.length) {
-        const best = valid.reduce((b, n) => (n.ping < b.ping ? n : b));
-        if (latencyPill)
-          latencyPill.setAttribute(
-            "data-tooltip",
-            `Best Node: ${best.name} (${best.region})`,
-          );
+        const sortedNodes = [...valid].sort((a, b) => a.ping - b.ping);
+        const best = sortedNodes[0];
+
+        if (latencyPill) {
+          let tooltipText = `Best Node: ${best.name} (${best.region}) — ${best.ping}ms<br/><br/>`;
+          const topFive = sortedNodes.slice(1, 6);
+
+          topFive.forEach((node, index) => {
+            tooltipText += `${index + 1}. ${node.name} (${node.region}): ${node.ping}ms<br/>`;
+          });
+
+          latencyPill.setAttribute("data-tooltip", tooltipText.trim());
+        }
 
         const target = Math.round(best.ping);
         animateValue(
