@@ -438,3 +438,7 @@ article img {
   border-radius: var(--radius-lg);
   border-bottom-right-radius: var(--radius-xs);
 }
+
+.border-glow-layer {
+  box-sizing: border-box;
+}
