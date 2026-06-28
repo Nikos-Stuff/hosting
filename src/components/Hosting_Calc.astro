@@ -340,13 +340,22 @@
       <div>
         <button
           id="place_order_btn"
-          class="group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg rounded-b-sm hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out"
+          class="group w-full p-4 mt-5 flex flex-col items-center justify-center border rounded-lg rounded-b-sm hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out"
         >
           <span
-            class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300"
+            class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300 font-medium"
           >
             Get My Server!
           </span>
+
+          <div
+            class="flex items-center justify-center gap-1.5 mt-1.5 z-10 relative text-xs text-white/50 group-hover:text-white/80 transition-colors duration-300"
+          >
+            <i
+              class="ph ph-shield-check text-[14px] text-green-400 group-hover:text-green-300 leading-none transform translate-y-[-1.5px] transition-colors"
+            ></i>
+            <span class="leading-none">Secured Deployment</span>
+          </div>
         </button>
 
         <a
