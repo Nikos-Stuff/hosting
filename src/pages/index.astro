@@ -47,31 +47,77 @@ const posts = (await getCollection("blog"))
   <!-- Ping popup thingy -->
   <div
     id="ping_analysis_popup"
-    class="fixed inset-0 z-50 items-center justify-center hidden"
+    class="fixed inset-0 z-50 items-center justify-center hidden bg-black/50 backdrop-blur-md"
   >
     <div
-      class="border border-white/20 bg-black rounded-lg p-8 flex flex-col items-center justify-center w-96 min-h-64 shadow-2xl text-center"
+      class="relative border border-white/10 bg-neutral-950 rounded-xl p-6 flex flex-col items-center justify-center w-[26rem] min-h-[22rem] shadow-2xl text-center overflow-hidden"
     >
-      <h2 class="text-xl font-semibold mb-5">Ping Analysis</h2>
-
-      <div
-        id="popup-ping-value"
-        class="text-6xl md:text-7xl font-bold mb-1 text-white"
+      <button
+        id="close-ping-popup"
+        class="absolute top-4 right-4 text-white/40 hover:text-white/80 transition-colors text-lg"
       >
-        --ms
+        <i class="ph ph-x"></i>
+      </button>
+
+      <div class="flex items-center gap-2 mb-4">
+        <i class="ph ph-activity text-indigo-400 text-lg"></i>
+        <h2 class="text-lg font-semibold text-white tracking-wide">
+          Network Diagnosis
+        </h2>
       </div>
 
-      <p id="popup-jitter-value" class="text-xs opacity-50 mb-4">
-        Waiting to start...
-      </p>
+      <div class="flex flex-col items-center justify-center my-auto w-full">
+        <div
+          id="popup-ping-value"
+          class="text-6xl font-extrabold tracking-tighter mb-2 text-white transition-colors duration-300"
+        >
+          --ms
+        </div>
 
-      <p id="popup-status-text" class="text-xs font-medium mb-6">
-        Initializing...
-      </p>
+        <p
+          id="popup-status-text"
+          class="text-sm font-medium text-neutral-300 mb-6 flex items-center gap-1.5"
+        >
+          <i class="ph ph-circle-notch animate-spin text-indigo-400"></i> Initializing...
+        </p>
 
-      <p class="text-[10px] opacity-30 mt-auto">
-        *Web-based estimate. Actual in-game ping may vary due to protocol
-        differences.
+        <div
+          class="grid grid-cols-2 gap-3 w-full border border-white/5 bg-white/[0.02] rounded-lg p-3 text-left text-xs mb-4"
+        >
+          <div class="flex items-center gap-1.5 text-white/60">
+            <i class="ph ph-waveform text-neutral-400"></i>
+            <span
+              >Jitter: <strong id="val-jitter" class="text-white">--ms</strong
+              ></span
+            >
+          </div>
+          <div class="flex items-center gap-1.5 text-white/60">
+            <i class="ph ph-arrows-out text-neutral-400"></i>
+            <span
+              >Variance: <strong id="val-variance" class="text-white"
+                >--ms</strong
+              ></span
+            >
+          </div>
+          <div class="flex items-center gap-1.5 text-white/60">
+            <i class="ph ph-warning-circle text-neutral-400"></i>
+            <span
+              >Loss Rate: <strong id="val-loss" class="text-white">0%</strong
+              ></span
+            >
+          </div>
+          <div class="flex items-center gap-1.5 text-white/60">
+            <i class="ph ph-chart-bar text-neutral-400"></i>
+            <span
+              >Samples: <strong id="val-samples" class="text-white">0/10</strong
+              ></span
+            >
+          </div>
+        </div>
+      </div>
+
+      <p class="text-[10px] text-white/30 w-full mt-auto">
+        *Web-based estimate. Actual protocol performance may vary.
       </p>
     </div>
   </div>

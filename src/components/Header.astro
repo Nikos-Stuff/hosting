@@ -88,7 +88,6 @@ import HeaderIcon from "@components/web_icon.astro";
 <script>
   import gsap from "gsap";
 
-  // Configuration & State
   const pill = document.getElementById("active-users-count");
   const pingSpan = document.getElementById("average-ping");
   const locations = document.getElementById("location_options");
@@ -97,6 +96,7 @@ import HeaderIcon from "@components/web_icon.astro";
   let currentUsers = Number(pill?.textContent) || 0;
   let currentPing = Number(pingSpan?.textContent) || 0;
   let pingRunning = false;
+  let modalAbortController = new AbortController();
 
   interface Node {
     name: string;
@@ -133,7 +133,6 @@ import HeaderIcon from "@components/web_icon.astro";
   const wsClients = new Map<string, any>();
   const nodeHistoryMap = new Map<string, number[]>();
 
-  // Helpers
   const animateValue = (
     el: HTMLElement,
     start: number,
@@ -151,7 +150,6 @@ import HeaderIcon from "@components/web_icon.astro";
     requestAnimationFrame(tick);
   };
 
-  // Alert trigger displayer
   function triggerCustomAlert(
     title: string,
     description: string,
@@ -169,10 +167,20 @@ import HeaderIcon from "@components/web_icon.astro";
     return res.json();
   };
 
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const sleep = (ms: number, signal?: AbortSignal) =>
+    new Promise<void>((resolve, reject) => {
+      if (signal?.aborted) return reject(new Error("aborted"));
+      const timer = setTimeout(() => {
+        signal?.removeEventListener("abort", onAbort);
+        resolve();
+      }, ms);
+      const onAbort = () => {
+        clearTimeout(timer);
+        reject(new Error("aborted"));
+      };
+      signal?.addEventListener("abort", onAbort);
+    });
 
-  // Active Users Logic
   const updateActiveUsers = async () => {
     if (!pill) return;
     try {
@@ -188,7 +196,6 @@ import HeaderIcon from "@components/web_icon.astro";
     }
   };
 
-  // WebSocket Ping Logic
   const createWsClient = (baseUrl: string) => {
     const u = new URL(baseUrl);
     u.protocol = u.protocol === "https:" ? "wss:" : "ws:";
@@ -275,7 +282,6 @@ import HeaderIcon from "@components/web_icon.astro";
     return Infinity;
   };
 
-  // Main Ping Update
   const updatePing = async () => {
     if (document.hidden || pingRunning || !pingSpan) return;
     pingRunning = true;
@@ -330,7 +336,6 @@ import HeaderIcon from "@components/web_icon.astro";
     }
   };
 
-  // Initialize
   if (pill) {
     updateActiveUsers();
     setInterval(updateActiveUsers, 60000);
@@ -341,16 +346,41 @@ import HeaderIcon from "@components/web_icon.astro";
     setInterval(updatePing, 5000);
   }
 
-  // Popup Analysis
+  const getPingColorClass = (ping: number): string => {
+    if (ping === Infinity) return "text-red-500";
+    if (ping < 60) return "text-emerald-400";
+    if (ping < 150) return "text-amber-400";
+    return "text-red-400";
+  };
+
   pingSpan?.parentElement?.addEventListener("click", async () => {
     const popup = document.getElementById("ping_analysis_popup");
     const modal = popup?.firstElementChild;
     const pingDisplay = document.getElementById("popup-ping-value");
     const statusDisplay = document.getElementById("popup-status-text");
-    const jitterDisplay = document.getElementById("popup-jitter-value");
+    const closeBtn = document.getElementById("close-ping-popup");
 
-    if (!popup || !modal || !pingDisplay || !statusDisplay || !jitterDisplay)
+    const jDisplay = document.getElementById("val-jitter");
+    const vDisplay = document.getElementById("val-variance");
+    const lDisplay = document.getElementById("val-loss");
+    const sDisplay = document.getElementById("val-samples");
+
+    if (
+      !popup ||
+      !modal ||
+      !pingDisplay ||
+      !statusDisplay ||
+      !closeBtn ||
+      !jDisplay ||
+      !vDisplay ||
+      !lDisplay ||
+      !sDisplay
+    )
       return;
+
+    modalAbortController.abort();
+    modalAbortController = new AbortController();
+    const signal = modalAbortController.signal;
 
     popup.classList.remove("hidden");
     popup.classList.add("flex");
@@ -360,91 +390,126 @@ import HeaderIcon from "@components/web_icon.astro";
       backdropFilter: "blur(0px)",
     });
     gsap.to(popup, {
-      backgroundColor: "rgba(0,0,0,0.5)",
-      backdropFilter: "blur(16px)",
-      duration: 0.4,
+      backgroundColor: "rgba(0,0,0,0.65)",
+      backdropFilter: "blur(12px)",
+      duration: 0.3,
     });
     gsap.fromTo(
       modal,
-      { scale: 0.9, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" },
+      { scale: 0.95, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.3, ease: "power2.out" },
     );
 
-    let bestOverall = { ping: Infinity, name: "", region: "" };
+    const resetUI = () => {
+      pingDisplay.textContent = "--ms";
+      pingDisplay.className =
+        "text-6xl font-extrabold tracking-tighter mb-2 text-white transition-colors duration-300";
+      statusDisplay.innerHTML = `<i class="ph ph-circle-notch animate-spin text-indigo-400"></i> Initializing...`;
+      jDisplay.textContent = "--ms";
+      vDisplay.textContent = "--ms";
+      lDisplay.textContent = "0%";
+      sDisplay.textContent = "0/10";
+    };
 
-    for (const node of nodes) {
-      let total = 0,
-        success = 0,
-        dropped = 0;
-      const history: number[] = [];
+    resetUI();
 
-      for (let i = 1; i <= 10; i++) {
-        statusDisplay.textContent = `Testing ${node.name} (${node.region}) - ${i}/10`;
-        const p = await pingNode(node.url, []);
+    const hidePopup = () => {
+      modalAbortController.abort();
+      gsap.to(popup, {
+        backgroundColor: "rgba(0,0,0,0)",
+        backdropFilter: "blur(0px)",
+        duration: 0.25,
+      });
+      gsap.to(modal, {
+        scale: 0.95,
+        opacity: 0,
+        duration: 0.25,
+        onComplete: () => {
+          popup.classList.add("hidden");
+          popup.classList.remove("flex");
+          resetUI();
+        },
+      });
+    };
 
-        if (p !== Infinity) {
-          history.push(p);
-          total += p;
-          success++;
+    closeBtn.onclick = hidePopup;
 
-          pingDisplay.textContent = `${p}ms`;
-          gsap.fromTo(
-            pingDisplay,
-            { scale: 1.1 },
-            { scale: 1, duration: 0.3 },
-          );
+    try {
+      let bestOverall = { ping: Infinity, name: "", region: "" };
 
-          const min = Math.min(...history);
-          const max = Math.max(...history);
-          const diffs = history
-            .slice(1)
-            .map((v, idx) => Math.abs(v - history[idx]));
-          const jitter =
-            Math.round(diffs.reduce((a, b) => a + b, 0) / diffs.length) || 0;
+      for (const node of nodes) {
+        let total = 0,
+          success = 0,
+          dropped = 0;
+        const history: number[] = [];
 
-          jitterDisplay.textContent = `Jitter: ${jitter}ms | Min: ${min}ms | Max: ${max}ms | Dropped: ${dropped}`;
-        } else {
-          dropped++;
-          jitterDisplay.textContent = `Jitter: --ms | Min: --ms | Max: --ms | Dropped: ${dropped}`;
+        for (let i = 1; i <= 10; i++) {
+          if (signal.aborted) return;
+
+          statusDisplay.innerHTML = `<i class="ph ph-broadcast text-indigo-400 animate-pulse"></i> Testing ${node.name} (${node.region})`;
+          sDisplay.textContent = `${i}/10`;
+
+          const p = await pingNode(node.url, []);
+
+          if (p !== Infinity) {
+            history.push(p);
+            total += p;
+            success++;
+
+            pingDisplay.textContent = `${p}ms`;
+            pingDisplay.className = `text-6xl font-extrabold tracking-tighter mb-2 transition-colors duration-300 ${getPingColorClass(p)}`;
+
+            gsap.fromTo(
+              pingDisplay,
+              { scale: 1.05 },
+              { scale: 1, duration: 0.2 },
+            );
+
+            const min = Math.min(...history);
+            const max = Math.max(...history);
+            const diffs = history
+              .slice(1)
+              .map((v, idx) => Math.abs(v - history[idx]));
+            const jitter =
+              Math.round(diffs.reduce((a, b) => a + b, 0) / diffs.length) || 0;
+
+            jDisplay.textContent = `${jitter}ms`;
+            vDisplay.textContent = `${min}-${max}ms`;
+          } else {
+            dropped++;
+          }
+
+          lDisplay.textContent = `${Math.round((dropped / i) * 100)}%`;
+          await sleep(400, signal);
         }
-        await sleep(500);
+
+        if (success > 0) {
+          const avg = Math.round(total / success);
+          if (avg < bestOverall.ping) {
+            bestOverall = { ping: avg, name: node.name, region: node.region };
+          }
+        }
+        await sleep(600, signal);
       }
 
-      if (success > 0) {
-        const avg = Math.round(total / success);
-        if (avg < bestOverall.ping)
-          bestOverall = { ping: avg, name: node.name, region: node.region };
-      }
-      await sleep(2000);
+      if (signal.aborted) return;
+
+      statusDisplay.innerHTML = `<i class="ph ph-check-circle text-emerald-400"></i> Best: ${bestOverall.name} (${bestOverall.region})`;
+      pingDisplay.textContent =
+        bestOverall.ping === Infinity ? "Timeout" : `${bestOverall.ping}ms`;
+      pingDisplay.className = `text-6xl font-extrabold tracking-tighter mb-2 transition-colors duration-300 ${getPingColorClass(bestOverall.ping)}`;
+
+      gsap.to(pingDisplay, {
+        scale: 1.1,
+        duration: 0.25,
+        yoyo: true,
+        repeat: 1,
+      });
+
+      await sleep(4000, signal);
+      hidePopup();
+    } catch (err) {
+      if (err instanceof Error && err.message === "aborted") return;
     }
-
-    statusDisplay.textContent = `Best: ${bestOverall.name} (${bestOverall.region})`;
-    pingDisplay.textContent = `${bestOverall.ping}ms`;
-    jitterDisplay.textContent = "Done";
-
-    gsap.set(pingDisplay, { scale: 1 });
-    gsap.to(pingDisplay, { scale: 1.2, duration: 0.3, yoyo: true, repeat: 1 });
-
-    await sleep(5000);
-
-    gsap.to(popup, {
-      backgroundColor: "rgba(0,0,0,0)",
-      backdropFilter: "blur(0px)",
-      duration: 0.3,
-    });
-    gsap.to(modal, {
-      scale: 0.9,
-      opacity: 0,
-      duration: 0.3,
-      onComplete: () => {
-        popup.classList.add("hidden");
-        popup.classList.remove("flex");
-
-        pingDisplay.textContent = "--ms";
-        statusDisplay.textContent = "Initializing...";
-        jitterDisplay.textContent = "Waiting to start...";
-        gsap.set(pingDisplay, { scale: 1, color: "#ffffff" });
-      },
-    });
   });
 </script>
