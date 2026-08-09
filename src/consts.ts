@@ -19,10 +19,10 @@ export const LINKS: Links = [
     TEXT: "Pack Converter",
     HREF: "/pack_converter",
   },
-  {
-    TEXT: "Server Checker",
-    HREF: "/server_checker",
-  },
+  // {
+  //   TEXT: "Server Checker",
+  //   HREF: "/server_checker",
+  // },
   { 
     TEXT: "Status", 
     HREF: "https://status.nikostuff.com", 
