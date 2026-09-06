@@ -64,109 +64,116 @@ import POD from "@components/POD.astro";
 <script>
   import gsap from "gsap";
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const status = urlParams.get("status");
-  const sessionId = urlParams.get("session_id");
-  const identifier = urlParams.get("identifier") || urlParams.get("server_id");
+  function initPaymentStatus() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get("status");
+    const sessionId = urlParams.get("session_id");
+    const identifier =
+      urlParams.get("identifier") || urlParams.get("server_id");
 
-  const sessionDisplay = document.getElementById("session-display");
-  const statusIconBg = document.getElementById("status-icon-bg");
-  const statusIcon = document.getElementById("status-icon");
-  const statusTitle = document.getElementById("status-title");
-  const statusMessage = document.getElementById("status-message");
-  const btnAction = document.getElementById(
-    "btn-action",
-  ) as HTMLAnchorElement | null;
+    const sessionDisplay = document.getElementById("session-display");
+    const statusIconBg = document.getElementById("status-icon-bg");
+    const statusIcon = document.getElementById("status-icon");
+    const statusTitle = document.getElementById("status-title");
+    const statusMessage = document.getElementById("status-message");
+    const btnAction = document.getElementById(
+      "btn-action",
+    ) as HTMLAnchorElement | null;
 
-  if (btnAction) {
-    if (identifier) {
-      btnAction.href = `https://panel.nikostuff.com/server/${identifier}/console`;
+    // Update Button HREF dynamically based on identifier
+    if (btnAction) {
+      if (identifier) {
+        btnAction.href = `https://panel.nikostuff.com/server/${encodeURIComponent(identifier)}/console`;
+      } else {
+        btnAction.href = "https://panel.nikostuff.com";
+      }
+    }
+
+    function triggerCustomAlert(
+      title: string,
+      description: string,
+      state: "success" | "error" | "warn" | "info" = "info",
+    ) {
+      const alertEvent = new CustomEvent("app:show_alert", {
+        detail: { title, description, state },
+      });
+      window.dispatchEvent(alertEvent);
+    }
+
+    // Display Session ID
+    if (sessionDisplay) {
+      if (sessionId) {
+        sessionDisplay.textContent = sessionId;
+      } else {
+        sessionDisplay.textContent = "No session ID found";
+        sessionDisplay.classList.add("text-zinc-500");
+      }
+    }
+
+    // Status UI Switching
+    if (status === "success") {
+      if (statusIconBg) {
+        statusIconBg.className =
+          "mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+      }
+      if (statusIcon) {
+        statusIcon.className = "ph ph-check-circle text-3xl";
+      }
+      if (statusTitle) {
+        statusTitle.textContent = "Payment Successful!";
+      }
+      if (statusMessage) {
+        statusMessage.textContent =
+          "Thank you for your order. Your hosting service is being provisioned and will be ready shortly.";
+      }
+      triggerCustomAlert(
+        "Payment Complete",
+        "Your transaction was successful.",
+        "success",
+      );
+    } else if (status === "cancel") {
+      if (statusIconBg) {
+        statusIconBg.className =
+          "mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20";
+      }
+      if (statusIcon) {
+        statusIcon.className = "ph ph-x-circle text-3xl";
+      }
+      if (statusTitle) {
+        statusTitle.textContent = "Payment Cancelled";
+      }
+      if (statusMessage) {
+        statusMessage.textContent =
+          "The checkout session was cancelled. No charges were made to your account.";
+      }
+      triggerCustomAlert(
+        "Order Cancelled",
+        "Payment process was interrupted or cancelled.",
+        "warn",
+      );
     } else {
-      btnAction.href = "https://panel.nikostuff.com";
+      if (statusIconBg) {
+        statusIconBg.className =
+          "mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20";
+      }
+      if (statusIcon) {
+        statusIcon.className = "ph ph-warning-circle text-3xl";
+      }
+      if (statusTitle) {
+        statusTitle.textContent = "Unknown Status";
+      }
+      if (statusMessage) {
+        statusMessage.textContent =
+          "We couldn't determine the status of your payment. Please check your dashboard or contact support.";
+      }
+      triggerCustomAlert(
+        "Status Unknown",
+        "Invalid status parameter received.",
+        "error",
+      );
     }
-  }
 
-  function triggerCustomAlert(
-    title: string,
-    description: string,
-    state: "success" | "error" | "warn" | "info" = "info",
-  ) {
-    const alertEvent = new CustomEvent("app:show_alert", {
-      detail: { title, description, state },
-    });
-    window.dispatchEvent(alertEvent);
-  }
-
-  if (sessionId && sessionDisplay) {
-    sessionDisplay.textContent = sessionId;
-  } else if (sessionDisplay) {
-    sessionDisplay.textContent = "No session ID found";
-    sessionDisplay.classList.add("text-zinc-500");
-  }
-
-  if (status === "success") {
-    if (statusIconBg) {
-      statusIconBg.className =
-        "mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
-    }
-    if (statusIcon) {
-      statusIcon.className = "ph ph-check-circle text-3xl";
-    }
-    if (statusTitle) {
-      statusTitle.textContent = "Payment Successful!";
-    }
-    if (statusMessage) {
-      statusMessage.textContent =
-        "Thank you for your order. Your hosting service is being provisioned and will be ready shortly.";
-    }
-    triggerCustomAlert(
-      "Payment Complete",
-      "Your transaction was successful.",
-      "success",
-    );
-  } else if (status === "cancel") {
-    if (statusIconBg) {
-      statusIconBg.className =
-        "mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20";
-    }
-    if (statusIcon) {
-      statusIcon.className = "ph ph-x-circle text-3xl";
-    }
-    if (statusTitle) {
-      statusTitle.textContent = "Payment Cancelled";
-    }
-    if (statusMessage) {
-      statusMessage.textContent =
-        "The checkout session was cancelled. No charges were made to your account.";
-    }
-    triggerCustomAlert(
-      "Order Cancelled",
-      "Payment process was interrupted or cancelled.",
-      "warn",
-    );
-  } else {
-    if (statusIconBg) {
-      statusIconBg.className =
-        "mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20";
-    }
-    if (statusIcon) {
-      statusIcon.className = "ph ph-warning-circle text-3xl";
-    }
-    if (statusTitle) {
-      statusTitle.textContent = "Unknown Status";
-    }
-    if (statusMessage) {
-      statusMessage.textContent =
-        "We couldn't determine the status of your payment. Please check your dashboard or contact support.";
-    }
-    triggerCustomAlert(
-      "Status Unknown",
-      "Invalid status parameter received.",
-      "error",
-    );
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
+    // Trigger GSAP Animation
     gsap.to("#status_card", {
       opacity: 1,
       scale: 1,
@@ -174,5 +181,12 @@ import POD from "@components/POD.astro";
       ease: "back.out(1.4)",
       delay: 0.1,
     });
-  });
+  }
+
+  // Run on page load (handles Astro View Transitions if enabled)
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initPaymentStatus);
+  } else {
+    initPaymentStatus();
+  }
 </script>
