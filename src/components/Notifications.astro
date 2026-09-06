@@ -4,7 +4,7 @@
 
 <div
   id="toast_container"
-  class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center pointer-events-none gap-2 w-full max-w-sm px-4 perspective-[1000px] transition-all duration-300"
+  class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center pointer-events-none gap-2 w-full max-w-sm px-4 perspective-[1000px]"
 >
 </div>
 
@@ -15,7 +15,10 @@
     <i class="toast-icon ph text-2xl shrink-0 mt-0.5"></i>
 
     <div class="flex-1 min-w-0">
-      <h4 class="toast-title text-sm font-semibold text-white leading-tight">
+      <h4
+        aria-label="Notification"
+        class="toast-title text-sm font-semibold text-white leading-tight"
+      >
       </h4>
       <p
         class="toast-desc text-xs text-white/60 mt-0.5 whitespace-normal wrap-break-word leading-normal"
@@ -47,9 +50,9 @@
     duration: number;
   }
 
-  const container = document.getElementById("toast_container");
-  const blueprint = document.getElementById("toast_blueprint") as HTMLTemplateElement | null;
-
+  // Define mutable variables scoped within the module
+  let container: HTMLElement | null = null;
+  let blueprint: HTMLTemplateElement | null = null;
   let activeToasts: ActiveToastItem[] = [];
   let isContainerHovered = false;
   const GAP_SPACING = 12;
@@ -73,15 +76,12 @@
     },
   };
 
-  // ----------------------------------------------------
-  // Dynamic Height & Cascade Layout Engine
-  // ----------------------------------------------------
   function updateToastLayout() {
     let accumulatedHeight = 0;
 
     activeToasts.forEach((item, index) => {
       const toast = item.element;
-      
+
       if (isContainerHovered) {
         gsap.to(toast, {
           y: -accumulatedHeight,
@@ -91,12 +91,13 @@
           ease: "power2.out",
           overwrite: "auto",
         });
-        
+
         accumulatedHeight += toast.offsetHeight + GAP_SPACING;
       } else {
         const scaleFactor = Math.max(0.85, 1 - index * 0.05);
         const yOffset = -index * 8;
-        const opacityFactor = index === 0 ? 1 : index === 1 ? 0.8 : index === 2 ? 0.4 : 0;
+        const opacityFactor =
+          index === 0 ? 1 : index === 1 ? 0.8 : index === 2 ? 0.4 : 0;
 
         gsap.to(toast, {
           y: yOffset,
@@ -106,14 +107,12 @@
           ease: "power2.out",
           overwrite: "auto",
         });
-        
-        // Match base item height for collapsed layout tracking
+
         if (index === 0) accumulatedHeight = toast.offsetHeight;
       }
       toast.style.zIndex = String(100 - index);
     });
 
-    // Adjust container boundary shapes on the fly to bridge hitboxes safely
     if (container) {
       if (isContainerHovered && activeToasts.length > 0) {
         container.style.height = `${accumulatedHeight}px`;
@@ -127,12 +126,9 @@
     }
   }
 
-  // ----------------------------------------------------
-  // Smart Lifetime/Dismiss Tracking
-  // ----------------------------------------------------
   function startToastTimer(item: ActiveToastItem) {
     if (item.timeoutId) return;
-    
+
     item.timeoutId = setTimeout(() => {
       dismissToast(item.element);
     }, item.duration);
@@ -140,18 +136,19 @@
 
   function pauseToastTimer(item: ActiveToastItem) {
     if (!item.timeoutId) return;
-    
+
     clearTimeout(item.timeoutId);
     item.timeoutId = null;
-    
+
     const elapsed = Date.now() - item.createdAt;
     item.duration = Math.max(1000, item.duration - elapsed);
   }
 
-  // ----------------------------------------------------
-  // Create and Setup Toast DOM Block
-  // ----------------------------------------------------
-  function createToast(title: string, description: string, state: ToastDetail["state"]) {
+  function createToast(
+    title: string,
+    description: string,
+    state: ToastDetail["state"],
+  ) {
     if (!container || !blueprint) return;
 
     const config = stateConfig[state] || stateConfig.info;
@@ -165,7 +162,7 @@
     if (titleEl) titleEl.textContent = title;
     if (descEl) descEl.textContent = description;
     if (iconEl) iconEl.classList.add(config.icon);
-    
+
     toast.classList.add(...config.bg);
 
     const newToastItem: ActiveToastItem = {
@@ -179,15 +176,24 @@
     container.appendChild(toast);
 
     if (isContainerHovered) {
-      gsap.fromTo(toast,
+      gsap.fromTo(
+        toast,
         { y: 60, scale: 0.9, opacity: 0 },
-        { y: 0, scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.2)", onComplete: updateToastLayout }
+        {
+          y: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 0.4,
+          ease: "back.out(1.2)",
+          onComplete: updateToastLayout,
+        },
       );
       pauseToastTimer(newToastItem);
     } else {
-      gsap.fromTo(toast,
+      gsap.fromTo(
+        toast,
         { y: 60, scale: 0.9, opacity: 0 },
-        { y: 0, scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.2)" }
+        { y: 0, scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.2)" },
       );
       startToastTimer(newToastItem);
       updateToastLayout();
@@ -196,7 +202,7 @@
     toast.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
       if (target.tagName === "BUTTON" || target.closest("button")) {
-        e.stopPropagation(); // Stop element bubbled clicks from triggering other cards
+        e.stopPropagation();
         if (newToastItem.timeoutId) clearTimeout(newToastItem.timeoutId);
         dismissToast(toast);
       }
@@ -204,7 +210,6 @@
   }
 
   function dismissToast(toastElement: HTMLElement) {
-    // Instantly remove from calculations array so it doesn't snap backwards mid-animation
     activeToasts = activeToasts.filter((item) => item.element !== toastElement);
 
     gsap.to(toastElement, {
@@ -218,33 +223,72 @@
       },
     });
 
-    // Recalculate remaining list items cleanly
     updateToastLayout();
   }
 
-  // ----------------------------------------------------
-  // Interactive Listeners
-  // ----------------------------------------------------
-  container?.addEventListener("mouseenter", () => {
+  // Extract handlers into shared references to enable safe listener removals
+  const handleMouseEnter = () => {
     isContainerHovered = true;
     activeToasts.forEach(pauseToastTimer);
     updateToastLayout();
-  });
+  };
 
-  container?.addEventListener("mouseleave", () => {
+  const handleMouseLeave = () => {
     isContainerHovered = false;
     activeToasts.forEach((item) => {
       item.createdAt = Date.now();
       startToastTimer(item);
     });
     updateToastLayout();
-  });
+  };
 
-  window.addEventListener("app:show_alert", (e) => {
+  const handleShowAlert = (e: Event) => {
     const customEvent = e as CustomEvent<ToastDetail>;
     if (!customEvent.detail) return;
 
     const { title, description, state } = customEvent.detail;
     createToast(title, description, state);
-  });
+  };
+
+  // Setup/Teardown Engine Loop
+  function initToastEngine() {
+    // 1. Re-query the current layout nodes on page navigation swaps
+    container = document.getElementById("toast_container");
+    blueprint = document.getElementById(
+      "toast_blueprint",
+    ) as HTMLTemplateElement | null;
+
+    if (!container) return;
+
+    // 2. Attach listeners onto the active page DOM elements
+    container.addEventListener("mouseenter", handleMouseEnter);
+    container.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("app:show_alert", handleShowAlert);
+
+    // 3. Clean up before swapping to the next page to prevent background processing memory leaks
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        // Clear all active timers to avoid trying to remove deleted nodes in the background
+        activeToasts.forEach((item) => {
+          if (item.timeoutId) clearTimeout(item.timeoutId);
+        });
+        activeToasts = [];
+        isContainerHovered = false;
+
+        // Disconnect layout elements
+        if (container) {
+          container.removeEventListener("mouseenter", handleMouseEnter);
+          container.removeEventListener("mouseleave", handleMouseLeave);
+        }
+        window.removeEventListener("app:show_alert", handleShowAlert);
+      },
+      { once: true },
+    );
+  }
+
+  // Boot on loading layout instance changes inside Astro
+  document.addEventListener("astro:page-load", initToastEngine);
+  // Boot on DOM content loaded
+  initToastEngine();
 </script>
