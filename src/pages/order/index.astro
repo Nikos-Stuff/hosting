@@ -1,0 +1,178 @@
+---
+import PageLayout from "@layouts/PageLayout.astro";
+import FancyDiv from "@components/FancyDiv.astro";
+import POD from "@components/POD.astro";
+---
+
+<PageLayout title="Payment Status" description="Order Payment Status">
+  <POD />
+  <div class="relative w-full flex items-center justify-center pt-60">
+    <FancyDiv isAnimated={true} theme="default_big" class="w-full">
+      <section
+        id="status_card"
+        class="relative animate text-center w-full max-w-md mx-auto opacity-0"
+      >
+        <div
+          id="status-icon-bg"
+          class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20"
+        >
+          <i id="status-icon" class="ph ph-circle-notch text-3xl animate-spin"
+          ></i>
+        </div>
+
+        <h1
+          id="status-title"
+          class="text-2xl font-bold tracking-tight text-white"
+        >
+          Processing Payment...
+        </h1>
+
+        <div
+          class="mt-3 inline-block rounded-lg bg-zinc-900/60 px-4 py-2 text-xs font-mono text-zinc-400 break-all border border-zinc-800"
+        >
+          <span class="text-zinc-500 select-none">Session: </span>
+          <span id="session-display">Loading Session...</span>
+        </div>
+
+        <div class="mt-6 space-y-3 text-sm text-zinc-300">
+          <p id="status-message">
+            Please wait while we verify your payment details.
+          </p>
+        </div>
+
+        <div
+          class="mt-8 flex flex-col sm:flex-row gap-3 w-full items-center justify-center"
+        >
+          <a
+            href="https://panel.nikostuff.com"
+            id="btn-action"
+            class="group w-full p-4 gap-3 flex items-center border rounded-lg hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out text-center cursor-pointer justify-center"
+          >
+            <span
+              class="w-full z-10 relative text-zinc-300 group-hover:text-white transition-colors duration-300 flex items-center justify-center gap-2"
+            >
+              <i class="ph ph-arrow-circle-up-right text-base"></i>
+              Open Panel
+            </span>
+          </a>
+        </div>
+      </section>
+    </FancyDiv>
+  </div>
+</PageLayout>
+
+<script>
+  import gsap from "gsap";
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const status = urlParams.get("status");
+  const sessionId = urlParams.get("session_id");
+  const identifier = urlParams.get("identifier") || urlParams.get("server_id");
+
+  const sessionDisplay = document.getElementById("session-display");
+  const statusIconBg = document.getElementById("status-icon-bg");
+  const statusIcon = document.getElementById("status-icon");
+  const statusTitle = document.getElementById("status-title");
+  const statusMessage = document.getElementById("status-message");
+  const btnAction = document.getElementById(
+    "btn-action",
+  ) as HTMLAnchorElement | null;
+
+  if (btnAction) {
+    if (identifier) {
+      btnAction.href = `https://panel.nikostuff.com/server/${identifier}/console`;
+    } else {
+      btnAction.href = "https://panel.nikostuff.com";
+    }
+  }
+
+  function triggerCustomAlert(
+    title: string,
+    description: string,
+    state: "success" | "error" | "warn" | "info" = "info",
+  ) {
+    const alertEvent = new CustomEvent("app:show_alert", {
+      detail: { title, description, state },
+    });
+    window.dispatchEvent(alertEvent);
+  }
+
+  if (sessionId && sessionDisplay) {
+    sessionDisplay.textContent = sessionId;
+  } else if (sessionDisplay) {
+    sessionDisplay.textContent = "No session ID found";
+    sessionDisplay.classList.add("text-zinc-500");
+  }
+
+  if (status === "success") {
+    if (statusIconBg) {
+      statusIconBg.className =
+        "mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+    }
+    if (statusIcon) {
+      statusIcon.className = "ph ph-check-circle text-3xl";
+    }
+    if (statusTitle) {
+      statusTitle.textContent = "Payment Successful!";
+    }
+    if (statusMessage) {
+      statusMessage.textContent =
+        "Thank you for your order. Your hosting service is being provisioned and will be ready shortly.";
+    }
+    triggerCustomAlert(
+      "Payment Complete",
+      "Your transaction was successful.",
+      "success",
+    );
+  } else if (status === "cancel") {
+    if (statusIconBg) {
+      statusIconBg.className =
+        "mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20";
+    }
+    if (statusIcon) {
+      statusIcon.className = "ph ph-x-circle text-3xl";
+    }
+    if (statusTitle) {
+      statusTitle.textContent = "Payment Cancelled";
+    }
+    if (statusMessage) {
+      statusMessage.textContent =
+        "The checkout session was cancelled. No charges were made to your account.";
+    }
+    triggerCustomAlert(
+      "Order Cancelled",
+      "Payment process was interrupted or cancelled.",
+      "warn",
+    );
+  } else {
+    if (statusIconBg) {
+      statusIconBg.className =
+        "mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20";
+    }
+    if (statusIcon) {
+      statusIcon.className = "ph ph-warning-circle text-3xl";
+    }
+    if (statusTitle) {
+      statusTitle.textContent = "Unknown Status";
+    }
+    if (statusMessage) {
+      statusMessage.textContent =
+        "We couldn't determine the status of your payment. Please check your dashboard or contact support.";
+    }
+    triggerCustomAlert(
+      "Status Unknown",
+      "Invalid status parameter received.",
+      "error",
+    );
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    gsap.to("#status_card", {
+      opacity: 1,
+      scale: 1,
+      duration: 0.6,
+      ease: "back.out(1.4)",
+      delay: 0.1,
+    });
+  });
+</script>
