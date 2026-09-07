@@ -1,7 +1,7 @@
 ---
 title: "v1.2.0"
 date: "September 7, 2026"
-time: 0:00
+time: 00:00
 draft: false
 tags:
   - News
