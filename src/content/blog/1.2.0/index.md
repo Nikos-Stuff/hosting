@@ -16,4 +16,4 @@ We’ve officially completed a full purge of suspicious accounts on our free tie
 - **100% Secure & Private:** All billing details are handled directly by Stripe-we never see or store your private info.
 - **Better Reliability:** Fewer abusers hogging resources means better overall performance and stability for genuine users.
 
-That's it for now. See you soon!
+That's it for now.  See you soon!
