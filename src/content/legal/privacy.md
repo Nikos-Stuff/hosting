@@ -1,6 +1,6 @@
 ---
 title: "Privacy Policy for Hosting Service"
-date: "4/1/2026"
+date: "9/8/2026"
 ---
 
 ## 1) General Information
@@ -27,10 +27,11 @@ We collect minimal data necessary to provide a stable service:
 - **Connectivity:** IP addresses and server logs (retained temporarily for security).
 - **Usage:** Statistics related to your server's resource consumption.
 
-### 2.2) Payment Data (Subplans & Stripe)
-When you subscribe to a paid plan (e.g., "Friends" package):
-- **Payment Processing:** Payments are processed securely via **Stripe**. 
+### 2.2) Payment & Verification Data (Subplans & Stripe)
+When you subscribe to a paid plan or undergo Free Tier card verification via Stripe:
+- **Payment & Verification Processing:** Transactions and card verification are processed securely via **Stripe**. 
 - **Information Collected:** Stripe collects your payment method details and billing address. **Niko's Stuff does not store your full credit card numbers.**
+- **Purpose:** Card details for free tier users are used strictly for identity verification, anti-abuse checks, and Setup Intents to prevent multi-accounting, and will not be charged unless you upgrade to a paid subplan.
 - **Transaction History:** We retain records of your subscription status and payment history for accounting purposes.
 
 ### 2.3) AI-Powered Tools (Log Analyzer & Server Checker)
@@ -45,7 +46,7 @@ Our service utilizes the **Google Gemini API** to provide automated technical as
 ## 3) Data Sharing & Third-Party Processors
 
 We only share data with essential service providers:
-- **Stripe:** For payment processing and subscription management.
+- **Stripe:** For payment processing, subscription management, and free tier identity/card verification.
 - **Google Cloud / Alphabet Inc.:** For AI analysis services via API (Logs/Server Checker).
 - **Ko-fi:** For managing legacy donations and associated perks.
 - **Infrastructure Providers:** For the physical/virtual servers where your data resides.

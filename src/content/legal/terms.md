@@ -1,6 +1,6 @@
 ---
 title: "Terms of Service for Hosting Service"
-date: "4/1/2026"
+date: "9/8/2026"
 ---
 
 ---
@@ -52,6 +52,10 @@ We reserve the right to suspend or terminate any server that violates the AUP or
 2. **Cancellations:** You can cancel at any time via the billing portal. 
 3. **Refunds:** Digital resource allocations are generally non-refundable unless required by Polish Consumer Law.
 4. **Taxation:** All listed prices include applicable VAT per Polish/EU regulations.
+5. **Free Tier Card Verification:** 
+   - **Identity & Anti-Abuse Verification:** To prevent resource abuse and multi-account creation, the Free Tier requires users to provide a valid credit or debit card via **Stripe** for verification purposes prior to server deployment.
+   - **Authorization Holds / Setup Intents:** By submitting your card details, you authorize Niko’s Stuff to use Stripe’s Setup Intent or issue a temporary, refundable micro-charge (authorization hold) to verify the validity of the payment method. This temporary amount is released immediately and is not a payment for service.
+   - **Future Billing Consent:** Card details saved during free tier verification are stored securely by Stripe and will **not** be charged for recurring subscription fees unless you explicitly upgrade to a Paid Subplan.
 
 ---
 
