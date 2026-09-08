@@ -1,64 +1,72 @@
 ---
 import PageLayout from "@layouts/PageLayout.astro";
-import FancyDiv from "@components/FancyDiv.astro";
-import POD from "@components/POD.astro";
 ---
 
 <PageLayout title="Payment Status" description="Order Payment Status">
-  <POD />
-  <div class="relative w-full flex items-center justify-center pt-60">
-    <FancyDiv isAnimated={true} theme="default_big" class="w-full">
-      <section
+  <section
+    class="animate w-full max-w-7xl mx-auto pt-24 pb-12 px-4 md:px-8 flex items-center justify-center min-h-[70vh]"
+  >
+    <div class="relative w-full max-w-lg">
+      <!-- Payment Status Card Component -->
+      <div
         id="status_card"
-        class="relative animate text-center w-full max-w-md mx-auto opacity-0"
+        class="fi-section relative z-10 p-6 md:p-10 text-center space-y-6 opacity-0 translate-y-4"
       >
+        <!-- Status Icon Container -->
         <div
           id="status-icon-bg"
-          class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20"
+          class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary-500/10 text-primary-400 border border-primary-500/20"
         >
           <i id="status-icon" class="ph ph-circle-notch text-3xl animate-spin"
           ></i>
         </div>
 
-        <h1
-          id="status-title"
-          class="text-2xl font-bold tracking-tight text-white"
-        >
-          Processing Payment...
-        </h1>
+        <div class="space-y-2">
+          <span
+            class="text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+          >
+            Transaction Details
+          </span>
 
-        <div
-          class="mt-3 inline-block rounded-lg bg-zinc-900/60 px-4 py-2 text-xs font-mono text-zinc-400 break-all border border-zinc-800"
-        >
-          <span class="text-zinc-500 select-none">Session: </span>
-          <span id="session-display">Loading Session...</span>
-        </div>
+          <h1
+            id="status-title"
+            class="text-2xl font-bold tracking-tight text-[rgb(var(--c-50))]"
+          >
+            Processing Payment...
+          </h1>
 
-        <div class="mt-6 space-y-3 text-sm text-zinc-300">
-          <p id="status-message">
+          <p
+            id="status-message"
+            class="text-xs md:text-sm text-[rgb(var(--c-400))] max-w-sm mx-auto leading-relaxed pt-1"
+          >
             Please wait while we verify your payment details.
           </p>
         </div>
 
+        <!-- Session ID Display Box -->
         <div
-          class="mt-8 flex flex-col sm:flex-row gap-3 w-full items-center justify-center"
+          class="inline-flex items-center gap-2 rounded-[4px] bg-[rgb(var(--c-900))] px-3 py-2 text-xs font-mono text-[rgb(var(--c-300))] border border-hairline max-w-full overflow-hidden text-ellipsis"
         >
+          <span class="text-[rgb(var(--c-500))] select-none">Session:</span>
+          <span id="session-display" class="truncate">Loading Session...</span>
+        </div>
+
+        <!-- Action Button -->
+        <div class="pt-2">
           <a
             href="https://panel.nikostuff.com"
             id="btn-action"
-            class="group w-full p-4 gap-3 flex items-center border rounded-lg hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out text-center cursor-pointer justify-center"
+            class="fi-btn group w-full p-3 gap-2 flex items-center justify-center border border-hairline rounded-[4px] bg-transparent text-[rgb(var(--c-50))] hover:bg-white/[0.03] transition-all duration-300 ease-in-out font-medium text-xs"
           >
-            <span
-              class="w-full z-10 relative text-zinc-300 group-hover:text-white transition-colors duration-300 flex items-center justify-center gap-2"
-            >
-              <i class="ph ph-arrow-circle-up-right text-base"></i>
-              Open Panel
+            <span class="relative z-10 flex items-center gap-2">
+              <i class="ph ph-arrow-circle-up-right text-sm"></i>
+              <span id="btn-text">Open Panel</span>
             </span>
           </a>
         </div>
-      </section>
-    </FancyDiv>
-  </div>
+      </div>
+    </div>
+  </section>
 </PageLayout>
 
 <script>
@@ -68,8 +76,9 @@ import POD from "@components/POD.astro";
     const urlParams = new URLSearchParams(window.location.search);
     const status = urlParams.get("status");
     const sessionId = urlParams.get("session_id");
-    const identifier =
-      urlParams.get("identifier") || urlParams.get("server_id");
+    
+    // Treat session_id or explicit identifier as the server ID
+    const serverId = urlParams.get("server_id") || urlParams.get("identifier") || sessionId;
 
     const sessionDisplay = document.getElementById("session-display");
     const statusIconBg = document.getElementById("status-icon-bg");
@@ -79,26 +88,7 @@ import POD from "@components/POD.astro";
     const btnAction = document.getElementById(
       "btn-action",
     ) as HTMLAnchorElement | null;
-
-    // Update Button HREF dynamically based on identifier
-    if (btnAction) {
-      if (identifier) {
-        btnAction.href = `https://panel.nikostuff.com/server/${encodeURIComponent(identifier)}/console`;
-      } else {
-        btnAction.href = "https://panel.nikostuff.com";
-      }
-    }
-
-    function triggerCustomAlert(
-      title: string,
-      description: string,
-      state: "success" | "error" | "warn" | "info" = "info",
-    ) {
-      const alertEvent = new CustomEvent("app:show_alert", {
-        detail: { title, description, state },
-      });
-      window.dispatchEvent(alertEvent);
-    }
+    const btnText = document.getElementById("btn-text");
 
     // Display Session ID
     if (sessionDisplay) {
@@ -106,7 +96,7 @@ import POD from "@components/POD.astro";
         sessionDisplay.textContent = sessionId;
       } else {
         sessionDisplay.textContent = "No session ID found";
-        sessionDisplay.classList.add("text-zinc-500");
+        sessionDisplay.classList.add("text-[rgb(var(--c-500))]/70");
       }
     }
 
@@ -114,7 +104,7 @@ import POD from "@components/POD.astro";
     if (status === "success") {
       if (statusIconBg) {
         statusIconBg.className =
-          "mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+          "mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
       }
       if (statusIcon) {
         statusIcon.className = "ph ph-check-circle text-3xl";
@@ -126,15 +116,20 @@ import POD from "@components/POD.astro";
         statusMessage.textContent =
           "Thank you for your order. Your hosting service is being provisioned and will be ready shortly.";
       }
-      triggerCustomAlert(
-        "Payment Complete",
-        "Your transaction was successful.",
-        "success",
-      );
+      if (btnAction) {
+        if (serverId) {
+          btnAction.href = `https://panel.nikostuff.com/server/${encodeURIComponent(serverId)}/console`;
+        } else {
+          btnAction.href = "https://panel.nikostuff.com";
+        }
+      }
+      if (btnText) {
+        btnText.textContent = "Go to Console";
+      }
     } else if (status === "cancel") {
       if (statusIconBg) {
         statusIconBg.className =
-          "mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20";
+          "mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20";
       }
       if (statusIcon) {
         statusIcon.className = "ph ph-x-circle text-3xl";
@@ -146,15 +141,16 @@ import POD from "@components/POD.astro";
         statusMessage.textContent =
           "The checkout session was cancelled. No charges were made to your account.";
       }
-      triggerCustomAlert(
-        "Order Cancelled",
-        "Payment process was interrupted or cancelled.",
-        "warn",
-      );
+      if (btnAction) {
+        btnAction.href = "https://panel.nikostuff.com";
+      }
+      if (btnText) {
+        btnText.textContent = "Open Panel";
+      }
     } else {
       if (statusIconBg) {
         statusIconBg.className =
-          "mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20";
+          "mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20";
       }
       if (statusIcon) {
         statusIcon.className = "ph ph-warning-circle text-3xl";
@@ -166,24 +162,25 @@ import POD from "@components/POD.astro";
         statusMessage.textContent =
           "We couldn't determine the status of your payment. Please check your dashboard or contact support.";
       }
-      triggerCustomAlert(
-        "Status Unknown",
-        "Invalid status parameter received.",
-        "error",
-      );
+      if (btnAction) {
+        btnAction.href = "https://panel.nikostuff.com";
+      }
+      if (btnText) {
+        btnText.textContent = "Open Panel";
+      }
     }
 
     // Trigger GSAP Animation
     gsap.to("#status_card", {
       opacity: 1,
-      scale: 1,
+      y: 0,
       duration: 0.6,
-      ease: "back.out(1.4)",
+      ease: "power2.out",
       delay: 0.1,
     });
   }
 
-  // Run on page load (handles Astro View Transitions if enabled)
+  // Run on page load
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initPaymentStatus);
   } else {
