@@ -208,13 +208,13 @@
               >
                 <div
                   id="boost_cpu_bar"
-                  class="absolute h-full bg-[rgb(var(--c-700))] opacity-50"
+                  class="absolute h-full bg-[rgb(var(--c-700))] opacity-50 transition-all duration-500 ease-in-out"
                   style="width: 0%"
                 >
                 </div>
                 <div
                   id="cpu_bar"
-                  class="relative h-full bg-[rgb(var(--primary-500))] font-semibold"
+                  class="relative h-full bg-[rgb(var(--primary-500))] font-semibold transition-all duration-500 ease-in-out"
                   style="width: 0%"
                 >
                 </div>
@@ -235,13 +235,13 @@
               >
                 <div
                   id="boost_ram_bar"
-                  class="absolute h-full bg-[rgb(var(--c-700))] opacity-50"
+                  class="absolute h-full bg-[rgb(var(--c-700))] opacity-50 transition-all duration-500 ease-in-out"
                   style="width: 0%"
                 >
                 </div>
                 <div
                   id="ram_bar"
-                  class="relative h-full bg-[rgb(var(--primary-500))] font-semibold"
+                  class="relative h-full bg-[rgb(var(--primary-500))] font-semibold transition-all duration-500 ease-in-out"
                   style="width: 0%"
                 >
                 </div>
@@ -262,13 +262,13 @@
               >
                 <div
                   id="boost_ssd_bar"
-                  class="absolute h-full bg-[rgb(var(--c-700))] opacity-50"
+                  class="absolute h-full bg-[rgb(var(--c-700))] opacity-50 transition-all duration-500 ease-in-out"
                   style="width: 0%"
                 >
                 </div>
                 <div
                   id="ssd_bar"
-                  class="relative h-full bg-[rgb(var(--primary-500))] font-semibold"
+                  class="relative h-full bg-[rgb(var(--primary-500))] font-semibold transition-all duration-500 ease-in-out"
                   style="width: 0%"
                 >
                 </div>
@@ -292,7 +292,7 @@
             class="relative w-20 h-20 my-1"
             data-tooltip="-"
           >
-            <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+            <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90 transition-all duration-500 ease-in-out">
               <circle
                 cx="50"
                 cy="50"
@@ -309,6 +309,7 @@
                 stroke-width="10"
                 stroke-linecap="round"
                 fill="none"
+                class="transition-all duration-500 ease-in-out"
                 stroke-dasharray="0 999"></circle>
               <circle
                 id="availability_after_circle"
@@ -320,6 +321,7 @@
                 stroke-width="10"
                 stroke-linecap="round"
                 fill="none"
+                class="transition-all duration-500 ease-in-out"
                 stroke-dasharray="0 999"></circle>
             </svg>
 
@@ -1014,10 +1016,10 @@
 
   function initCalculatorDefaults() {
     const defaultLocation = locationOptions?.querySelector(
-      '[data-location_name="europe_free"]',
+      '[data-location_name="europe"]',
     );
     if (defaultLocation) {
-      data_storage.location = "europe_free";
+      data_storage.location = "europe";
       setSelectedLocationOption(defaultLocation);
     }
 
