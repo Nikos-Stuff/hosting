@@ -4,19 +4,57 @@ import { LEGAL } from "@consts";
 ---
 
 <PageLayout title="TOS / Privacy Policy" description={LEGAL.DESCRIPTION}>
-  <div class="justify-center max-w-3xl mx-auto px-4 py-16 sm:py-24 lg:py-32">
-    <h1 class="text-4xl font-bold mb-6">Documents:</h1>
-    <ul class="list-disc list-inside space-y-2">
-      <li>
-        <a href="/legal/privacy" class="text-blue-600 hover:underline">
-          Privacy Policy
-        </a>
-      </li>
-      <li>
-        <a href="/legal/terms" class="text-blue-600 hover:underline">
-          Terms Of Service
-        </a>
-      </li>
-    </ul>
-  </div>
+  <section
+    class="w-full max-w-7xl mx-auto pt-24 pb-12 px-4 md:px-8 flex items-center justify-center min-h-[70vh]"
+  >
+    <div class="relative w-full max-w-xl">
+      <!-- Legal Documents Card Component -->
+      <div
+        class="fi-section relative z-10 p-6 md:p-10 text-left space-y-6"
+      >
+        <div class="space-y-2">
+          <span
+            class="text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+          >
+            Legal & Compliance
+          </span>
+          <h1 class="text-2xl font-bold tracking-tight text-[rgb(var(--c-50))]">
+            Documents
+          </h1>
+          <p class="text-xs md:text-sm text-[rgb(var(--c-400))] leading-relaxed">
+            Please review our legal policies and terms of service regarding your use of our platform.
+          </p>
+        </div>
+
+        <!-- Links List styled as clean rows -->
+        <div class="space-y-2 pt-2">
+          <a
+            href="/legal/privacy"
+            class="fi-section-hoverable group flex items-center justify-between p-3.5 rounded-[4px] border border-hairline bg-[rgb(var(--c-900))] transition-all duration-200"
+          >
+            <div class="flex items-center gap-3">
+              <i class="ph ph-shield-check text-base text-[rgb(var(--c-300))] group-hover:text-[rgb(var(--c-50))] transition-colors"></i>
+              <span class="text-xs font-medium text-[rgb(var(--c-50))]">
+                Privacy Policy
+              </span>
+            </div>
+            <i class="ph ph-arrow-right text-xs text-[rgb(var(--c-400))] group-hover:translate-x-0.5 transition-transform"></i>
+          </a>
+
+          <a
+            href="/legal/terms"
+            class="fi-section-hoverable group flex items-center justify-between p-3.5 rounded-[4px] border border-hairline bg-[rgb(var(--c-900))] transition-all duration-200"
+          >
+            <div class="flex items-center gap-3">
+              <i class="ph ph-file-text text-base text-[rgb(var(--c-300))] group-hover:text-[rgb(var(--c-50))] transition-colors"></i>
+              <span class="text-xs font-medium text-[rgb(var(--c-50))]">
+                Terms Of Service
+              </span>
+            </div>
+            <i class="ph ph-arrow-right text-xs text-[rgb(var(--c-400))] group-hover:translate-x-0.5 transition-transform"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 </PageLayout>
