@@ -433,457 +433,622 @@
 </div>
 
 <script>
-  function initHostingCalculator() {
-    const locationOptions = document.getElementById("location_options");
-    const eggOptions = document.getElementById("egg_options");
-    const eggTemplate = document.getElementById("egg_template");
-    const subplanOptions = document.getElementById("subplan_options");
-    const clientEmailInput = document.getElementById(
-      "client_email",
-    ) as HTMLInputElement | null;
-    const placeOrderBtn = document.getElementById("place_order_btn");
-    const orderBlocker = document.getElementById("order_blocker");
-    const orderStatus = document.getElementById("order_activity");
+  // ------------------------------
+  // DOM ELEMENT REFERENCES
+  // ------------------------------
+  const locationOptions = document.getElementById(
+    "location_options",
+  ) as HTMLElement | null;
 
-    const cpuBar = document.getElementById("cpu_bar");
-    const ramBar = document.getElementById("ram_bar");
-    const ssdBar = document.getElementById("ssd_bar");
-    const cpuText = document.getElementById("cpu_text");
-    const ramText = document.getElementById("ram_text");
-    const ssdText = document.getElementById("ssd_text");
-    const boostCpuBar = document.getElementById("boost_cpu_bar");
-    const boostRamBar = document.getElementById("boost_ram_bar");
-    const boostSsdBar = document.getElementById("boost_ssd_bar");
+  const eggOptions = document.getElementById(
+    "egg_options",
+  ) as HTMLElement | null;
+  const eggTemplate = document.getElementById(
+    "egg_template",
+  ) as HTMLElement | null;
 
-    const availabilityBar = document.getElementById("availability_base_bar");
-    const availabilityAfterBar = document.getElementById(
-      "availability_after_bar",
-    );
-    const availabilityBaseCircle = document.getElementById(
-      "availability_base_circle",
-    ) as SVGCircleElement | null;
-    const availabilityAfterCircle = document.getElementById(
-      "availability_after_circle",
-    ) as SVGCircleElement | null;
-    const availabilityPercentText = document.getElementById(
-      "availability_percent_text",
-    );
-    const availabilityCircle = document.getElementById("availability_circle");
+  const subplanOptions = document.getElementById(
+    "subplan_options",
+  ) as HTMLElement | null;
 
-    const canDeployText = document.getElementById("can_deploy");
-    const estimatedCost = document.getElementById("estimated_cost");
+  const clientEmailInput = document.getElementById(
+    "client_email",
+  ) as HTMLInputElement | null;
+  const placeOrderBtn = document.getElementById(
+    "place_order_btn",
+  ) as HTMLElement | null;
+  const orderBlocker = document.getElementById(
+    "order_blocker",
+  ) as HTMLElement | null;
+  const orderStatus = document.getElementById(
+    "order_activity",
+  ) as HTMLElement | null;
 
-    function triggerCustomAlert(
-      title: string,
-      description: string,
-      state: "success" | "error" | "warn" | "info" = "error",
-    ) {
-      const alertEvent = new CustomEvent("app:show_alert", {
-        detail: { title, description, state },
-      });
-      window.dispatchEvent(alertEvent);
-    }
+  const cpuBar = document.getElementById("cpu_bar") as HTMLElement | null;
+  const ramBar = document.getElementById("ram_bar") as HTMLElement | null;
+  const ssdBar = document.getElementById("ssd_bar") as HTMLElement | null;
 
-    const egg_list = "https://api.nikostuff.com/HostingPelicanData?list_eggs";
-    const order_api =
-      "https://api.nikostuff.com/HostingOrderManager?place_order";
-    const status_api =
-      "https://api.nikostuff.com/HostingOrderManager?place_order_status";
-    const specs_api =
-      "https://api.nikostuff.com/HostingOrderManager?retrive_data";
+  const cpuText = document.getElementById("cpu_text") as HTMLElement | null;
+  const ramText = document.getElementById("ram_text") as HTMLElement | null;
+  const ssdText = document.getElementById("ssd_text") as HTMLElement | null;
 
-    const data_storage = {
-      egg_id: "",
-      client_email: "",
-      location: "",
-      subplan: "",
-      turnstile_token: "",
-    };
+  const boostCpuBar = document.getElementById(
+    "boost_cpu_bar",
+  ) as HTMLElement | null;
+  const boostRamBar = document.getElementById(
+    "boost_ram_bar",
+  ) as HTMLElement | null;
+  const boostSsdBar = document.getElementById(
+    "boost_ssd_bar",
+  ) as HTMLElement | null;
 
-    const AVAILABILITY_RADIUS = 42;
-    const AVAILABILITY_CIRCUMFERENCE = 2 * Math.PI * AVAILABILITY_RADIUS;
+  const availabilityBar = document.getElementById(
+    "availability_base_bar",
+  ) as HTMLElement | null;
+  const availabilityAfterBar = document.getElementById(
+    "availability_after_bar",
+  ) as HTMLElement | null;
 
-    function setStatus(text: string) {
-      if (orderStatus) orderStatus.textContent = text;
-    }
+  const availabilityBaseCircle = document.getElementById(
+    "availability_base_circle",
+  ) as SVGCircleElement | null;
+  const availabilityAfterCircle = document.getElementById(
+    "availability_after_circle",
+  ) as SVGCircleElement | null;
+  const availabilityPercentText = document.getElementById(
+    "availability_percent_text",
+  ) as HTMLElement | null;
+  const availabilityCircle = document.getElementById(
+    "availability_circle",
+  ) as HTMLElement | null;
 
-    let isCurrentlyRateLimited = false;
+  const canDeployText = document.getElementById(
+    "can_deploy",
+  ) as HTMLElement | null;
+  const estimatedCost = document.getElementById(
+    "estimated_cost",
+  ) as HTMLElement | null;
+  // ------------------------------
 
-    function setSelectedOption(
-      container: HTMLElement | null,
-      selector: string,
-      selectedOption: Element,
-    ) {
-      container?.querySelectorAll(selector).forEach((option) => {
-        if (!(option instanceof HTMLElement)) return;
-        option.classList.remove("border-primary-500", "bg-white/[0.05]");
-        option.classList.add("border-transparent");
-      });
+  // Alert trigger displayer
+  function triggerCustomAlert(
+    title: string,
+    description: string,
+    state: "success" | "error" | "warn" | "info" = "error",
+  ) {
+    const alertEvent = new CustomEvent("app:show_alert", {
+      detail: { title, description, state },
+    });
+    window.dispatchEvent(alertEvent);
+  }
 
-      if (selectedOption instanceof HTMLElement) {
-        selectedOption.classList.remove("border-transparent");
-        selectedOption.classList.add("border-primary-500", "bg-white/[0.05]");
-      }
-    }
+  const egg_list = "https://api.nikostuff.com/HostingPelicanData?list_eggs";
+  const order_api = "https://api.nikostuff.com/HostingOrderManager?place_order";
+  const status_api =
+    "https://api.nikostuff.com/HostingOrderManager?place_order_status";
+  const specs_api =
+    "https://api.nikostuff.com/HostingOrderManager?retrive_data";
 
-    async function updateSpecsAndCost(isBackgroundPolling = false) {
-      if (
-        !data_storage.egg_id ||
-        !data_storage.location ||
-        !data_storage.subplan
-      )
-        return;
+  const data_storage = {
+    egg_id: "",
+    client_email: "",
+    location: "",
+    subplan: "",
+    turnstile_token: "",
+  };
 
-      try {
-        const res = await fetch(specs_api, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            egg_id: data_storage.egg_id,
-            location: data_storage.location,
-            subplan: data_storage.subplan,
-          }),
-        });
+  const AVAILABILITY_RADIUS = 42;
+  const AVAILABILITY_CIRCUMFERENCE = 2 * Math.PI * AVAILABILITY_RADIUS;
 
-        if (!res.ok && res.status !== 429)
-          throw new Error(`Failed status: ${res.status}`);
+  function setStatus(text: string) {
+    if (orderStatus) orderStatus.textContent = text;
+  }
 
-        const contentType = res.headers.get("content-type");
-        if (contentType && contentType.includes("text/html")) return;
+  // Track if we have already alerted the user to prevent continuous alert spamming
+  let isCurrentlyRateLimited = false;
 
-        const textData = await res.text();
-        if (!textData || textData.trim() === "") return;
-
-        const data = JSON.parse(textData);
-
-        if (data.result === "Rate limited" || res.status === 429) {
-          if (!isCurrentlyRateLimited) {
-            isCurrentlyRateLimited = true;
-            triggerCustomAlert(
-              "Rate Limited",
-              "Please wait a moment before trying again.",
-              "warn",
-            );
-          }
-          return;
-        }
-
-        isCurrentlyRateLimited = false;
-
-        const canDeploy =
-          typeof data.can_deploy === "boolean" ? data.can_deploy : false;
-
-        const cpuBaseRaw = Math.max(0, Number(data.cpu) || 0);
-        const cpuBoostRaw = Math.max(0, Number(data.boost?.cpu) || 0);
-        const cpuTotalRaw = cpuBaseRaw + cpuBoostRaw;
-        const cpuMaxTotal = 800;
-        const cpuBase = Math.min(100, (cpuBaseRaw / cpuMaxTotal) * 100);
-        const cpuTotal = Math.min(100, (cpuTotalRaw / cpuMaxTotal) * 100);
-
-        const ramBaseRaw = Math.max(0, Number(data.ram) || 0);
-        const ramBoostRaw = Math.max(0, Number(data.boost?.ram) || 0);
-        const ramBase = Math.max(0, Math.min(100, ramBaseRaw));
-        const ramTotal = Math.max(0, Math.min(100, ramBaseRaw + ramBoostRaw));
-
-        const ssdBaseRaw = Math.max(0, Number(data.disk) || 0);
-        const ssdBoostRaw = Math.max(0, Number(data.boost?.disk) || 0);
-        const ssdBase = Math.max(0, Math.min(100, ssdBaseRaw));
-        const ssdTotal = Math.max(0, Math.min(100, ssdBaseRaw + ssdBoostRaw));
-
-        if (cpuText) cpuText.textContent = `CPU - ${cpuTotalRaw}%`;
-        if (ramText) ramText.textContent = `RAM - ${ramTotal} GB`;
-        if (ssdText) ssdText.textContent = `SSD STORAGE - ${ssdTotal} GB`;
-
-        if (cpuBar) cpuBar.style.width = `${cpuBase}%`;
-        if (boostCpuBar) boostCpuBar.style.width = `${cpuTotal}%`;
-
-        if (ramBar) ramBar.style.width = `${ramBase}%`;
-        if (boostRamBar) boostRamBar.style.width = `${ramTotal}%`;
-
-        if (ssdBar) ssdBar.style.width = `${ssdBase}%`;
-        if (boostSsdBar) boostSsdBar.style.width = `${ssdTotal}%`;
-
-        if (estimatedCost) estimatedCost.textContent = `$${data.price}`;
-
-        const availability = Math.max(
-          0,
-          Math.min(100, Number(data.availability) || 0),
-        );
-        const availabilityAfter = Math.max(
-          0,
-          Math.min(100, Number(data.availability_after) || 0),
-        );
-
-        if (availabilityBar) availabilityBar.style.width = `${availability}%`;
-        if (availabilityAfterBar)
-          availabilityAfterBar.style.width = `${availabilityAfter}%`;
-
-        if (availabilityBaseCircle) {
-          const dash = (availability / 100) * AVAILABILITY_CIRCUMFERENCE;
-          availabilityBaseCircle.setAttribute(
-            "stroke-dasharray",
-            `${dash} 999`,
-          );
-        }
-
-        if (availabilityAfterCircle) {
-          const dashAfter =
-            (availabilityAfter / 100) * AVAILABILITY_CIRCUMFERENCE;
-          availabilityAfterCircle.setAttribute(
-            "stroke-dasharray",
-            `${dashAfter} 999`,
-          );
-        }
-
-        if (availabilityPercentText)
-          availabilityPercentText.textContent = `${availability}%`;
-
-        if (canDeployText) {
-          canDeployText.textContent = canDeploy
-            ? "Server ready to deploy!"
-            : "Insufficient node capacity.";
-        }
-      } catch (err: any) {
-        if (!isBackgroundPolling) {
-          triggerCustomAlert("Pricing Sync Error", err.message || err, "error");
-        }
-      }
-    }
-
-    let emailTimer: ReturnType<typeof setTimeout> | undefined;
-    function commitEmail() {
-      if (!clientEmailInput) return;
-      data_storage.client_email = clientEmailInput.value.trim();
-    }
-
-    clientEmailInput?.addEventListener("input", () => {
-      if (emailTimer) clearTimeout(emailTimer);
-      emailTimer = setTimeout(commitEmail, 1500);
+  function setSelectedEggOption(selectedOption: Element) {
+    eggOptions?.querySelectorAll(".egg_option").forEach((option) => {
+      if (!(option instanceof HTMLElement)) return;
+      option.classList.remove(
+        "border-white/40",
+        "bg-white/10",
+        "ring-1",
+        "ring-white/30",
+      );
+      option.classList.add("border-transparent");
     });
 
-    clientEmailInput?.addEventListener("blur", () => {
-      if (emailTimer) clearTimeout(emailTimer);
-      commitEmail();
-    });
-
-    (window as any).onTurnstileSuccess = (token: string) => {
-      data_storage.turnstile_token = token || "";
-    };
-    (window as any).onTurnstileExpired = () => {
-      data_storage.turnstile_token = "";
-    };
-
-    type Egg = {
-      id: number;
-      tags: string[];
-      name: string;
-      desc: string;
-      image: string;
-    };
-
-    async function fetchEggs() {
-      try {
-        const res = await fetch(egg_list);
-        if (!res.ok) throw new Error("Failed to load eggs");
-
-        const data = await res.json();
-        const container = eggOptions?.querySelector(".grid");
-        if (!container || !eggTemplate) return;
-
-        container
-          .querySelectorAll(".egg_option, .category_header")
-          .forEach((el) => el.remove());
-
-        const eggs = Object.values(data).filter(
-          (item): item is Egg =>
-            typeof item === "object" && item !== null && "id" in item,
-        );
-
-        const grouped = eggs.reduce(
-          (acc, egg) => {
-            const category =
-              egg.tags && egg.tags.length > 0 ? egg.tags[0] : "Other";
-            if (!acc[category]) acc[category] = [];
-            acc[category].push(egg);
-            return acc;
-          },
-          {} as Record<string, Egg[]>,
-        );
-
-        for (const category of Object.keys(grouped).sort()) {
-          const header = document.createElement("div");
-          header.style.gridColumn = "1 / -1";
-          header.className =
-            "flex items-center w-full category_header pt-2 pb-1";
-
-          const headerText = document.createElement("h3");
-          headerText.className =
-            "text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))] mr-3 shrink-0";
-          headerText.textContent = category;
-
-          const headerLine = document.createElement("div");
-          headerLine.className = "h-px bg-hairline flex-grow";
-
-          header.appendChild(headerText);
-          header.appendChild(headerLine);
-          container.appendChild(header);
-
-          for (const egg of grouped[category].sort((a, b) =>
-            a.name.localeCompare(b.name),
-          )) {
-            const eggOption = eggTemplate.cloneNode(true);
-            if (!(eggOption instanceof HTMLElement)) continue;
-
-            eggOption.id = "";
-            eggOption.classList.add(
-              "egg_option",
-              "border",
-              "border-transparent",
-            );
-            eggOption.dataset.egg_id = String(egg.id);
-            eggOption.hidden = false;
-
-            const img = eggOption.querySelector("img");
-            if (img) {
-              img.src = egg.image || "/imgs/plc.png";
-              img.alt = egg.name || "";
-            }
-
-            const label = eggOption.querySelector("span");
-            if (label) label.textContent = egg.name || "";
-
-            eggOption.addEventListener("click", () => {
-              data_storage.egg_id = eggOption.getAttribute("data-egg_id") || "";
-              setSelectedOption(eggOptions, ".egg_option", eggOption);
-              updateSpecsAndCost(false);
-            });
-
-            container.appendChild(eggOption);
-          }
-        }
-      } catch (e: any) {
-        triggerCustomAlert(
-          "Application List Sync Failed",
-          e.message || e,
-          "error",
-        );
-      }
+    if (selectedOption instanceof HTMLElement) {
+      selectedOption.classList.remove("border-transparent");
+      selectedOption.classList.add(
+        "border-white/40",
+        "bg-white/10",
+        "ring-1",
+        "ring-white/30",
+      );
     }
+  }
 
+  function setSelectedLocationOption(selectedOption: Element) {
     locationOptions
       ?.querySelectorAll("[data-location_name]")
       .forEach((option) => {
-        option.addEventListener("click", () => {
-          data_storage.location =
-            option.getAttribute("data-location_name") || "";
-          setSelectedOption(locationOptions, "[data-location_name]", option);
-          updateSpecsAndCost(false);
-        });
+        if (!(option instanceof HTMLElement)) return;
+        option.classList.remove(
+          "border-white/40",
+          "bg-white/10",
+          "ring-1",
+          "ring-white/30",
+        );
+        option.classList.add("border", "border-transparent");
       });
 
+    if (selectedOption instanceof HTMLElement) {
+      selectedOption.classList.remove("border-transparent");
+      selectedOption.classList.add(
+        "border",
+        "border-white/40",
+        "bg-white/10",
+        "ring-1",
+        "ring-white/30",
+      );
+    }
+  }
+
+  function setSelectedSubplanOption(selectedOption: Element) {
     subplanOptions
       ?.querySelectorAll("[data-subplan_name]")
       .forEach((option) => {
-        option.addEventListener("click", () => {
-          data_storage.subplan = option.getAttribute("data-subplan_name") || "";
-          setSelectedOption(subplanOptions, "[data-subplan_name]", option);
-          updateSpecsAndCost(false);
-        });
+        if (!(option instanceof HTMLElement)) return;
+        option.classList.remove(
+          "border-white/40",
+          "bg-white/10",
+          "ring-1",
+          "ring-white/30",
+        );
+        option.classList.add("border", "border-transparent");
       });
 
-    placeOrderBtn?.addEventListener("click", async () => {
-      if (emailTimer) clearTimeout(emailTimer);
-      commitEmail();
+    if (selectedOption instanceof HTMLElement) {
+      selectedOption.classList.remove("border-transparent");
+      selectedOption.classList.add(
+        "border",
+        "border-white/40",
+        "bg-white/10",
+        "ring-1",
+        "ring-white/30",
+      );
+    }
+  }
 
-      if (orderBlocker) orderBlocker.removeAttribute("hidden");
+  // ------------------------------
+  // UPDATE STATS AND COST FUNCTION
+  // ------------------------------
+  async function updateSpecsAndCost(isBackgroundPolling = false) {
+    if (!data_storage.egg_id || !data_storage.location || !data_storage.subplan)
+      return;
 
-      let statusInterval: any = null;
-      let isOrderFinished = false;
+    try {
+      const res = await fetch(specs_api, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          egg_id: data_storage.egg_id,
+          location: data_storage.location,
+          subplan: data_storage.subplan,
+        }),
+      });
 
-      try {
-        setStatus("Processing deployment task...");
+      if (!res.ok && res.status !== 429)
+        throw new Error(
+          `Failed to fetch specs and cost. Status: ${res.status}`,
+        );
 
-        statusInterval = setInterval(async () => {
-          try {
-            const statusRes = await fetch(status_api);
-            if (statusRes.ok) {
-              const statusData = await statusRes.json();
-              if (!isOrderFinished && statusData?.result) {
-                setStatus(statusData.result);
-              }
-            }
-          } catch (statusErr) {
-            console.error(statusErr);
-          }
-        }, 500);
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("text/html")) {
+        return;
+      }
 
-        const res = await fetch(order_api, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data_storage),
-        });
+      const textData = await res.text();
 
-        isOrderFinished = true;
-        clearInterval(statusInterval);
+      if (!textData || textData.trim() === "") {
+        throw new Error("Server returned an empty response body.");
+      }
 
-        const textData = await res.text();
-        if (!textData) throw new Error("Empty server response.");
+      const data = JSON.parse(textData);
 
-        const data = JSON.parse(textData);
-
-        if (data.result === "Rate limited" || res.status === 429) {
-          if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
+      if (data.result === "Rate limited" || res.status === 429) {
+        if (!isCurrentlyRateLimited) {
+          isCurrentlyRateLimited = true;
           triggerCustomAlert(
-            "Order Throttled",
-            "Please wait a moment and try placing your order again.",
+            "Rate Limited",
+            "You are making requests too quickly. Please wait a moment before trying again.",
             "warn",
           );
-          return;
         }
+        return;
+      }
 
-        if (data.error) throw new Error(data.error);
+      isCurrentlyRateLimited = false;
 
-        if (data.status === "task_created") {
-          setStatus("Success! Redirecting to panel...");
-          setTimeout(() => {
-            if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
-            window.location.href =
-              data.redirect_url || "https://panel.nikostuff.com";
-          }, 2000);
-        } else {
-          if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
-          triggerCustomAlert(
-            "Order Failed",
-            "Deployment encountered an issue. Please try again.",
-            "error",
-          );
-        }
-      } catch (err: any) {
-        isOrderFinished = true;
-        if (statusInterval) clearInterval(statusInterval);
-        if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
-        triggerCustomAlert(
-          "Order Exception",
-          err.message || String(err),
-          "error",
+      const canDeploy =
+        typeof data.can_deploy === "boolean" ? data.can_deploy : false;
+
+      const cpuBaseRaw = Math.max(0, Number(data.cpu) || 0);
+      const cpuBoostRaw = Math.max(0, Number(data.boost?.cpu) || 0);
+      const cpuTotalRaw = cpuBaseRaw + cpuBoostRaw;
+      const cpuMaxTotal = 800;
+      const cpuBase = Math.min(100, (cpuBaseRaw / cpuMaxTotal) * 100);
+      const cpuTotal = Math.min(100, (cpuTotalRaw / cpuMaxTotal) * 100);
+
+      const ramBaseRaw = Math.max(0, Number(data.ram) || 0);
+      const ramBoostRaw = Math.max(0, Number(data.boost?.ram) || 0);
+      const ramBase = Math.max(0, Math.min(100, ramBaseRaw));
+      const ramTotal = Math.max(0, Math.min(100, ramBaseRaw + ramBoostRaw));
+
+      const ssdBaseRaw = Math.max(0, Number(data.disk) || 0);
+      const ssdBoostRaw = Math.max(0, Number(data.boost?.disk) || 0);
+      const ssdBase = Math.max(0, Math.min(100, ssdBaseRaw));
+      const ssdTotal = Math.max(0, Math.min(100, ssdBaseRaw + ssdBoostRaw));
+
+      if (cpuText) cpuText.textContent = `CPU - ${cpuTotalRaw}%`;
+      if (ramText) ramText.textContent = `RAM - ${ramTotal} GB`;
+      if (ssdText) ssdText.textContent = `SSD STORAGE - ${ssdTotal} GB`;
+
+      if (cpuBar) {
+        cpuBar.style.width = `${cpuBase}%`;
+        cpuBar.parentElement?.setAttribute(
+          "data-tooltip",
+          `${cpuBaseRaw}%+${cpuBoostRaw}% CPU (total ${cpuTotalRaw}% CPU)`,
+        );
+      }
+      if (boostCpuBar) boostCpuBar.style.width = `${cpuTotal}%`;
+
+      if (ramBar) {
+        ramBar.style.width = `${ramBase}%`;
+        ramBar.parentElement?.setAttribute(
+          "data-tooltip",
+          `${ramBaseRaw}+${ramBoostRaw} GB RAM (total ${ramBaseRaw + ramBoostRaw} GB)`,
+        );
+      }
+      if (boostRamBar) boostRamBar.style.width = `${ramTotal}%`;
+
+      if (ssdBar) {
+        ssdBar.style.width = `${ssdBase}%`;
+        ssdBar.parentElement?.setAttribute(
+          "data-tooltip",
+          `${ssdBaseRaw}+${ssdBoostRaw} GB Storage (total ${ssdBaseRaw + ssdBoostRaw} GB) </br> *Expandable storage - free of charge. Contact us via ticketing system after placing the order if you need more storage!`,
+        );
+      }
+      if (boostSsdBar) boostSsdBar.style.width = `${ssdTotal}%`;
+
+      if (estimatedCost) estimatedCost.textContent = `$${data.price}`;
+
+      const availability = Math.max(
+        0,
+        Math.min(100, Number(data.availability) || 0),
+      );
+      const availabilityAfter = Math.max(
+        0,
+        Math.min(100, Number(data.availability_after) || 0),
+      );
+
+      if (availabilityBar) availabilityBar.style.width = `${availability}%`;
+      if (availabilityAfterBar)
+        availabilityAfterBar.style.width = `${availabilityAfter}%`;
+
+      if (availabilityCircle) {
+        availabilityCircle.setAttribute(
+          "data-tooltip",
+          `${availability}% Available Resources ( After this order, ${availabilityAfter}% will be available )`,
         );
       }
 
-      if ((window as any).turnstile?.reset) (window as any).turnstile.reset();
+      if (availabilityBaseCircle) {
+        const dash = (availability / 100) * AVAILABILITY_CIRCUMFERENCE;
+        availabilityBaseCircle.setAttribute("stroke-dasharray", `${dash} 999`);
+      }
+
+      if (availabilityAfterCircle) {
+        const dashAfter =
+          (availabilityAfter / 100) * AVAILABILITY_CIRCUMFERENCE;
+        availabilityAfterCircle.setAttribute(
+          "stroke-dasharray",
+          `${dashAfter} 999`,
+        );
+      }
+
+      if (availabilityPercentText)
+        availabilityPercentText.textContent = `${availability}%`;
+
+      if (canDeployText) {
+        canDeployText.textContent = canDeploy
+          ? "Your server can be deployed!"
+          : "Your server cannot be deployed due to insufficient resources.";
+      }
+    } catch (err: any) {
+      if (!isBackgroundPolling) {
+        triggerCustomAlert(
+          "Failed to update pricing",
+          err.message || err,
+          "error",
+        );
+      }
+      console.error("Specs loop caught an error context:", err);
+    }
+  }
+
+  // ------------------------------
+  // CLIENT EMAIL INPUT HANDLING
+  // ------------------------------
+  let emailTimer: ReturnType<typeof setTimeout> | undefined;
+  function commitEmail() {
+    if (!clientEmailInput) return;
+    data_storage.client_email = clientEmailInput.value.trim();
+  }
+
+  clientEmailInput?.addEventListener("input", () => {
+    if (emailTimer) clearTimeout(emailTimer);
+    emailTimer = setTimeout(commitEmail, 2000);
+  });
+
+  clientEmailInput?.addEventListener("blur", () => {
+    if (emailTimer) clearTimeout(emailTimer);
+    commitEmail();
+  });
+
+  // ------------------------------
+  // Cloudflare Turnstile callbacks
+  // ------------------------------
+  (window as any).onTurnstileSuccess = (token: string) => {
+    data_storage.turnstile_token = token || "";
+  };
+  (window as any).onTurnstileExpired = () => {
+    data_storage.turnstile_token = "";
+  };
+
+  // ------------------------------
+  // FETCH EGGS
+  // ------------------------------
+  type Egg = {
+    id: number;
+    tags: string[];
+    name: string;
+    desc: string;
+    image: string;
+  };
+
+  async function fetchEggs() {
+    try {
+      const res = await fetch(egg_list);
+      if (!res.ok) throw new Error("Failed to fetch eggs");
+
+      const data = await res.json();
+      const container = eggOptions?.querySelector(".p-3");
+      if (!container || !eggTemplate) return;
+
+      container
+        .querySelectorAll(".egg_option, .category_header")
+        .forEach((el) => el.remove());
+
+      const eggs = Object.values(data).filter(
+        (item): item is Egg =>
+          typeof item === "object" && item !== null && "id" in item,
+      );
+
+      const grouped = eggs.reduce(
+        (acc, egg) => {
+          const category =
+            egg.tags && egg.tags.length > 0 ? egg.tags[0] : "Other";
+          if (!acc[category]) acc[category] = [];
+          acc[category].push(egg);
+          return acc;
+        },
+        {} as Record<string, Egg[]>,
+      );
+
+      const sortedCategories = Object.keys(grouped).sort();
+
+      for (const category of sortedCategories) {
+        const header = document.createElement("div");
+
+        header.style.gridColumn = "1 / -1";
+        header.className = "flex items-center w-full category_header";
+
+        const headerText = document.createElement("h3");
+        headerText.className =
+          "text-lg font-bold text-white/70 capitalize mr-4 shrink-0";
+        headerText.textContent = category;
+
+        const headerLine = document.createElement("div");
+        headerLine.className = "h-px bg-white/20 flex-grow";
+
+        header.appendChild(headerText);
+        header.appendChild(headerLine);
+        container.appendChild(header);
+
+        const sortedEggs = grouped[category].sort((a, b) =>
+          a.name.localeCompare(b.name),
+        );
+
+        for (const egg of sortedEggs) {
+          const eggOption = eggTemplate.cloneNode(true);
+          if (!(eggOption instanceof HTMLElement)) continue;
+
+          eggOption.id = "";
+          eggOption.classList.add("egg_option", "border", "border-transparent");
+          eggOption.dataset.egg_id = String(egg.id);
+          eggOption.dataset.tooltip = egg.desc;
+          eggOption.hidden = false;
+
+          const img = eggOption.querySelector("img");
+          if (img) {
+            img.src = egg.image || "/imgs/plc.png";
+            img.alt = egg.name || "";
+          }
+
+          const label = eggOption.querySelector("span");
+          if (label) label.textContent = egg.name || "";
+
+          eggOption.addEventListener("click", () => {
+            data_storage.egg_id = eggOption.getAttribute("data-egg_id") || "";
+            setSelectedEggOption(eggOption);
+            updateSpecsAndCost(false);
+          });
+
+          container.appendChild(eggOption);
+        }
+      }
+    } catch (e: any) {
+      triggerCustomAlert("Failed to fetch 'eggs'", e, "error");
+    }
+  }
+
+  // ------------------------------
+  // LOCATION PICKER SELECT
+  // ------------------------------
+  locationOptions
+    ?.querySelectorAll("[data-location_name]")
+    .forEach((option) => {
+      if (option instanceof HTMLElement)
+        option.classList.add("border", "border-transparent");
+
+      option.addEventListener("click", () => {
+        data_storage.location = option.getAttribute("data-location_name") || "";
+        setSelectedLocationOption(option);
+        updateSpecsAndCost(false);
+      });
     });
 
-    fetchEggs();
+  // ------------------------------
+  // SUBPLAN GRID OPTION SELECT
+  // ------------------------------
+  subplanOptions?.querySelectorAll("[data-subplan_name]").forEach((option) => {
+    if (option instanceof HTMLElement)
+      option.classList.add("border", "border-transparent");
 
+    option.addEventListener("click", () => {
+      data_storage.subplan = option.getAttribute("data-subplan_name") || "";
+      setSelectedSubplanOption(option);
+      updateSpecsAndCost(false);
+    });
+  });
+
+  // ------------------------------
+  // PLACE ORDER
+  // ------------------------------
+  placeOrderBtn?.addEventListener("click", async () => {
+    if (emailTimer) clearTimeout(emailTimer);
+    commitEmail();
+
+    if (orderBlocker) orderBlocker.removeAttribute("hidden");
+
+    let statusInterval: any = null;
+    let isOrderFinished = false;
+
+    try {
+      setStatus("Waiting for API response...");
+
+      statusInterval = setInterval(async () => {
+        try {
+          const statusRes = await fetch(status_api);
+          if (statusRes.ok) {
+            const statusData = await statusRes.json();
+
+            if (!isOrderFinished && statusData && statusData.result) {
+              setStatus(statusData.result);
+            }
+          }
+        } catch (statusErr) {
+          console.error("Error fetching status update:", statusErr);
+        }
+      }, 500);
+
+      const res = await fetch(order_api, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data_storage),
+      });
+
+      isOrderFinished = true;
+      clearInterval(statusInterval);
+
+      if (!res.ok && res.status !== 429)
+        throw new Error(
+          `Server returned status ${res.status} (Can't reach the target URL)`,
+        );
+
+      const textData = await res.text();
+      if (!textData) {
+        throw new Error(
+          "Server processed the order but returned an empty response body.",
+        );
+      }
+
+      const data = JSON.parse(textData);
+
+      if (data.result === "Rate limited" || res.status === 429) {
+        if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
+        triggerCustomAlert(
+          "Order Throttled",
+          "Your order submission was rate limited. Please hold on a moment and click place order again.",
+          "warn",
+        );
+        return;
+      }
+
+      if (data.error) throw new Error(data.error);
+
+      if (data.status === "task_created") {
+        setStatus("Action completed successfully! Redirecting...");
+        setTimeout(() => {
+          if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
+          const redirectUrl =
+            typeof data.redirect_url === "string"
+              ? data.redirect_url
+              : "https://panel.nikostuff.com";
+          window.location.href = redirectUrl;
+        }, 3000);
+      } else {
+        if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
+        triggerCustomAlert(
+          "Order Failed",
+          "Oops. Something went wrong. Please try again later.",
+          "error",
+        );
+      }
+    } catch (err) {
+      isOrderFinished = true;
+      if (statusInterval) clearInterval(statusInterval);
+
+      if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
+      const errMsg =
+        err && typeof err === "object" && "message" in err
+          ? (err as any).message
+          : String(err);
+      triggerCustomAlert(
+        "Order Failed",
+        "Failed to place order: " + errMsg,
+        "error",
+      );
+    }
+
+    if ((window as any).turnstile?.reset) (window as any).turnstile.reset();
+  });
+
+  // ------------------------------
+  // INIT & LOAD MANAGEMENT
+  // ------------------------------
+  fetchEggs();
+
+  document.addEventListener("DOMContentLoaded", () => {
     const defaultLocation = locationOptions?.querySelector(
       '[data-location_name="europe_free"]',
     );
     if (defaultLocation) {
       data_storage.location = "europe_free";
-      setSelectedOption(
-        locationOptions,
-        "[data-location_name]",
-        defaultLocation,
-      );
+      setSelectedLocationOption(defaultLocation);
     }
 
     const defaultSubplan = subplanOptions?.querySelector(
@@ -891,13 +1056,11 @@
     );
     if (defaultSubplan) {
       data_storage.subplan = "free";
-      setSelectedOption(subplanOptions, "[data-subplan_name]", defaultSubplan);
+      setSelectedSubplanOption(defaultSubplan);
     }
 
     updateSpecsAndCost(false);
-    setInterval(() => updateSpecsAndCost(true), 3000);
-  }
 
-  initHostingCalculator();
-  document.addEventListener("astro:page-load", initHostingCalculator);
+    setInterval(() => updateSpecsAndCost(true), 2000);
+  });
 </script>
