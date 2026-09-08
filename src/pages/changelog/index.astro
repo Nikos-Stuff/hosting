@@ -1,0 +1,58 @@
+---
+import PageLayout from "@layouts/PageLayout.astro";
+import { SITE } from "@consts";
+import { getCollection } from "astro:content";
+import BlogSummary from "@components/BlogSummary";
+
+const posts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => {
+    // Sort by date and time
+    const dateA = new Date(a.data.date);
+    const dateB = new Date(b.data.date);
+
+    const timeA = a.data.time || "00:00";
+    const timeB = b.data.time || "00:00";
+
+    const dateTimeA = new Date(`${dateA.toDateString()} ${timeA}`);
+    const dateTimeB = new Date(`${dateB.toDateString()} ${timeB}`);
+
+    return dateTimeB.getTime() - dateTimeA.getTime();
+  });
+---
+
+<PageLayout title="Changelog" description={SITE.DESCRIPTION}>
+  <div class="relative">
+    <!-- Changelog Section -->
+    <section
+      id="changelog"
+      class="animate w-full max-w-7xl mx-auto py-12 px-4 md:px-8 mb-12.5 pt-20"
+    >
+      <div class="fi-section p-6 md:p-10 space-y-6 text-left">
+        <div class="space-y-1">
+          <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
+            Updates & News
+          </span>
+
+          <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase">
+            Changelog
+          </h2>
+
+          <p class="animate text-xs text-[rgb(var(--c-400))]">
+            What's new? Check out the latest changes and improvements.
+          </p>
+        </div>
+
+        <div class="pt-2">
+          <ul class="columns-1 md:columns-2 gap-4 space-y-4">
+            {posts.map((post) => (
+              <li class="break-inside-avoid">
+                <BlogSummary entry={post} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</PageLayout>
