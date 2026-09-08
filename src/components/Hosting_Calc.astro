@@ -160,13 +160,13 @@
       >
         Your Email Address:
       </label>
-      <div class="fi-input-wrp">
+      <div class="fi-input-wrp animate">
         <input
           data-tooltip="Your auto-generated login credentials will be delivered here."
           id="client_email"
           type="email"
           placeholder="example@domain.com"
-          class="fi-input animate w-full p-3 bg-[rgb(var(--c-900))] text-[rgb(var(--c-50))] border border-hairline focus:border-primary-500 focus:outline-none transition-colors"
+          class="fi-input w-full p-3 bg-[rgb(var(--c-900))] text-[rgb(var(--c-50))] border border-hairline focus:border-primary-500 focus:outline-none transition-colors"
         />
       </div>
     </div>
@@ -641,6 +641,66 @@
   }
 
   // ------------------------------
+  // DYNAMIC SUBPLAN RESTRICTION / BLUR HANDLER
+  // ------------------------------
+  function applySubplanRestrictions(locationName: string) {
+    const allSubplanElements = subplanOptions?.querySelectorAll(
+      "[data-subplan_name]",
+    );
+    if (!allSubplanElements) return;
+
+    const isFreeLocation = locationName.includes("free");
+    let isCurrentSubplanAllowed = false;
+    const elementsArray = Array.from(allSubplanElements) as HTMLElement[];
+
+    elementsArray.forEach((el) => {
+      const subplanName = el.dataset.subplan_name;
+      // Example rule: if it's a free location, only allow the "free" subplan.
+      // Or if it's a paid location, disallow the "free" subplan. Adjust this logic to fit your exact requirements!
+      const isAllowed = isFreeLocation
+        ? subplanName === "free"
+        : subplanName !== "free";
+
+      if (isAllowed) {
+        if (subplanName === data_storage.subplan) {
+          isCurrentSubplanAllowed = true;
+        }
+        el.style.opacity = "1";
+        el.style.filter = "none";
+        el.classList.remove("pointer-events-none", "opacity-40", "blur-[2px]");
+      } else {
+        el.style.opacity = "0.35";
+        el.style.filter = "grayscale(100%) blur(2px)";
+        el.classList.add("pointer-events-none");
+
+        if (subplanName === data_storage.subplan) {
+          el.classList.remove(
+            "border-white/40",
+            "bg-white/10",
+            "ring-1",
+            "ring-white/30",
+          );
+        }
+      }
+    });
+
+    // If the currently selected subplan is no longer allowed, pick the first valid alternative
+    if (!isCurrentSubplanAllowed) {
+      const firstAvailableElement = elementsArray.find((el) => {
+        const subplanName = el.dataset.subplan_name;
+        return isFreeLocation ? subplanName === "free" : subplanName !== "free";
+      });
+
+      if (firstAvailableElement) {
+        const newSubplanName = firstAvailableElement.dataset.subplan_name || "";
+        data_storage.subplan = newSubplanName;
+        setSelectedSubplanOption(firstAvailableElement);
+        updateSpecsAndCost(false);
+      }
+    }
+  }
+
+  // ------------------------------
   // UPDATE STATS AND COST FUNCTION
   // ------------------------------
   async function updateSpecsAndCost(isBackgroundPolling = false) {
@@ -941,6 +1001,9 @@
   // ------------------------------
   // LOCATION PICKER SELECT
   // ------------------------------
+  // ------------------------------
+  // LOCATION PICKER SELECT
+  // ------------------------------
   locationOptions
     ?.querySelectorAll("[data-location_name]")
     .forEach((option) => {
@@ -950,6 +1013,10 @@
       option.addEventListener("click", () => {
         data_storage.location = option.getAttribute("data-location_name") || "";
         setSelectedLocationOption(option);
+
+        // Apply the blur/disable logic for subplans based on the location
+        applySubplanRestrictions(data_storage.location);
+
         updateSpecsAndCost(false);
       });
     });
@@ -1090,7 +1157,9 @@
       setSelectedSubplanOption(defaultSubplan);
     }
 
-    // Fetch eggs first so DOM elements exist before updateSpecsAndCost runs
+    // Apply initial subplan restrictions based on the default location
+    applySubplanRestrictions(data_storage.location);
+
     await fetchEggs();
 
     // Automatically select the first available/unlocked egg by default if none selected
