@@ -825,7 +825,8 @@
       if (!res.ok) throw new Error("Failed to fetch eggs");
 
       const data = await res.json();
-      const container = eggOptions?.querySelector(".p-3");
+      // Target the grid container inside egg_options directly
+      const container = eggOptions?.querySelector(".grid");
       if (!container || !eggTemplate) return;
 
       container
@@ -854,15 +855,15 @@
         const header = document.createElement("div");
 
         header.style.gridColumn = "1 / -1";
-        header.className = "flex items-center w-full category_header";
+        header.className = "flex items-center w-full category_header pt-2 pb-1";
 
         const headerText = document.createElement("h3");
         headerText.className =
-          "text-lg font-bold text-white/70 capitalize mr-4 shrink-0";
+          "text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))] mr-3 shrink-0";
         headerText.textContent = category;
 
         const headerLine = document.createElement("div");
-        headerLine.className = "h-px bg-white/20 flex-grow";
+        headerLine.className = "h-px bg-hairline flex-grow";
 
         header.appendChild(headerText);
         header.appendChild(headerLine);
