@@ -52,7 +52,10 @@
       </div>
     </div>
   </div>
-  <p class="animate text-xs text-[rgb(var(--c-400))] font-mono" id="server_counter">
+  <p
+    class="animate text-xs text-[rgb(var(--c-400))] font-mono"
+    id="server_counter"
+  >
     -
   </p>
 
@@ -70,13 +73,15 @@
     </div>
 
     <div class="animate flex flex-col sm:flex-row gap-3">
-      <input
-        type="text"
-        autocomplete="off"
-        id="toggle-visibility-input"
-        placeholder="e.g. 550e8400-e29b-41d4-a716-446655440000"
-        class="fi-input animate w-full p-3 bg-[rgb(var(--c-900))] text-[rgb(var(--c-50))] border border-hairline focus:border-primary-500 focus:outline-none transition-colors text-xs"
-      />
+      <div class="animate fi-input-wrp w-full">
+        <input
+          type="text"
+          autocomplete="off"
+          id="toggle-visibility-input"
+          placeholder="e.g. 550e8400-e29b-41d4-a716-446655440000"
+          class="fi-input w-full p-3 bg-[rgb(var(--c-900))] text-[rgb(var(--c-50))] border border-hairline focus:border-primary-500 focus:outline-none transition-colors text-xs"
+        />
+      </div>
       <button
         id="toggle-visibility-btn"
         class="fi-btn animate shrink-0 flex items-center justify-center gap-2 bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors"

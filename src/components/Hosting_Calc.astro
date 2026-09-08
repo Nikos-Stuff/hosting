@@ -149,13 +149,15 @@
       >
         Your Email Address:
       </label>
-      <input
-        data-tooltip="Your auto-generated login credentials will be delivered here."
-        id="client_email"
-        type="email"
-        placeholder="example@domain.com"
-        class="fi-input animate w-full p-3 bg-[rgb(var(--c-900))] text-[rgb(var(--c-50))] border border-hairline focus:border-primary-500 focus:outline-none transition-colors"
-      />
+      <div class="fi-input-wrp">
+        <input
+          data-tooltip="Your auto-generated login credentials will be delivered here."
+          id="client_email"
+          type="email"
+          placeholder="example@domain.com"
+          class="fi-input animate w-full p-3 bg-[rgb(var(--c-900))] text-[rgb(var(--c-50))] border border-hairline focus:border-primary-500 focus:outline-none transition-colors"
+        />
+      </div>
     </div>
 
     <!-- Cloudflare Turnstile -->
@@ -175,142 +177,150 @@
     </div>
 
     <!-- Server Specs Preview Bar Graph -->
-    <div id="specs_preview" class="space-y-4">
-      <div class="grid animate grid-cols-1 md:grid-cols-12 gap-6 items-center">
+    <div id="specs_preview" class="space-y-3">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
         <!-- Resource Bars -->
-        <div class="md:col-span-8 space-y-3">
-          <label
-            class="block text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+        <div
+          class="md:col-span-8 space-y-2.5 bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] p-3.5 rounded-lg"
+        >
+          <div
+            class="flex items-center justify-between pb-1 border-b border-[rgb(var(--c-800))]/60"
           >
-            Server Specs Preview:
-          </label>
+            <label
+              class="text-[0.6875rem] font-bold uppercase tracking-wider text-[rgb(var(--c-300))]"
+            >
+              Resource Allocations
+            </label>
+          </div>
 
           <div class="space-y-2">
             <!-- CPU Bar -->
-            <div
-              class="w-full fi-section fi-section-dark h-5 relative overflow-hidden"
-              data-tooltip="-"
-            >
+            <div class="space-y-1">
               <div
-                id="boost_cpu_bar"
-                class="absolute h-full transition-all duration-300 bg-primary-500/40"
-                style="width: 0%"
+                class="flex justify-between text-[0.625rem] font-mono text-[rgb(var(--c-400))]"
               >
+                <span>CPU Cores</span>
+                <span id="cpu_text">0%</span>
               </div>
               <div
-                id="cpu_bar"
-                class="relative h-full transition-all duration-300 bg-primary-500"
-                style="width: 0%"
+                class="w-full bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] h-4 relative overflow-hidden rounded-sm"
+                data-tooltip="-"
               >
+                <div
+                  id="boost_cpu_bar"
+                  class="absolute h-full bg-[rgb(var(--c-700))] opacity-50"
+                  style="width: 0%"
+                >
+                </div>
+                <div
+                  id="cpu_bar"
+                  class="relative h-full bg-[rgb(var(--primary-500))] font-semibold"
+                  style="width: 0%"
+                >
+                </div>
               </div>
-              <span
-                id="cpu_text"
-                class="absolute inset-0 z-10 flex items-center justify-center text-[0.625rem] font-mono font-bold text-white drop-shadow"
-              >
-                CPU - 0%
-              </span>
             </div>
 
             <!-- RAM Bar -->
-            <div
-              class="w-full fi-section fi-section-dark h-5 relative overflow-hidden"
-              data-tooltip="-"
-            >
+            <div class="space-y-1">
               <div
-                id="boost_ram_bar"
-                class="absolute h-full transition-all duration-300 bg-primary-500/40"
-                style="width: 0%"
+                class="flex justify-between text-[0.625rem] font-mono text-[rgb(var(--c-400))]"
               >
+                <span>Memory Allocation</span>
+                <span id="ram_text">0 GB</span>
               </div>
               <div
-                id="ram_bar"
-                class="relative h-full transition-all duration-300 bg-primary-500"
-                style="width: 0%"
+                class="w-full bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] h-4 relative overflow-hidden rounded-sm"
+                data-tooltip="-"
               >
+                <div
+                  id="boost_ram_bar"
+                  class="absolute h-full bg-[rgb(var(--c-700))] opacity-50"
+                  style="width: 0%"
+                >
+                </div>
+                <div
+                  id="ram_bar"
+                  class="relative h-full bg-[rgb(var(--primary-500))] font-semibold"
+                  style="width: 0%"
+                >
+                </div>
               </div>
-              <span
-                id="ram_text"
-                class="absolute inset-0 z-10 flex items-center justify-center text-[0.625rem] font-mono font-bold text-white drop-shadow"
-              >
-                RAM - 0 GB
-              </span>
             </div>
 
             <!-- Disk Bar -->
-            <div
-              class="w-full fi-section fi-section-dark h-5 relative overflow-hidden"
-              data-tooltip="-"
-            >
+            <div class="space-y-1">
               <div
-                id="boost_ssd_bar"
-                class="absolute h-full transition-all duration-300 bg-primary-500/40"
-                style="width: 0%"
+                class="flex justify-between text-[0.625rem] font-mono text-[rgb(var(--c-400))]"
               >
+                <span>NVMe Storage</span>
+                <span id="ssd_text">0 GB</span>
               </div>
               <div
-                id="ssd_bar"
-                class="relative h-full transition-all duration-300 bg-primary-500"
-                style="width: 0%"
+                class="w-full bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] h-4 relative overflow-hidden rounded-sm"
+                data-tooltip="-"
               >
+                <div
+                  id="boost_ssd_bar"
+                  class="absolute h-full bg-[rgb(var(--c-700))] opacity-50"
+                  style="width: 0%"
+                >
+                </div>
+                <div
+                  id="ssd_bar"
+                  class="relative h-full bg-[rgb(var(--primary-500))] font-semibold"
+                  style="width: 0%"
+                >
+                </div>
               </div>
-              <span
-                id="ssd_text"
-                class="absolute inset-0 z-10 flex items-center justify-center text-[0.625rem] font-mono font-bold text-white drop-shadow"
-              >
-                SSD STORAGE - 0 GB
-              </span>
             </div>
           </div>
         </div>
 
         <!-- Node Availability Dial -->
         <div
-          class="md:col-span-4 flex flex-col items-center justify-center text-center space-y-1 border-t md:border-t-0 md:border-l border-hairline pt-4 md:pt-0 md:pl-6"
+          class="md:col-span-4 flex flex-col items-center justify-center text-center space-y-1.5 bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] p-3.5 rounded-lg h-full"
         >
           <label
-            class="block text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))] mb-1"
+            class="text-[0.6875rem] font-bold uppercase tracking-wider text-[rgb(var(--c-300))]"
           >
             Node Capacity
           </label>
 
           <div
             id="availability_circle"
-            class="relative w-24 h-24"
+            class="relative w-20 h-20 my-1"
             data-tooltip="-"
           >
             <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
               <circle
                 cx="50"
                 cy="50"
-                r="42"
+                r="40"
                 stroke="rgb(var(--c-900))"
-                stroke-width="8"
+                stroke-width="10"
                 fill="none"></circle>
               <circle
                 id="availability_base_circle"
                 cx="50"
                 cy="50"
-                r="42"
+                r="40"
                 stroke="rgb(var(--primary-500))"
-                stroke-width="8"
+                stroke-width="10"
                 stroke-linecap="round"
                 fill="none"
-                stroke-dasharray="0 999"
-                style="transition: stroke-dasharray 500ms ease, stroke-dashoffset 500ms ease;"
-              ></circle>
+                stroke-dasharray="0 999"></circle>
               <circle
                 id="availability_after_circle"
                 cx="50"
                 cy="50"
-                r="42"
+                r="40"
                 stroke="rgb(var(--c-400))"
-                stroke-opacity="0.5"
-                stroke-width="8"
+                stroke-opacity="0.4"
+                stroke-width="10"
                 stroke-linecap="round"
                 fill="none"
-                stroke-dasharray="0 999"
-                style="transition: stroke-dasharray 500ms ease, stroke-dashoffset 500ms ease;"
-              ></circle>
+                stroke-dasharray="0 999"></circle>
             </svg>
 
             <div
@@ -323,7 +333,7 @@
 
           <p
             id="can_deploy"
-            class="text-[0.6875rem] text-[rgb(var(--c-400))] font-mono pt-1"
+            class="text-[0.625rem] text-[rgb(var(--c-400))] font-mono"
           >
             -
           </p>
@@ -336,26 +346,26 @@
       </div>
 
       <!-- Total Cost Row -->
-      <div class="flex animate justify-between items-center pt-2">
+      <div
+        class="flex justify-between items-center px-4 py-2.5 bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] rounded-lg"
+      >
         <span
-          class="text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+          class="text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-300))]"
           >Monthly Cost:</span
         >
         <span
           id="estimated_cost"
-          class="text-2xl font-mono font-bold text-primary-500">-</span
+          class="text-xl font-mono font-bold text-primary-500">-</span
         >
       </div>
 
       <!-- Submit Actions Stack -->
-      <div class="space-y-2 pt-2">
+      <div class="space-y-2 pt-1">
         <button
           id="place_order_btn"
-          class="fi-btn animate w-full flex flex-col items-center justify-center bg-primary-500 text-white hover:bg-[rgb(var(--primary-600))] transition-colors"
+          class="fi-btn w-full flex flex-col items-center justify-center bg-primary-500 text-white hover:bg-[rgb(var(--primary-600))] py-2.5 rounded-lg transition-colors"
         >
-          <span class="text-xs font-semibold tracking-wide">
-            Get My Server!
-          </span>
+          <span class="text-xs font-bold tracking-wide"> Get My Server! </span>
           <div
             class="flex items-center justify-center gap-1.5 mt-0.5 text-[0.6875rem] opacity-90"
           >
@@ -367,14 +377,12 @@
         <a
           href="https://billing.stripe.com/p/login/6oUaEWa7abrm9GSdzBdAk00"
           target="_blank"
-          class="fi-btn animate w-full flex items-center justify-center bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors"
+          class="fi-btn w-full flex items-center justify-center bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] text-[rgb(var(--c-50))] hover:bg-[rgb(var(--c-800))] py-2.5 rounded-lg text-xs font-semibold transition-colors"
         >
           Manage Subscriptions
         </a>
 
-        <p
-          class="animate text-[0.6875rem] text-center text-[rgb(var(--c-400))] pt-1"
-        >
+        <p class="text-[0.6875rem] text-center text-[rgb(var(--c-400))] pt-1">
           By deploying a server, you agree to our{" "}
           <a
             href="/legal"
@@ -653,9 +661,9 @@
       const ssdBase = Math.max(0, Math.min(100, ssdBaseRaw));
       const ssdTotal = Math.max(0, Math.min(100, ssdBaseRaw + ssdBoostRaw));
 
-      if (cpuText) cpuText.textContent = `CPU - ${cpuTotalRaw}%`;
-      if (ramText) ramText.textContent = `RAM - ${ramTotal} GB`;
-      if (ssdText) ssdText.textContent = `SSD STORAGE - ${ssdTotal} GB`;
+      if (cpuText) cpuText.textContent = `${cpuTotalRaw}%`;
+      if (ramText) ramText.textContent = `${ramTotal} GB`;
+      if (ssdText) ssdText.textContent = `${ssdTotal} GB`;
 
       if (cpuBar) {
         cpuBar.style.width = `${cpuBase}%`;

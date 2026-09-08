@@ -1,87 +1,92 @@
 <script>
-import gsap from "gsap";
+  import gsap from "gsap";
 
-document.addEventListener("mousemove", (e: MouseEvent) => {
-  const target = (e.target as HTMLElement).closest<HTMLElement>(
-    "button, a, [data-glow], .glow-card",
-  );
+  document.addEventListener("mousemove", (e: MouseEvent) => {
+    // Added .fi-input and .fi-btn to the selector list
+    const target = (e.target as HTMLElement).closest<HTMLElement>(
+      "button, a, [data-glow], .glow-card, .fi-input-wrp, .fi-btn",
+    );
 
-  if (!target) return;
-  
-  if (!target.hasAttribute("data-glow-initialized")) {
-    const computedStyle = window.getComputedStyle(target);
-    const borderRadius = computedStyle.borderRadius ? computedStyle.borderRadius.trim() : "";
+    if (!target) return;
 
-    if (!borderRadius || borderRadius === "0px") {
-      return; 
-    }
+    if (!target.hasAttribute("data-glow-initialized")) {
+      const computedStyle = window.getComputedStyle(target);
+      const borderRadius = computedStyle.borderRadius
+        ? computedStyle.borderRadius.trim()
+        : "";
 
-    target.setAttribute("data-glow-initialized", "true");
-
-    if (window.getComputedStyle(target).position === "static") {
-      target.style.position = "relative";
-    }
-
-
-    Array.from(target.children).forEach((child) => {
-      const htmlChild = child as HTMLElement;
-      if (!htmlChild.classList.contains("border-glow-layer")) {
-        htmlChild.style.pointerEvents = "none";
+      if (!borderRadius || borderRadius === "0px") {
+        return;
       }
-    });
 
-    const borderGlow = document.createElement("span");
-    borderGlow.classList.add("border-glow-layer");
+      target.setAttribute("data-glow-initialized", "true");
 
-    const offsetSize = "1px";
-
-    Object.assign(borderGlow.style, {
-      position: "absolute",
-      top: `-${offsetSize}`,
-      left: `-${offsetSize}`,
-      right: `-${offsetSize}`,
-      bottom: `-${offsetSize}`,
-      padding: "1px", 
-      borderRadius: `calc(${borderRadius} + ${offsetSize})`,
-      pointerEvents: "none",
-      opacity: "0",
-      zIndex: "1",
-      background:
-        "radial-gradient(280px circle at var(--x, 0px) var(--y, 0px), rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.02) 60%, transparent 100%)",
-      webkitMask:
-        "linear-gradient(#fff, #fff) content-box, linear-gradient(#fff, #fff)",
-      webkitMaskComposite: "xor",
-      maskComposite: "exclude",
-    });
-
-    target.appendChild(borderGlow);
-
-    target.addEventListener("mousemove", (elEvent: MouseEvent) => {
-      if (elEvent.currentTarget === target) {
-        gsap.to(borderGlow, {
-          "--x": `${elEvent.offsetX}px`,
-          "--y": `${elEvent.offsetY}px`,
-          opacity: 1,
-          duration: 0.1,
-          ease: "power1.out",
-        } as any);
+      if (window.getComputedStyle(target).position === "static") {
+        target.style.position = "relative";
       }
-    });
 
-    target.addEventListener("mouseleave", () => {
-      gsap.to(borderGlow, {
-        opacity: 0,
-        duration: 0.4,
-        ease: "power2.out",
+      Array.from(target.children).forEach((child) => {
+        const htmlChild = child as HTMLElement;
+        if (!htmlChild.classList.contains("border-glow-layer")) {
+          if (!htmlChild.matches("input, textarea, select")) {
+            htmlChild.style.pointerEvents = "none";
+          }
+        }
       });
-    });
-  }
 
-  if (!target.matches(":hover")) {
-    const borderGlow = target.querySelector<HTMLElement>(".border-glow-layer");
-    if (borderGlow) {
-      gsap.to(borderGlow, { opacity: 0, duration: 0.3 });
+      const borderGlow = document.createElement("span");
+      borderGlow.classList.add("border-glow-layer");
+
+      const offsetSize = "1px";
+
+      Object.assign(borderGlow.style, {
+        position: "absolute",
+        top: `-${offsetSize}`,
+        left: `-${offsetSize}`,
+        right: `-${offsetSize}`,
+        bottom: `-${offsetSize}`,
+        padding: "1px",
+        borderRadius: `calc(${borderRadius} + ${offsetSize})`,
+        pointerEvents: "none",
+        opacity: "0",
+        zIndex: "1",
+        background:
+          "radial-gradient(280px circle at var(--x, 0px) var(--y, 0px), rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.02) 60%, transparent 100%)",
+        webkitMask:
+          "linear-gradient(#fff, #fff) content-box, linear-gradient(#fff, #fff)",
+        webkitMaskComposite: "xor",
+        maskComposite: "exclude",
+      });
+
+      target.appendChild(borderGlow);
+
+      target.addEventListener("mousemove", (elEvent: MouseEvent) => {
+        if (elEvent.currentTarget === target) {
+          gsap.to(borderGlow, {
+            "--x": `${elEvent.offsetX}px`,
+            "--y": `${elEvent.offsetY}px`,
+            opacity: 1,
+            duration: 0.1,
+            ease: "power1.out",
+          } as any);
+        }
+      });
+
+      target.addEventListener("mouseleave", () => {
+        gsap.to(borderGlow, {
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      });
     }
-  }
-});
+
+    if (!target.matches(":hover")) {
+      const borderGlow =
+        target.querySelector<HTMLElement>(".border-glow-layer");
+      if (borderGlow) {
+        gsap.to(borderGlow, { opacity: 0, duration: 0.3 });
+      }
+    }
+  });
 </script>
