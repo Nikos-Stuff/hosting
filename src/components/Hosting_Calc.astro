@@ -36,52 +36,36 @@
       </div>
     </div>
 
-    <!-- Egg Selection -->
-    <div class="space-y-2" id="egg_dropdown">
-      <label
-        class="block animate text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-      >
-        Select Game / Application:
-      </label>
-
+    <!-- Egg Selection Container -->
+    <div
+      id="egg_options"
+      class="hide_scrollbar animate h-96 overflow-auto fi-section fi-section-dark p-3"
+    >
       <div
-        id="egg_options"
-        class="hide_scrollbar animate h-96 overflow-auto fi-section fi-section-dark p-3"
+        class="p-2 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 justify-items-center items-start"
       >
         <div
-          class="p-2 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 justify-items-center items-start"
+          hidden
+          id="egg_template"
+          data-egg_id="?"
+          class="flex h-auto w-full max-w-27.5 flex-col items-center p-3 fi-btn hover:bg-white/5 hover:-translate-y-1 select-none transition-all duration-300 border-transparent bg-transparent rounded-xl group"
         >
-          <div
-            hidden
-            id="egg_template"
-            data-egg_id="?"
-            class="flex h-auto w-28 flex-col items-center p-3 fi-btn hover:bg-white/5 hover:-translate-y-1 select-none transition-all duration-300 border-transparent bg-transparent rounded-xl group"
+          <figure
+            class="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] overflow-hidden flex items-center justify-center shrink-0 shadow-inner group-hover:border-primary-500/50 transition-colors"
           >
-            <figure
-              class="w-16 h-16 rounded-lg bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] overflow-hidden flex items-center justify-center shrink-0 shadow-inner group-hover:border-primary-500/50 transition-colors"
-            >
-              <img
-                src=""
-                alt="Loading"
-                class="w-10 h-10 object-contain drop-shadow"
-              />
-            </figure>
-            <span
-              class="text-xs mt-2.5 text-center w-full whitespace-normal wrap-break-word leading-tight flex items-center justify-center min-h-10 font-medium text-[rgb(var(--c-50))] group-hover:text-white transition-colors"
-            >
-              Downloading...
-            </span>
-          </div>
+            <img
+              src=""
+              alt="Loading"
+              class="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow"
+            />
+          </figure>
+          <span
+            class="text-[0.7rem] sm:text-xs mt-2.5 text-center w-full wrap-break-word leading-tight flex items-center justify-center min-h-10 font-medium text-[rgb(var(--c-50))] group-hover:text-white transition-colors"
+          >
+            Downloading...
+          </span>
         </div>
       </div>
-
-      <a
-        href="https://forms.gle/KXNLmxLib8ERo9vT7"
-        target="_blank"
-        class="inline-block animate text-[0.6875rem] text-[rgb(var(--c-400))] hover:text-primary-500 transition-colors pt-1"
-      >
-        We're missing something? Let us know! →
-      </a>
     </div>
 
     <!-- Subplan Selection -->
