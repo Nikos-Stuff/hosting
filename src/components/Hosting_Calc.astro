@@ -375,7 +375,9 @@
           Manage Subscriptions
         </a>
 
-        <p class="animate text-[0.6875rem] text-center text-[rgb(var(--c-400))] pt-1">
+        <p
+          class="animate text-[0.6875rem] text-center text-[rgb(var(--c-400))] pt-1"
+        >
           By deploying a server, you agree to our{" "}
           <a
             href="/legal"
@@ -585,6 +587,59 @@
   }
 
   // ------------------------------
+  // DYNAMIC EGG RESTRICTION / BLUR HANDLER
+  // ------------------------------
+  function applyEggRestrictions(allowedEggs: number[]) {
+    const allEggElements = eggOptions?.querySelectorAll(".egg_option");
+    if (!allEggElements) return;
+
+    let isCurrentEggAllowed = false;
+    const elementsArray = Array.from(allEggElements) as HTMLElement[];
+
+    elementsArray.forEach((el) => {
+      const eggId = parseInt(el.dataset.egg_id || "0", 10);
+      const isAllowed = allowedEggs.length === 0 || allowedEggs.includes(eggId);
+
+      if (isAllowed) {
+        if (el.dataset.egg_id === data_storage.egg_id) {
+          isCurrentEggAllowed = true;
+        }
+
+        el.style.opacity = "1";
+        el.style.filter = "none";
+        el.classList.remove("pointer-events-none", "opacity-40", "blur-[2px]");
+      } else {
+        el.style.opacity = "0.35";
+        el.style.filter = "grayscale(100%) blur(2px)";
+        el.classList.add("pointer-events-none");
+
+        if (el.dataset.egg_id === data_storage.egg_id) {
+          el.classList.remove(
+            "border-white/40",
+            "bg-white/10",
+            "ring-1",
+            "ring-white/30",
+          );
+        }
+      }
+    });
+
+    if (!isCurrentEggAllowed) {
+      const firstAvailableElement = elementsArray.find((el) => {
+        const eggId = parseInt(el.dataset.egg_id || "0", 10);
+        return allowedEggs.length === 0 || allowedEggs.includes(eggId);
+      });
+
+      if (firstAvailableElement) {
+        const newEggId = firstAvailableElement.dataset.egg_id || "";
+        data_storage.egg_id = newEggId;
+        setSelectedEggOption(firstAvailableElement);
+        updateSpecsAndCost(false);
+      }
+    }
+  }
+
+  // ------------------------------
   // UPDATE STATS AND COST FUNCTION
   // ------------------------------
   async function updateSpecsAndCost(isBackgroundPolling = false) {
@@ -633,6 +688,13 @@
       }
 
       isCurrentlyRateLimited = false;
+
+      console.log("Received data:", data);
+
+      // --- APPLY ALLOWED EGGS BLUR & LOCK ---
+      if (Array.isArray(data.allowed_eggs)) {
+        applyEggRestrictions(data.allowed_eggs);
+      }
 
       const canDeploy =
         typeof data.can_deploy === "boolean" ? data.can_deploy : false;
@@ -840,7 +902,13 @@
           if (!(eggOption instanceof HTMLElement)) continue;
 
           eggOption.id = "";
-          eggOption.classList.add("egg_option", "border", "border-transparent");
+          eggOption.classList.add(
+            "egg_option",
+            "border",
+            "border-transparent",
+            "transition-all",
+            "duration-200",
+          );
           eggOption.dataset.egg_id = String(egg.id);
           eggOption.dataset.tooltip = egg.desc;
           eggOption.hidden = false;
@@ -855,6 +923,9 @@
           if (label) label.textContent = egg.name || "";
 
           eggOption.addEventListener("click", () => {
+            // Prevent clicking disabled/blurred options
+            if (eggOption.classList.contains("pointer-events-none")) return;
+
             data_storage.egg_id = eggOption.getAttribute("data-egg_id") || "";
             setSelectedEggOption(eggOption);
             updateSpecsAndCost(false);
@@ -1003,9 +1074,7 @@
   // ------------------------------
   // INIT & LOAD MANAGEMENT
   // ------------------------------
-  fetchEggs();
-
-  function initCalculatorDefaults() {
+  async function initApp() {
     const defaultLocation = locationOptions?.querySelector(
       '[data-location_name="europe"]',
     );
@@ -1022,11 +1091,23 @@
       setSelectedSubplanOption(defaultSubplan);
     }
 
+    // Fetch eggs first so DOM elements exist before updateSpecsAndCost runs
+    await fetchEggs();
+
+    // Automatically select the first available/unlocked egg by default if none selected
+    const firstAvailableEgg = eggOptions?.querySelector(
+      ".egg_option:not(.pointer-events-none)",
+    );
+    if (firstAvailableEgg instanceof HTMLElement) {
+      data_storage.egg_id = firstAvailableEgg.dataset.egg_id || "";
+      setSelectedEggOption(firstAvailableEgg);
+    }
+
     updateSpecsAndCost(false);
   }
 
-  initCalculatorDefaults();
-  document.addEventListener("astro:page-load", initCalculatorDefaults);
+  initApp();
+  document.addEventListener("astro:page-load", initApp);
 
   setInterval(() => updateSpecsAndCost(true), 2000);
 </script>
