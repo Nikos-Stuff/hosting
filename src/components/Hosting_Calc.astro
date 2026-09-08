@@ -689,8 +689,6 @@
 
       isCurrentlyRateLimited = false;
 
-      console.log("Received data:", data);
-
       // --- APPLY ALLOWED EGGS BLUR & LOCK ---
       if (Array.isArray(data.allowed_eggs)) {
         applyEggRestrictions(data.allowed_eggs);
