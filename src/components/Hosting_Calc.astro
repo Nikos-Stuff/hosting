@@ -9,28 +9,59 @@
       </label>
       <div
         id="location_options"
-        class="hide_scrollbar animate max-h-52 overflow-auto fi-section fi-section-dark p-3"
+        class="hide_scrollbar animate max-h-64 overflow-auto fi-section fi-section-dark p-3 space-y-4"
       >
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div
-            class="relative px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent"
-            data-location_name="europe"
-            data-tooltip="Ryzen 9 5950X based servers located in Europe"
-          >
-            <span
-              class="absolute top-2 right-2 px-1.5 py-0.5 text-[0.625rem] font-semibold tracking-wider uppercase rounded bg-amber-500/10 text-amber-400 border border-amber-500/20"
+        <!-- PAID SECTION -->
+        <div>
+          <span class="text-[0.625rem] font-bold uppercase tracking-wider text-[rgb(var(--c-400))] block mb-2 px-1">
+            Paid Tiers
+          </span>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div
+              class="relative px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent"
+              data-location_name="europe"
+              data-tooltip="Ryzen 9 5950X based servers located in Europe"
             >
-              Paid
-            </span>
+              <span class="absolute top-2 right-2 px-1.5 py-0.5 text-[0.625rem] font-semibold tracking-wider uppercase rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                Paid
+              </span>
 
-            <span class="fi fi-eu text-2xl mb-2 rounded-sm"></span>
-            <span class="text-xs font-medium text-[rgb(var(--c-50))]"
-              >Europe</span
+              <span class="fi fi-eu text-2xl mb-2 rounded-sm"></span>
+              <span class="text-xs font-medium text-[rgb(var(--c-50))]">
+                Europe
+              </span>
+              <span class="ping text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5">
+                Ping: 0ms
+              </span>
+            </div>
+            <!-- future premium stuff ther -->
+          </div>
+        </div>
+
+        <!-- FREE SECTION -->
+        <div>
+          <span class="text-[0.625rem] font-bold uppercase tracking-wider text-[rgb(var(--c-400))] block mb-2 px-1">
+            Free Tiers
+          </span>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div
+              class="relative px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent"
+              data-location_name="europe_free"
+              data-tooltip="ARM64 based free servers located in Europe"
             >
-            <span
-              class="ping text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5"
-              >Ping: 0ms</span
-            >
+              <span class="absolute top-2 right-2 px-1.5 py-0.5 text-[0.625rem] font-semibold tracking-wider uppercase rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                Free
+              </span>
+
+              <span class="fi fi-eu text-2xl mb-2 rounded-sm"></span>
+              <span class="text-xs font-medium text-[rgb(var(--c-50))]">
+                Europe
+              </span>
+              <span class="ping text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5">
+                Ping: -ms
+              </span>
+            </div>
+            <!-- future free stuff ther -->
           </div>
         </div>
       </div>
@@ -41,27 +72,21 @@
       id="egg_options"
       class="hide_scrollbar animate h-96 overflow-auto fi-section fi-section-dark p-3"
     >
-      <div
-        class="p-2 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 justify-items-center items-start"
-      >
+      <div class="p-2 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 justify-items-center items-start">
         <div
           hidden
           id="egg_template"
           data-egg_id="?"
           class="flex h-auto w-full max-w-27.5 flex-col items-center p-3 fi-btn hover:bg-white/5 hover:-translate-y-1 select-none transition-all duration-300 border-transparent bg-transparent rounded-xl group"
         >
-          <figure
-            class="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] overflow-hidden flex items-center justify-center shrink-0 shadow-inner group-hover:border-primary-500/50 transition-colors"
-          >
+          <figure class="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] overflow-hidden flex items-center justify-center shrink-0 shadow-inner group-hover:border-primary-500/50 transition-colors">
             <img
               src=""
               alt="Loading"
               class="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow"
             />
           </figure>
-          <span
-            class="text-[0.7rem] sm:text-xs mt-2.5 text-center w-full wrap-break-word leading-tight flex items-center justify-center min-h-10 font-medium text-[rgb(var(--c-50))] group-hover:text-white transition-colors"
-          >
+          <span class="text-[0.7rem] sm:text-xs mt-2.5 text-center w-full wrap-break-word leading-tight flex items-center justify-center min-h-10 font-medium text-[rgb(var(--c-50))] group-hover:text-white transition-colors">
             Downloading...
           </span>
         </div>
@@ -70,9 +95,7 @@
 
     <!-- Subplan Selection -->
     <div class="space-y-2" id="subplan_container">
-      <label
-        class="block animate text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-      >
+      <label class="block animate text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
         Select Plan Tier:
       </label>
 
@@ -87,13 +110,12 @@
             data-tooltip="Standard free plan. Specs scale according to your chosen game egg."
           >
             <i class="ph ph-sparkle text-xl mb-1.5 text-emerald-400"></i>
-            <span class="text-xs font-semibold text-[rgb(var(--c-50))]"
-              >Free</span
-            >
-            <span
-              class="text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5"
-              >Scaled Specs</span
-            >
+            <span class="text-xs font-semibold text-[rgb(var(--c-50))]">
+              Free
+            </span>
+            <span class="text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5">
+              Scaled Specs
+            </span>
           </div>
 
           <div
@@ -102,13 +124,12 @@
             data-tooltip="Enhanced resources for growing community projects."
           >
             <i class="ph ph-users text-xl mb-1.5 text-sky-400"></i>
-            <span class="text-xs font-semibold text-[rgb(var(--c-50))]"
-              >Friends</span
-            >
-            <span
-              class="text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5"
-              >Enhanced</span
-            >
+            <span class="text-xs font-semibold text-[rgb(var(--c-50))]">
+              Friends
+            </span>
+            <span class="text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5">
+              Enhanced
+            </span>
           </div>
 
           <div
@@ -117,13 +138,12 @@
             data-tooltip="Maximum dedicated capacity for large server networks."
           >
             <i class="ph ph-rocket-launch text-xl mb-1.5 text-indigo-400"></i>
-            <span class="text-xs font-semibold text-[rgb(var(--c-50))]"
-              >Advanced</span
-            >
-            <span
-              class="text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5"
-              >Premium</span
-            >
+            <span class="text-xs font-semibold text-[rgb(var(--c-50))]">
+              Advanced
+            </span>
+            <span class="text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5">
+              Premium
+            </span>
           </div>
         </div>
       </div>
@@ -159,8 +179,7 @@
           data-callback="onTurnstileSuccess"
           data-expired-callback="onTurnstileExpired"
           style="min-height:78px;"
-        >
-        </div>
+        ></div>
       </div>
     </div>
 
@@ -168,15 +187,9 @@
     <div id="specs_preview" class="space-y-3">
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
         <!-- Resource Bars -->
-        <div
-          class="animate md:col-span-8 space-y-2.5 bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] p-3.5 rounded-lg"
-        >
-          <div
-            class="flex items-center justify-between pb-1 border-b border-[rgb(var(--c-800))]/60"
-          >
-            <label
-              class="text-[0.6875rem] font-bold uppercase tracking-wider text-[rgb(var(--c-300))]"
-            >
+        <div class="animate md:col-span-8 space-y-2.5 bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] p-3.5 rounded-lg">
+          <div class="flex items-center justify-between pb-1 border-b border-[rgb(var(--c-800))]/60">
+            <label class="text-[0.6875rem] font-bold uppercase tracking-wider text-[rgb(var(--c-300))]">
               Resource Allocations
             </label>
           </div>
@@ -184,9 +197,7 @@
           <div class="space-y-2">
             <!-- CPU Bar -->
             <div class="space-y-1">
-              <div
-                class="flex justify-between text-[0.625rem] font-mono text-[rgb(var(--c-400))]"
-              >
+              <div class="flex justify-between text-[0.625rem] font-mono text-[rgb(var(--c-400))]">
                 <span>CPU Cores</span>
                 <span id="cpu_text">0%</span>
               </div>
@@ -198,22 +209,18 @@
                   id="boost_cpu_bar"
                   class="absolute h-full bg-[rgb(var(--primary-500))] opacity-60 transition-all duration-500 ease-in-out"
                   style="width: 0%"
-                >
-                </div>
+                ></div>
                 <div
                   id="cpu_bar"
                   class="relative h-full bg-[rgb(var(--primary-500))] font-semibold transition-all duration-500 ease-in-out"
                   style="width: 0%"
-                >
-                </div>
+                ></div>
               </div>
             </div>
 
             <!-- RAM Bar -->
             <div class="space-y-1">
-              <div
-                class="flex justify-between text-[0.625rem] font-mono text-[rgb(var(--c-400))]"
-              >
+              <div class="flex justify-between text-[0.625rem] font-mono text-[rgb(var(--c-400))]">
                 <span>Memory Allocation</span>
                 <span id="ram_text">0 GB</span>
               </div>
@@ -225,22 +232,18 @@
                   id="boost_ram_bar"
                   class="absolute h-full bg-[rgb(var(--primary-500))] opacity-60 transition-all duration-500 ease-in-out"
                   style="width: 0%"
-                >
-                </div>
+                ></div>
                 <div
                   id="ram_bar"
                   class="relative h-full bg-[rgb(var(--primary-500))] font-semibold transition-all duration-500 ease-in-out"
                   style="width: 0%"
-                >
-                </div>
+                ></div>
               </div>
             </div>
 
             <!-- Disk Bar -->
             <div class="space-y-1">
-              <div
-                class="flex justify-between text-[0.625rem] font-mono text-[rgb(var(--c-400))]"
-              >
+              <div class="flex justify-between text-[0.625rem] font-mono text-[rgb(var(--c-400))]">
                 <span>NVMe Storage</span>
                 <span id="ssd_text">0 GB</span>
               </div>
@@ -252,26 +255,20 @@
                   id="boost_ssd_bar"
                   class="absolute h-full bg-[rgb(var(--primary-500))] opacity-60 transition-all duration-500 ease-in-out"
                   style="width: 0%"
-                >
-                </div>
+                ></div>
                 <div
                   id="ssd_bar"
                   class="relative h-full bg-[rgb(var(--primary-500))] font-semibold transition-all duration-500 ease-in-out"
                   style="width: 0%"
-                >
-                </div>
+                ></div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Node Availability Dial -->
-        <div
-          class="animate md:col-span-4 flex flex-col items-center justify-center text-center space-y-1.5 bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] p-3.5 rounded-lg h-full"
-        >
-          <label
-            class="text-[0.6875rem] font-bold uppercase tracking-wider text-[rgb(var(--c-300))]"
-          >
+        <div class="animate md:col-span-4 flex flex-col items-center justify-center text-center space-y-1.5 bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] p-3.5 rounded-lg h-full">
+          <label class="text-[0.6875rem] font-bold uppercase tracking-wider text-[rgb(var(--c-300))]">
             Node Capacity
           </label>
 
@@ -290,7 +287,8 @@
                 r="40"
                 stroke="rgb(var(--c-900))"
                 stroke-width="10"
-                fill="none"></circle>
+                fill="none"
+              ></circle>
               <circle
                 id="availability_base_circle"
                 cx="50"
@@ -301,7 +299,8 @@
                 stroke-linecap="round"
                 fill="none"
                 class="transition-all duration-500 ease-in-out"
-                stroke-dasharray="0 999"></circle>
+                stroke-dasharray="0 999"
+              ></circle>
               <circle
                 id="availability_after_circle"
                 cx="50"
@@ -313,7 +312,8 @@
                 stroke-linecap="round"
                 fill="none"
                 class="transition-all duration-500 ease-in-out"
-                stroke-dasharray="0 999"></circle>
+                stroke-dasharray="0 999"
+              ></circle>
             </svg>
 
             <div
@@ -339,17 +339,16 @@
       </div>
 
       <!-- Total Cost Row -->
-      <div
-        class="animate flex justify-between items-center px-4 py-2.5 bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] rounded-lg"
-      >
-        <span
-          class="text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-300))]"
-          >Monthly Cost:</span
-        >
+      <div class="animate flex justify-between items-center px-4 py-2.5 bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] rounded-lg">
+        <span class="text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-300))]">
+          Monthly Cost:
+        </span>
         <span
           id="estimated_cost"
-          class="text-xl font-mono font-bold text-primary-500">-</span
+          class="text-xl font-mono font-bold text-primary-500"
         >
+          -
+        </span>
       </div>
 
       <!-- Submit Actions Stack -->
@@ -359,9 +358,7 @@
           class="fi-btn animate w-full flex flex-col items-center justify-center bg-primary-500 text-white hover:bg-[rgb(var(--primary-600))] py-2.5 rounded-lg transition-colors"
         >
           <span class="text-xs font-bold tracking-wide"> Get My Server! </span>
-          <div
-            class="flex items-center justify-center gap-1.5 mt-0.5 text-[0.6875rem] opacity-90"
-          >
+          <div class="flex items-center justify-center gap-1.5 mt-0.5 text-[0.6875rem] opacity-90">
             <i class="ph ph-shield-check text-sm leading-none"></i>
             <span>Secured Deployment</span>
           </div>
@@ -375,21 +372,22 @@
           Manage Subscriptions
         </a>
 
-        <p
-          class="animate text-[0.6875rem] text-center text-[rgb(var(--c-400))] pt-1"
-        >
+        <p class="animate text-[0.6875rem] text-center text-[rgb(var(--c-400))] pt-1">
           By deploying a server, you agree to our{" "}
           <a
             href="/legal"
             class="text-[rgb(var(--c-300))] underline hover:text-primary-500"
-            >Terms of Service</a
-          >{" "}
+          >
+            Terms of Service
+          </a>{" "}
           and{" "}
           <a
             href="/legal"
             class="text-[rgb(var(--c-300))] underline hover:text-primary-500"
-            >Privacy Policy</a
-          >.
+          >
+            Privacy Policy
+          </a>
+          .
         </p>
       </div>
     </div>
