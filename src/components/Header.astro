@@ -10,14 +10,14 @@ import HeaderIcon from "@components/web_icon.astro";
 <header id="header" class="fixed top-3 w-full h-16 z-40">
   <Container size="2xl">
     <div
-      class="relative h-full w-full rounded-2xl border border-white/15 bg-zinc-900/60 backdrop-blur-xl shadow-xl px-4 backdrop-saturate-200"
+      class="relative h-full w-full backdrop-blur-md backdrop-saturate-200 backdrop-brightness-50 bg-[rgb(var(--c-800))]/60! shadow-xl px-4"
     >
       <div
         class="absolute left-4 top-1/2 -translate-y-1/2 flex gap-1 font-semibold transition-transform duration-300 hover:scale-105"
       >
         <a
           href="/"
-          class="flex gap-3 items-center w-fit font-semibold text-current hover:text-white transition-colors duration-300 ease-in-out"
+          class="flex gap-3 items-center w-fit font-semibold text-[rgb(var(--c-50))] hover:text-primary-500 transition-colors duration-300 ease-in-out"
         >
           <HeaderIcon />
           <div>Hosting</div>
@@ -25,18 +25,18 @@ import HeaderIcon from "@components/web_icon.astro";
       </div>
 
       <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <nav class="hidden lg:flex items-center justify-center text-sm gap-1.5">
+        <nav class="hidden lg:flex items-center justify-center text-xs gap-1.5">
           {
             LINKS.map((LINK) => (
               <a
                 href={LINK.HREF}
                 class={cn(
-                  "h-8 rounded-lg px-3 text-current whitespace-nowrap",
-                  "flex items-center justify-center",
+                  "h-8 rounded-sm px-3 text-[rgb(var(--c-300))] whitespace-nowrap",
+                  "flex items-center justify-center font-medium",
                   "transition-all duration-300 ease-in-out",
                   pathname === LINK.HREF || "/" + subpath?.[0] === LINK.HREF
-                    ? "bg-white text-black shadow-sm"
-                    : "hover:bg-white/15 hover:text-white",
+                    ? "bg-primary-500 text-white shadow-sm"
+                    : "hover:bg-white/3 hover:text-[rgb(var(--c-50))]",
                 )}
               >
                 {LINK.TEXT}
@@ -50,7 +50,7 @@ import HeaderIcon from "@components/web_icon.astro";
         <button
           data-tooltip="?"
           id="server-latency-pill"
-          class="flex items-center justify-center bg-blue-500/15 border border-white/20 text-sm font-medium px-3 py-1 rounded-xl transition-all duration-300 hover:bg-blue-500/25"
+          class="flex items-center justify-center bg-primary-500/10 border border-hairline text-xs font-mono font-medium px-3 py-1 rounded-sm text-[rgb(var(--c-50))] transition-all duration-300 hover:bg-primary-500/20"
         >
           Ping: <span id="average-ping" class="ml-1">0</span> ms
         </button>
@@ -58,7 +58,7 @@ import HeaderIcon from "@components/web_icon.astro";
         <div
           data-tooltip="Amount of created accounts"
           id="active-users-pill"
-          class="flex items-center justify-center bg-green-500/15 border border-white/20 text-sm font-medium px-3 py-1 rounded-xl transition-all duration-300 hover:bg-green-500/25"
+          class="flex items-center justify-center bg-emerald-500/10 border border-hairline text-xs font-mono font-medium px-3 py-1 rounded-sm text-[rgb(var(--c-50))] transition-all duration-300 hover:bg-emerald-500/20"
         >
           Users: <span id="active-users-count" class="ml-1">0</span>
         </div>
@@ -347,10 +347,10 @@ import HeaderIcon from "@components/web_icon.astro";
   }
 
   const getPingColorClass = (ping: number): string => {
-    if (ping === Infinity) return "text-red-500";
+    if (ping === Infinity) return "text-rose-400";
     if (ping < 60) return "text-emerald-400";
     if (ping < 150) return "text-amber-400";
-    return "text-red-400";
+    return "text-rose-400";
   };
 
   pingSpan?.parentElement?.addEventListener("click", async () => {
@@ -404,7 +404,7 @@ import HeaderIcon from "@components/web_icon.astro";
       pingDisplay.textContent = "--ms";
       pingDisplay.className =
         "text-6xl font-extrabold tracking-tighter mb-2 text-white transition-colors duration-300";
-      statusDisplay.innerHTML = `<i class="ph ph-circle-notch animate-spin text-indigo-400"></i> Initializing...`;
+      statusDisplay.innerHTML = `<i class="ph ph-circle-notch animate-spin text-primary-500"></i> Initializing...`;
       jDisplay.textContent = "--ms";
       vDisplay.textContent = "--ms";
       lDisplay.textContent = "0%";
@@ -446,7 +446,7 @@ import HeaderIcon from "@components/web_icon.astro";
         for (let i = 1; i <= 10; i++) {
           if (signal.aborted) return;
 
-          statusDisplay.innerHTML = `<i class="ph ph-broadcast text-indigo-400 animate-pulse"></i> Testing ${node.name} (${node.region})`;
+          statusDisplay.innerHTML = `<i class="ph ph-broadcast text-primary-500 animate-pulse"></i> Testing ${node.name} (${node.region})`;
           sDisplay.textContent = `${i}/10`;
 
           const p = await pingNode(node.url, []);

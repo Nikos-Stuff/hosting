@@ -7,25 +7,29 @@ type Props = {
 
 export default function BlogCard({ entry }: Props) {
   return (
-    <div class="animate p-6 border border-white/25 rounded-lg hover:bg-white/10 shadow-none hover:shadow-xl hover:shadow-black/50 transition-[background-color,box-shadow] duration-300">
+    <div class="animate fi-section fi-section-hoverable p-6 transition-[background-color,border-color] duration-200">
       {/* title thingy */}
-      <h2 class="text-2xl font-bold mb-2">{entry.data.title}</h2>
+      <h2 class="text-base font-semibold text-[rgb(var(--c-50))] mb-1.5">
+        {entry.data.title}
+      </h2>
 
       {/* dateeeee */}
       {entry.data.date && (
-        <p class="text-sm text-gray-500 mb-4">{formatDate(entry.data.date)}</p>
+        <p class="text-xs text-[rgb(var(--c-400))] font-mono mb-3">
+          {formatDate(entry.data.date)}
+        </p>
       )}
 
       {/* our beloved mdd */}
-      <div class="max-w-full prose prose-invert">
+      <div class="max-w-full prose prose-invert text-xs text-[rgb(var(--c-300))]">
         <div innerHTML={entry.rendered?.html}></div>
       </div>
 
       {/* tagzzz */}
       {entry.data.tags?.length > 0 && (
-        <ul class="flex flex-wrap mt-4 gap-2">
+        <ul class="flex flex-wrap mt-4 gap-1.5">
           {entry.data.tags?.map((tag: string) => (
-            <li class="text-xs uppercase py-0.5 px-2 rounded bg-white/20 text-white/75">
+            <li class="fi-badge text-[0.6875rem] uppercase py-0.5 px-2 bg-white/3 text-[rgb(var(--c-300))] border border-hairline">
               {truncateText(tag, 20)}
             </li>
           ))}

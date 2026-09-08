@@ -1,81 +1,108 @@
-<div>
-  <div class="space-y-4 animate">
-    <!-- Custom Dropdown grid -->
+<div class="space-y-6 text-left">
+  <div class="space-y-6">
+    <!-- Location Selection -->
     <div class="space-y-2" id="location_dropdown">
-      <p class="block text-sm font-medium mb-1">Choose Location:</p>
-      <!-- Scrollable locations grid -->
+      <label
+        class="block animate text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+      >
+        Choose Location:
+      </label>
       <div
         id="location_options"
-        class="hide_scrollbar max-h-52 overflow-auto rounded-lg border border-white/20 bg-black/40 p-3"
+        class="hide_scrollbar animate max-h-52 overflow-auto fi-section fi-section-dark p-3"
       >
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div
-            class="px-3 py-4 rounded-lg cursor-pointer hover:bg-white/10 transition-all duration-300 text-center select-none flex flex-col items-center justify-center"
+            class="px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent"
             data-location_name="europe_free"
             data-tooltip="Ryzen 9 5950X based servers located in Europe"
           >
             <span class="fi fi-eu text-2xl mb-2 rounded-sm"></span>
-            <span class="text-sm">Europe</span>
-            <span class="ping text-xs opacity-50">Ping: 0ms</span>
+            <span class="text-xs font-medium text-[rgb(var(--c-50))]"
+              >Europe</span
+            >
+            <span
+              class="ping text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5"
+              >Ping: 0ms</span
+            >
           </div>
 
           <div
-            class="px-3 py-4 rounded-lg cursor-pointer hover:bg-white/10 transition-all duration-300 text-center select-none flex flex-col items-center justify-center"
+            class="px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent"
             data-location_name="us_free"
             data-tooltip="EPYC based servers located in the United States"
           >
             <span class="fi fi-us text-2xl mb-2 rounded-sm"></span>
-            <span class="text-sm">United States</span>
-            <span class="ping text-xs opacity-50">Ping: 0ms</span>
+            <span class="text-xs font-medium text-[rgb(var(--c-50))]"
+              >United States</span
+            >
+            <span
+              class="ping text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5"
+              >Ping: 0ms</span
+            >
           </div>
 
           <div
-            class="px-3 py-4 rounded-lg cursor-pointer hover:bg-white/10 transition-all duration-300 text-center select-none flex flex-col items-center justify-center"
+            class="px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent"
             data-location_name="sydney_free"
-            data-tooltip="UPCOMING LOCATION - EPYC based servers located in the Sydney, Australia"
+            data-tooltip="UPCOMING LOCATION - EPYC based servers located in Sydney, Australia"
           >
             <span class="fi fi-au text-2xl mb-2 rounded-sm"></span>
-            <span class="text-sm">Australia (Sydney)</span>
-            <span class="ping text-xs opacity-50">Ping: -ms</span>
+            <span class="text-xs font-medium text-[rgb(var(--c-50))]"
+              >Australia (Sydney)</span
+            >
+            <span
+              class="ping text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5"
+              >Ping: -ms</span
+            >
           </div>
 
           <div
-            class="px-3 py-4 rounded-lg cursor-pointer hover:bg-white/10 transition-all duration-300 text-center select-none flex flex-col items-center justify-center"
+            class="px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent"
             data-location_name="india_free"
-            data-tooltip="EPYC based servers located in the Asia, India"
+            data-tooltip="EPYC based servers located in Asia, India"
           >
             <span class="fi fi-in text-2xl mb-2 rounded-sm"></span>
-            <span class="text-sm">Asia (India)</span>
-            <span class="ping text-xs opacity-50">Ping: -ms</span>
+            <span class="text-xs font-medium text-[rgb(var(--c-50))]"
+              >Asia (India)</span
+            >
+            <span
+              class="ping text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5"
+              >Ping: -ms</span
+            >
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Eggs grid -->
+    <!-- Egg Selection -->
     <div class="space-y-2" id="egg_dropdown">
-      <p class="block text-sm font-medium mb-1">Select "egg":</p>
+      <label
+        class="block animate text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+      >
+        Select Game / Application:
+      </label>
 
       <div
         id="egg_options"
-        class="hide_scrollbar h-96 overflow-auto rounded-lg border border-white/20 bg-black/40 p-3"
+        class="hide_scrollbar animate h-96 overflow-auto fi-section fi-section-dark p-3"
       >
         <div
-          class="p-3 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 justify-items-center items-start"
+          class="p-2 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 justify-items-center items-start"
         >
           <div
             hidden
             id="egg_template"
             data-egg_id="?"
-            class="flex h-auto w-24 flex-col items-center px-2 py-3 rounded-lg cursor-pointer hover:bg-white/10 select-none transition-all border border-transparent"
+            class="flex h-auto w-24 flex-col items-center px-2 py-3 fi-btn hover:bg-white/3 select-none transition-all border-transparent bg-transparent"
           >
             <figure
-              class="w-16 h-16 rounded-sm overflow-hidden bg-white/5 flex items-center justify-center shrink-0"
+              class="w-16 h-16 fi-section overflow-hidden flex items-center justify-center shrink-0"
             >
               <img src="" alt="Loading" class="w-full h-full object-cover" />
             </figure>
             <span
-              class="text-sm mt-2 text-center w-full whitespace-normal wrap-break-word leading-tight flex items-center justify-center min-h-16"
+              class="text-xs mt-2 text-center w-full whitespace-normal wrap-break-word leading-tight flex items-center justify-center min-h-12 font-medium text-[rgb(var(--c-50))]"
             >
               Downloading...
             </span>
@@ -86,80 +113,97 @@
       <a
         href="https://forms.gle/KXNLmxLib8ERo9vT7"
         target="_blank"
-        class="text-xs italic"
+        class="inline-block animate text-[0.6875rem] text-[rgb(var(--c-400))] hover:text-primary-500 transition-colors pt-1"
       >
-        We're missing something? Let us know!
+        We're missing something? Let us know! →
       </a>
     </div>
 
-    <!-- Subplan dropdown -->
+    <!-- Subplan Selection -->
     <div class="space-y-2" id="subplan_container">
-      <p class="block text-sm font-medium mb-1">Select Subplan:</p>
+      <label
+        class="block animate text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+      >
+        Select Plan Tier:
+      </label>
 
       <div
         id="subplan_options"
-        class="hide_scrollbar max-h-52 overflow-auto rounded-lg border border-white/20 bg-black/40 p-3"
+        class="hide_scrollbar animate max-h-52 overflow-auto fi-section fi-section-dark p-3"
       >
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div
-            class="px-3 py-4 rounded-lg cursor-pointer hover:bg-white/10 transition-all duration-300 text-center select-none flex flex-col items-center justify-center"
+            class="px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent"
             data-subplan_name="free"
-            data-tooltip="Good old free plan. Specifications are scaled based on the egg you choose."
+            data-tooltip="Standard free plan. Specs scale according to your chosen game egg."
           >
-            <i class="ph ph-sparkle text-2xl mb-2 text-green-400"></i>
-            <span class="text-sm font-medium">Free</span>
-            <span class="text-xs opacity-50 mt-1">Scaled Specs</span>
+            <i class="ph ph-sparkle text-xl mb-1.5 text-emerald-400"></i>
+            <span class="text-xs font-semibold text-[rgb(var(--c-50))]"
+              >Free</span
+            >
+            <span
+              class="text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5"
+              >Scaled Specs</span
+            >
           </div>
 
           <div
-            class="px-3 py-4 rounded-lg cursor-pointer hover:bg-white/10 transition-all duration-300 text-center select-none flex flex-col items-center justify-center"
+            class="px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent"
             data-subplan_name="friends"
-            data-tooltip="Enhanced performance with more resources for growing projects </br> Performance: ★★★☆☆"
+            data-tooltip="Enhanced resources for growing community projects."
           >
-            <i class="ph ph-users text-2xl mb-2 text-blue-400"></i>
-            <span class="text-sm font-medium">Friends</span>
-            <span class="text-xs opacity-50 mt-1">Enhanced</span>
+            <i class="ph ph-users text-xl mb-1.5 text-sky-400"></i>
+            <span class="text-xs font-semibold text-[rgb(var(--c-50))]"
+              >Friends</span
+            >
+            <span
+              class="text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5"
+              >Enhanced</span
+            >
           </div>
 
           <div
-            class="px-3 py-4 rounded-lg cursor-pointer hover:bg-white/10 transition-all duration-300 text-center select-none flex flex-col items-center justify-center"
+            class="px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent"
             data-subplan_name="advanced"
-            data-tooltip="Premium performance with the most resources for large projects </br> Performance: ★★★★★"
+            data-tooltip="Maximum dedicated capacity for large server networks."
           >
-            <i class="ph ph-rocket-launch text-2xl mb-2 text-purple-400"></i>
-            <span class="text-sm font-medium">Advanced</span>
-            <span class="text-xs opacity-50 mt-1">Premium</span>
+            <i class="ph ph-rocket-launch text-xl mb-1.5 text-indigo-400"></i>
+            <span class="text-xs font-semibold text-[rgb(var(--c-50))]"
+              >Advanced</span
+            >
+            <span
+              class="text-[0.625rem] font-mono text-[rgb(var(--c-400))] mt-0.5"
+              >Premium</span
+            >
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Email Input for order -->
-    <div class="relative">
-      <p class="block text-sm font-medium mb-1">Your Email:</p>
+    <!-- Client Email Input -->
+    <div class="space-y-1.5">
+      <label
+        for="client_email"
+        class="block animate text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+      >
+        Your Email Address:
+      </label>
       <input
-        data-tooltip="Your auto-generated password will be sent here. No spam!"
+        data-tooltip="Your auto-generated login credentials will be delivered here."
         id="client_email"
-        type="text"
-        placeholder="example@xyz.com"
-        class="w-full p-4 border rounded-lg
-              bg-transparent
-             border-white/20 hover:bg-white/10
-               focus:outline-none
-             focus:border-white/40
-               focus:ring-2 focus:ring-white/20
-               focus:ring-offset-0
-               transition-all duration-300 ease-out"
+        type="email"
+        placeholder="example@domain.com"
+        class="fi-input animate w-full p-3 bg-[rgb(var(--c-900))] text-[rgb(var(--c-50))] border border-hairline focus:border-primary-500 focus:outline-none transition-colors"
       />
     </div>
 
-    <div class="flex justify-center my-4">
+    <!-- Cloudflare Turnstile -->
+    <div class="flex animate justify-center my-4">
       <div class="w-full max-w-90 h-19.5 flex items-center justify-center">
-        <!-- reserved box to avoid CLS and keep centered -->
         <div
           class="cf-turnstile"
           data-sitekey="0x4AAAAAACBNatxTQCTb20u7"
-          data-theme="light"
+          data-theme="dark"
           data-size="normal"
           data-callback="onTurnstileSuccess"
           data-expired-callback="onTurnstileExpired"
@@ -169,140 +213,138 @@
       </div>
     </div>
 
-    <!-- Line -->
-    <hr class="border-white/25 my-5" />
-
-    <!-- Server specs preview ( CPU / RAM / SSD bars ) -->
+    <!-- Server Specs Preview Bar Graph -->
     <div id="specs_preview" class="space-y-4">
-      <div class="flex items-start gap-4">
-        <div class="flex-1">
-          <p class="block text-sm font-medium mb-2">Server Specs Preview:</p>
+      <div class="grid animate grid-cols-1 md:grid-cols-12 gap-6 items-center">
+        <!-- Resource Bars -->
+        <div class="md:col-span-8 space-y-3">
+          <label
+            class="block text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+          >
+            Server Specs Preview:
+          </label>
 
-          <div class="h-28 flex flex-col justify-between">
-            <div>
+          <div class="space-y-2">
+            <!-- CPU Bar -->
+            <div
+              class="w-full fi-section fi-section-dark h-5 relative overflow-hidden"
+              data-tooltip="-"
+            >
               <div
-                class="w-full bg-white/5 rounded-md h-5 relative overflow-hidden"
-                data-tooltip="-"
+                id="boost_cpu_bar"
+                class="absolute h-full transition-all duration-300 bg-primary-500/40"
+                style="width: 0%"
               >
-                <div
-                  id="boost_cpu_bar"
-                  class="absolute h-full rounded-md transition-all duration-300 bg-purple-400/70"
-                  style="width: 0%"
-                >
-                </div>
-                <div
-                  id="cpu_bar"
-                  class="relative h-full rounded-md transition-all duration-300 bg-white"
-                  style="width: 0%"
-                >
-                </div>
-                <span
-                  id="cpu_text"
-                  class="absolute inset-0 z-10 flex items-center justify-center text-[11px] font-semibold text-white"
-                  style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);"
-                >
-                  CPU - 0%
-                </span>
               </div>
+              <div
+                id="cpu_bar"
+                class="relative h-full transition-all duration-300 bg-primary-500"
+                style="width: 0%"
+              >
+              </div>
+              <span
+                id="cpu_text"
+                class="absolute inset-0 z-10 flex items-center justify-center text-[0.625rem] font-mono font-bold text-white drop-shadow"
+              >
+                CPU - 0%
+              </span>
             </div>
 
-            <div>
+            <!-- RAM Bar -->
+            <div
+              class="w-full fi-section fi-section-dark h-5 relative overflow-hidden"
+              data-tooltip="-"
+            >
               <div
-                class="w-full bg-white/5 rounded-md h-5 relative overflow-hidden"
-                data-tooltip="-"
+                id="boost_ram_bar"
+                class="absolute h-full transition-all duration-300 bg-primary-500/40"
+                style="width: 0%"
               >
-                <div
-                  id="boost_ram_bar"
-                  class="absolute h-full rounded-md transition-all duration-300 bg-purple-400/70"
-                  style="width: 0%"
-                >
-                </div>
-                <div
-                  id="ram_bar"
-                  class="relative h-full rounded-md transition-all duration-300 bg-white"
-                  style="width: 0%"
-                >
-                </div>
-                <span
-                  id="ram_text"
-                  class="absolute inset-0 z-10 flex items-center justify-center text-[11px] font-semibold text-white"
-                  style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);"
-                >
-                  RAM - 0 GB
-                </span>
               </div>
+              <div
+                id="ram_bar"
+                class="relative h-full transition-all duration-300 bg-primary-500"
+                style="width: 0%"
+              >
+              </div>
+              <span
+                id="ram_text"
+                class="absolute inset-0 z-10 flex items-center justify-center text-[0.625rem] font-mono font-bold text-white drop-shadow"
+              >
+                RAM - 0 GB
+              </span>
             </div>
 
-            <div>
+            <!-- Disk Bar -->
+            <div
+              class="w-full fi-section fi-section-dark h-5 relative overflow-hidden"
+              data-tooltip="-"
+            >
               <div
-                class="w-full bg-white/5 rounded-md h-5 relative overflow-hidden"
-                data-tooltip="-"
+                id="boost_ssd_bar"
+                class="absolute h-full transition-all duration-300 bg-primary-500/40"
+                style="width: 0%"
               >
-                <div
-                  id="boost_ssd_bar"
-                  class="absolute h-full rounded-md transition-all duration-300 bg-purple-400/70"
-                  style="width: 0%"
-                >
-                </div>
-                <div
-                  id="ssd_bar"
-                  class="relative h-full rounded-md transition-all duration-300 bg-white"
-                  style="width: 0%"
-                >
-                </div>
-                <span
-                  id="ssd_text"
-                  class="absolute inset-0 z-10 flex items-center justify-center text-[11px] font-semibold text-white"
-                  style="text-shadow: 0 1px 2px rgba(0,0,0,0.8);"
-                >
-                  SSD STORAGE - 0 GB
-                </span>
               </div>
+              <div
+                id="ssd_bar"
+                class="relative h-full transition-all duration-300 bg-primary-500"
+                style="width: 0%"
+              >
+              </div>
+              <span
+                id="ssd_text"
+                class="absolute inset-0 z-10 flex items-center justify-center text-[0.625rem] font-mono font-bold text-white drop-shadow"
+              >
+                SSD STORAGE - 0 GB
+              </span>
             </div>
           </div>
         </div>
 
-        <div class="w-36 shrink-0">
-          <p class="block text-sm font-medium mb-2 text-center">Availability</p>
+        <!-- Node Availability Dial -->
+        <div
+          class="md:col-span-4 flex flex-col items-center justify-center text-center space-y-1 border-t md:border-t-0 md:border-l border-hairline pt-4 md:pt-0 md:pl-6"
+        >
+          <label
+            class="block text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))] mb-1"
+          >
+            Node Capacity
+          </label>
 
           <div
             id="availability_circle"
-            class="relative w-28 h-28 mx-auto"
+            class="relative w-24 h-24"
             data-tooltip="-"
           >
             <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
-              <!-- Track -->
               <circle
                 cx="50"
                 cy="50"
                 r="42"
-                stroke="rgba(255,255,255,0.15)"
-                stroke-width="10"
+                stroke="rgb(var(--c-900))"
+                stroke-width="8"
                 fill="none"></circle>
-
-              <!-- Current availability (white, drawn first) -->
               <circle
                 id="availability_base_circle"
                 cx="50"
                 cy="50"
                 r="42"
-                stroke="white"
-                stroke-width="10"
+                stroke="rgb(var(--primary-500))"
+                stroke-width="8"
                 stroke-linecap="round"
                 fill="none"
                 stroke-dasharray="0 999"
                 style="transition: stroke-dasharray 500ms ease, stroke-dashoffset 500ms ease;"
               ></circle>
-
-              <!-- After-order availability (gray, drawn on top so it is visible) -->
               <circle
                 id="availability_after_circle"
                 cx="50"
                 cy="50"
                 r="42"
-                stroke="rgb(156 163 175)"
-                stroke-opacity="0.95"
-                stroke-width="10"
+                stroke="rgb(var(--c-400))"
+                stroke-opacity="0.5"
+                stroke-width="8"
                 stroke-linecap="round"
                 fill="none"
                 stroke-dasharray="0 999"
@@ -312,15 +354,19 @@
 
             <div
               id="availability_percent_text"
-              class="absolute inset-0 flex items-center justify-center text-sm font-semibold"
+              class="absolute inset-0 flex items-center justify-center text-xs font-mono font-bold text-[rgb(var(--c-50))]"
             >
               0%
             </div>
           </div>
 
-          <p id="can_deploy" class="text-xs opacity-50 text-center mt-2">-</p>
+          <p
+            id="can_deploy"
+            class="text-[0.6875rem] text-[rgb(var(--c-400))] font-mono pt-1"
+          >
+            -
+          </p>
 
-          <!-- hidden compatibility bars for existing JS -->
           <div hidden id="availability_bar" data-tooltip="-">
             <div id="availability_after_bar" style="width: 0%"></div>
             <div id="availability_base_bar" style="width: 0%"></div>
@@ -328,677 +374,516 @@
         </div>
       </div>
 
-      <!-- Total cost -->
-      <div class="flex justify-between items-center">
-        <p class="text-lg font-semibold">Monthly Cost:</p>
-        <p id="estimated_cost" class="text-4xl font-bold">-</p>
+      <!-- Total Cost Row -->
+      <div class="flex animate justify-between items-center pt-2">
+        <span
+          class="text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+          >Monthly Cost:</span
+        >
+        <span
+          id="estimated_cost"
+          class="text-2xl font-mono font-bold text-primary-500">-</span
+        >
       </div>
 
-      <!-- Line -->
-      <hr class="border-white/25 my-5" />
-
-      <div>
+      <!-- Submit Actions Stack -->
+      <div class="space-y-2 pt-2">
         <button
           id="place_order_btn"
-          class="group w-full p-4 mt-5 flex flex-col items-center justify-center border rounded-lg rounded-b-sm hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out"
+          class="fi-btn animate w-full flex flex-col items-center justify-center bg-primary-500 text-white hover:bg-[rgb(var(--primary-600))] transition-colors"
         >
-          <span
-            class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300 font-medium"
-          >
+          <span class="text-xs font-semibold tracking-wide">
             Get My Server!
           </span>
-
           <div
-            class="flex items-center justify-center gap-1.5 mt-1.5 z-10 relative text-xs text-white/50 group-hover:text-white/80 transition-colors duration-300"
+            class="flex items-center justify-center gap-1.5 mt-0.5 text-[0.6875rem] opacity-90"
           >
-            <i
-              class="ph ph-shield-check text-[14px] text-green-400 group-hover:text-green-300 leading-none transform translate-y-[-1.5px] transition-colors"
-            ></i>
-            <span class="leading-none">Secured Deployment</span>
+            <i class="ph ph-shield-check text-sm leading-none"></i>
+            <span>Secured Deployment</span>
           </div>
         </button>
 
         <a
           href="https://billing.stripe.com/p/login/6oUaEWa7abrm9GSdzBdAk00"
           target="_blank"
-          class="group w-full h-5 p-4 mt-2 gap-3 flex items-center border rounded-lg rounded-t-sm hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out"
+          class="fi-btn animate w-full flex items-center justify-center bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors"
         >
-          <span
-            class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300"
-          >
-            Manage Subscriptions
-          </span>
+          Manage Subscriptions
         </a>
 
-        <a href="/legal">
-          <small>
-            By creating a server, you agree to our <strong
-              >Terms of Service</strong
-            > & <strong>Privacy Policy</strong>.
-          </small>
-        </a>
+        <p
+          class="animate text-[0.6875rem] text-center text-[rgb(var(--c-400))] pt-1"
+        >
+          By deploying a server, you agree to our{" "}
+          <a
+            href="/legal"
+            class="text-[rgb(var(--c-300))] underline hover:text-primary-500"
+            >Terms of Service</a
+          >{" "}
+          and{" "}
+          <a
+            href="/legal"
+            class="text-[rgb(var(--c-300))] underline hover:text-primary-500"
+            >Privacy Policy</a
+          >.
+        </p>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  // ------------------------------
-  // DOM ELEMENT REFERENCES
-  // ------------------------------
-  const locationOptions = document.getElementById(
-    "location_options",
-  ) as HTMLElement | null;
+  function initHostingCalculator() {
+    const locationOptions = document.getElementById("location_options");
+    const eggOptions = document.getElementById("egg_options");
+    const eggTemplate = document.getElementById("egg_template");
+    const subplanOptions = document.getElementById("subplan_options");
+    const clientEmailInput = document.getElementById(
+      "client_email",
+    ) as HTMLInputElement | null;
+    const placeOrderBtn = document.getElementById("place_order_btn");
+    const orderBlocker = document.getElementById("order_blocker");
+    const orderStatus = document.getElementById("order_activity");
 
-  const eggOptions = document.getElementById(
-    "egg_options",
-  ) as HTMLElement | null;
-  const eggTemplate = document.getElementById(
-    "egg_template",
-  ) as HTMLElement | null;
+    const cpuBar = document.getElementById("cpu_bar");
+    const ramBar = document.getElementById("ram_bar");
+    const ssdBar = document.getElementById("ssd_bar");
+    const cpuText = document.getElementById("cpu_text");
+    const ramText = document.getElementById("ram_text");
+    const ssdText = document.getElementById("ssd_text");
+    const boostCpuBar = document.getElementById("boost_cpu_bar");
+    const boostRamBar = document.getElementById("boost_ram_bar");
+    const boostSsdBar = document.getElementById("boost_ssd_bar");
 
-  const subplanOptions = document.getElementById(
-    "subplan_options",
-  ) as HTMLElement | null;
+    const availabilityBar = document.getElementById("availability_base_bar");
+    const availabilityAfterBar = document.getElementById(
+      "availability_after_bar",
+    );
+    const availabilityBaseCircle = document.getElementById(
+      "availability_base_circle",
+    ) as SVGCircleElement | null;
+    const availabilityAfterCircle = document.getElementById(
+      "availability_after_circle",
+    ) as SVGCircleElement | null;
+    const availabilityPercentText = document.getElementById(
+      "availability_percent_text",
+    );
+    const availabilityCircle = document.getElementById("availability_circle");
 
-  const clientEmailInput = document.getElementById(
-    "client_email",
-  ) as HTMLInputElement | null;
-  const placeOrderBtn = document.getElementById(
-    "place_order_btn",
-  ) as HTMLElement | null;
-  const orderBlocker = document.getElementById(
-    "order_blocker",
-  ) as HTMLElement | null;
-  const orderStatus = document.getElementById(
-    "order_activity",
-  ) as HTMLElement | null;
+    const canDeployText = document.getElementById("can_deploy");
+    const estimatedCost = document.getElementById("estimated_cost");
 
-  const cpuBar = document.getElementById("cpu_bar") as HTMLElement | null;
-  const ramBar = document.getElementById("ram_bar") as HTMLElement | null;
-  const ssdBar = document.getElementById("ssd_bar") as HTMLElement | null;
-
-  const cpuText = document.getElementById("cpu_text") as HTMLElement | null;
-  const ramText = document.getElementById("ram_text") as HTMLElement | null;
-  const ssdText = document.getElementById("ssd_text") as HTMLElement | null;
-
-  const boostCpuBar = document.getElementById(
-    "boost_cpu_bar",
-  ) as HTMLElement | null;
-  const boostRamBar = document.getElementById(
-    "boost_ram_bar",
-  ) as HTMLElement | null;
-  const boostSsdBar = document.getElementById(
-    "boost_ssd_bar",
-  ) as HTMLElement | null;
-
-  const availabilityBar = document.getElementById(
-    "availability_base_bar",
-  ) as HTMLElement | null;
-  const availabilityAfterBar = document.getElementById(
-    "availability_after_bar",
-  ) as HTMLElement | null;
-
-  const availabilityBaseCircle = document.getElementById(
-    "availability_base_circle",
-  ) as SVGCircleElement | null;
-  const availabilityAfterCircle = document.getElementById(
-    "availability_after_circle",
-  ) as SVGCircleElement | null;
-  const availabilityPercentText = document.getElementById(
-    "availability_percent_text",
-  ) as HTMLElement | null;
-  const availabilityCircle = document.getElementById(
-    "availability_circle",
-  ) as HTMLElement | null;
-
-  const canDeployText = document.getElementById(
-    "can_deploy",
-  ) as HTMLElement | null;
-  const estimatedCost = document.getElementById(
-    "estimated_cost",
-  ) as HTMLElement | null;
-  // ------------------------------
-
-  // Alert trigger displayer
-  function triggerCustomAlert(
-    title: string,
-    description: string,
-    state: "success" | "error" | "warn" | "info" = "error",
-  ) {
-    const alertEvent = new CustomEvent("app:show_alert", {
-      detail: { title, description, state },
-    });
-    window.dispatchEvent(alertEvent);
-  }
-
-  const egg_list = "https://api.nikostuff.com/HostingPelicanData?list_eggs";
-  const order_api = "https://api.nikostuff.com/HostingOrderManager?place_order";
-  const status_api =
-    "https://api.nikostuff.com/HostingOrderManager?place_order_status";
-  const specs_api =
-    "https://api.nikostuff.com/HostingOrderManager?retrive_data";
-
-  const data_storage = {
-    egg_id: "",
-    client_email: "",
-    location: "",
-    subplan: "",
-    turnstile_token: "",
-  };
-
-  const AVAILABILITY_RADIUS = 42;
-  const AVAILABILITY_CIRCUMFERENCE = 2 * Math.PI * AVAILABILITY_RADIUS;
-
-  function setStatus(text: string) {
-    if (orderStatus) orderStatus.textContent = text;
-  }
-
-  // Track if we have already alerted the user to prevent continuous alert spamming
-  let isCurrentlyRateLimited = false;
-
-  function setSelectedEggOption(selectedOption: Element) {
-    eggOptions?.querySelectorAll(".egg_option").forEach((option) => {
-      if (!(option instanceof HTMLElement)) return;
-      option.classList.remove(
-        "border-white/40",
-        "bg-white/10",
-        "ring-1",
-        "ring-white/30",
-      );
-      option.classList.add("border-transparent");
-    });
-
-    if (selectedOption instanceof HTMLElement) {
-      selectedOption.classList.remove("border-transparent");
-      selectedOption.classList.add(
-        "border-white/40",
-        "bg-white/10",
-        "ring-1",
-        "ring-white/30",
-      );
+    function triggerCustomAlert(
+      title: string,
+      description: string,
+      state: "success" | "error" | "warn" | "info" = "error",
+    ) {
+      const alertEvent = new CustomEvent("app:show_alert", {
+        detail: { title, description, state },
+      });
+      window.dispatchEvent(alertEvent);
     }
-  }
 
-  function setSelectedLocationOption(selectedOption: Element) {
+    const egg_list = "https://api.nikostuff.com/HostingPelicanData?list_eggs";
+    const order_api =
+      "https://api.nikostuff.com/HostingOrderManager?place_order";
+    const status_api =
+      "https://api.nikostuff.com/HostingOrderManager?place_order_status";
+    const specs_api =
+      "https://api.nikostuff.com/HostingOrderManager?retrive_data";
+
+    const data_storage = {
+      egg_id: "",
+      client_email: "",
+      location: "",
+      subplan: "",
+      turnstile_token: "",
+    };
+
+    const AVAILABILITY_RADIUS = 42;
+    const AVAILABILITY_CIRCUMFERENCE = 2 * Math.PI * AVAILABILITY_RADIUS;
+
+    function setStatus(text: string) {
+      if (orderStatus) orderStatus.textContent = text;
+    }
+
+    let isCurrentlyRateLimited = false;
+
+    function setSelectedOption(
+      container: HTMLElement | null,
+      selector: string,
+      selectedOption: Element,
+    ) {
+      container?.querySelectorAll(selector).forEach((option) => {
+        if (!(option instanceof HTMLElement)) return;
+        option.classList.remove("border-primary-500", "bg-white/[0.05]");
+        option.classList.add("border-transparent");
+      });
+
+      if (selectedOption instanceof HTMLElement) {
+        selectedOption.classList.remove("border-transparent");
+        selectedOption.classList.add("border-primary-500", "bg-white/[0.05]");
+      }
+    }
+
+    async function updateSpecsAndCost(isBackgroundPolling = false) {
+      if (
+        !data_storage.egg_id ||
+        !data_storage.location ||
+        !data_storage.subplan
+      )
+        return;
+
+      try {
+        const res = await fetch(specs_api, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            egg_id: data_storage.egg_id,
+            location: data_storage.location,
+            subplan: data_storage.subplan,
+          }),
+        });
+
+        if (!res.ok && res.status !== 429)
+          throw new Error(`Failed status: ${res.status}`);
+
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("text/html")) return;
+
+        const textData = await res.text();
+        if (!textData || textData.trim() === "") return;
+
+        const data = JSON.parse(textData);
+
+        if (data.result === "Rate limited" || res.status === 429) {
+          if (!isCurrentlyRateLimited) {
+            isCurrentlyRateLimited = true;
+            triggerCustomAlert(
+              "Rate Limited",
+              "Please wait a moment before trying again.",
+              "warn",
+            );
+          }
+          return;
+        }
+
+        isCurrentlyRateLimited = false;
+
+        const canDeploy =
+          typeof data.can_deploy === "boolean" ? data.can_deploy : false;
+
+        const cpuBaseRaw = Math.max(0, Number(data.cpu) || 0);
+        const cpuBoostRaw = Math.max(0, Number(data.boost?.cpu) || 0);
+        const cpuTotalRaw = cpuBaseRaw + cpuBoostRaw;
+        const cpuMaxTotal = 800;
+        const cpuBase = Math.min(100, (cpuBaseRaw / cpuMaxTotal) * 100);
+        const cpuTotal = Math.min(100, (cpuTotalRaw / cpuMaxTotal) * 100);
+
+        const ramBaseRaw = Math.max(0, Number(data.ram) || 0);
+        const ramBoostRaw = Math.max(0, Number(data.boost?.ram) || 0);
+        const ramBase = Math.max(0, Math.min(100, ramBaseRaw));
+        const ramTotal = Math.max(0, Math.min(100, ramBaseRaw + ramBoostRaw));
+
+        const ssdBaseRaw = Math.max(0, Number(data.disk) || 0);
+        const ssdBoostRaw = Math.max(0, Number(data.boost?.disk) || 0);
+        const ssdBase = Math.max(0, Math.min(100, ssdBaseRaw));
+        const ssdTotal = Math.max(0, Math.min(100, ssdBaseRaw + ssdBoostRaw));
+
+        if (cpuText) cpuText.textContent = `CPU - ${cpuTotalRaw}%`;
+        if (ramText) ramText.textContent = `RAM - ${ramTotal} GB`;
+        if (ssdText) ssdText.textContent = `SSD STORAGE - ${ssdTotal} GB`;
+
+        if (cpuBar) cpuBar.style.width = `${cpuBase}%`;
+        if (boostCpuBar) boostCpuBar.style.width = `${cpuTotal}%`;
+
+        if (ramBar) ramBar.style.width = `${ramBase}%`;
+        if (boostRamBar) boostRamBar.style.width = `${ramTotal}%`;
+
+        if (ssdBar) ssdBar.style.width = `${ssdBase}%`;
+        if (boostSsdBar) boostSsdBar.style.width = `${ssdTotal}%`;
+
+        if (estimatedCost) estimatedCost.textContent = `$${data.price}`;
+
+        const availability = Math.max(
+          0,
+          Math.min(100, Number(data.availability) || 0),
+        );
+        const availabilityAfter = Math.max(
+          0,
+          Math.min(100, Number(data.availability_after) || 0),
+        );
+
+        if (availabilityBar) availabilityBar.style.width = `${availability}%`;
+        if (availabilityAfterBar)
+          availabilityAfterBar.style.width = `${availabilityAfter}%`;
+
+        if (availabilityBaseCircle) {
+          const dash = (availability / 100) * AVAILABILITY_CIRCUMFERENCE;
+          availabilityBaseCircle.setAttribute(
+            "stroke-dasharray",
+            `${dash} 999`,
+          );
+        }
+
+        if (availabilityAfterCircle) {
+          const dashAfter =
+            (availabilityAfter / 100) * AVAILABILITY_CIRCUMFERENCE;
+          availabilityAfterCircle.setAttribute(
+            "stroke-dasharray",
+            `${dashAfter} 999`,
+          );
+        }
+
+        if (availabilityPercentText)
+          availabilityPercentText.textContent = `${availability}%`;
+
+        if (canDeployText) {
+          canDeployText.textContent = canDeploy
+            ? "Server ready to deploy!"
+            : "Insufficient node capacity.";
+        }
+      } catch (err: any) {
+        if (!isBackgroundPolling) {
+          triggerCustomAlert("Pricing Sync Error", err.message || err, "error");
+        }
+      }
+    }
+
+    let emailTimer: ReturnType<typeof setTimeout> | undefined;
+    function commitEmail() {
+      if (!clientEmailInput) return;
+      data_storage.client_email = clientEmailInput.value.trim();
+    }
+
+    clientEmailInput?.addEventListener("input", () => {
+      if (emailTimer) clearTimeout(emailTimer);
+      emailTimer = setTimeout(commitEmail, 1500);
+    });
+
+    clientEmailInput?.addEventListener("blur", () => {
+      if (emailTimer) clearTimeout(emailTimer);
+      commitEmail();
+    });
+
+    (window as any).onTurnstileSuccess = (token: string) => {
+      data_storage.turnstile_token = token || "";
+    };
+    (window as any).onTurnstileExpired = () => {
+      data_storage.turnstile_token = "";
+    };
+
+    type Egg = {
+      id: number;
+      tags: string[];
+      name: string;
+      desc: string;
+      image: string;
+    };
+
+    async function fetchEggs() {
+      try {
+        const res = await fetch(egg_list);
+        if (!res.ok) throw new Error("Failed to load eggs");
+
+        const data = await res.json();
+        const container = eggOptions?.querySelector(".grid");
+        if (!container || !eggTemplate) return;
+
+        container
+          .querySelectorAll(".egg_option, .category_header")
+          .forEach((el) => el.remove());
+
+        const eggs = Object.values(data).filter(
+          (item): item is Egg =>
+            typeof item === "object" && item !== null && "id" in item,
+        );
+
+        const grouped = eggs.reduce(
+          (acc, egg) => {
+            const category =
+              egg.tags && egg.tags.length > 0 ? egg.tags[0] : "Other";
+            if (!acc[category]) acc[category] = [];
+            acc[category].push(egg);
+            return acc;
+          },
+          {} as Record<string, Egg[]>,
+        );
+
+        for (const category of Object.keys(grouped).sort()) {
+          const header = document.createElement("div");
+          header.style.gridColumn = "1 / -1";
+          header.className =
+            "flex items-center w-full category_header pt-2 pb-1";
+
+          const headerText = document.createElement("h3");
+          headerText.className =
+            "text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))] mr-3 shrink-0";
+          headerText.textContent = category;
+
+          const headerLine = document.createElement("div");
+          headerLine.className = "h-px bg-hairline flex-grow";
+
+          header.appendChild(headerText);
+          header.appendChild(headerLine);
+          container.appendChild(header);
+
+          for (const egg of grouped[category].sort((a, b) =>
+            a.name.localeCompare(b.name),
+          )) {
+            const eggOption = eggTemplate.cloneNode(true);
+            if (!(eggOption instanceof HTMLElement)) continue;
+
+            eggOption.id = "";
+            eggOption.classList.add(
+              "egg_option",
+              "border",
+              "border-transparent",
+            );
+            eggOption.dataset.egg_id = String(egg.id);
+            eggOption.hidden = false;
+
+            const img = eggOption.querySelector("img");
+            if (img) {
+              img.src = egg.image || "/imgs/plc.png";
+              img.alt = egg.name || "";
+            }
+
+            const label = eggOption.querySelector("span");
+            if (label) label.textContent = egg.name || "";
+
+            eggOption.addEventListener("click", () => {
+              data_storage.egg_id = eggOption.getAttribute("data-egg_id") || "";
+              setSelectedOption(eggOptions, ".egg_option", eggOption);
+              updateSpecsAndCost(false);
+            });
+
+            container.appendChild(eggOption);
+          }
+        }
+      } catch (e: any) {
+        triggerCustomAlert(
+          "Application List Sync Failed",
+          e.message || e,
+          "error",
+        );
+      }
+    }
+
     locationOptions
       ?.querySelectorAll("[data-location_name]")
       .forEach((option) => {
-        if (!(option instanceof HTMLElement)) return;
-        option.classList.remove(
-          "border-white/40",
-          "bg-white/10",
-          "ring-1",
-          "ring-white/30",
-        );
-        option.classList.add("border", "border-transparent");
+        option.addEventListener("click", () => {
+          data_storage.location =
+            option.getAttribute("data-location_name") || "";
+          setSelectedOption(locationOptions, "[data-location_name]", option);
+          updateSpecsAndCost(false);
+        });
       });
 
-    if (selectedOption instanceof HTMLElement) {
-      selectedOption.classList.remove("border-transparent");
-      selectedOption.classList.add(
-        "border",
-        "border-white/40",
-        "bg-white/10",
-        "ring-1",
-        "ring-white/30",
-      );
-    }
-  }
-
-  function setSelectedSubplanOption(selectedOption: Element) {
     subplanOptions
       ?.querySelectorAll("[data-subplan_name]")
       .forEach((option) => {
-        if (!(option instanceof HTMLElement)) return;
-        option.classList.remove(
-          "border-white/40",
-          "bg-white/10",
-          "ring-1",
-          "ring-white/30",
-        );
-        option.classList.add("border", "border-transparent");
+        option.addEventListener("click", () => {
+          data_storage.subplan = option.getAttribute("data-subplan_name") || "";
+          setSelectedOption(subplanOptions, "[data-subplan_name]", option);
+          updateSpecsAndCost(false);
+        });
       });
 
-    if (selectedOption instanceof HTMLElement) {
-      selectedOption.classList.remove("border-transparent");
-      selectedOption.classList.add(
-        "border",
-        "border-white/40",
-        "bg-white/10",
-        "ring-1",
-        "ring-white/30",
-      );
-    }
-  }
+    placeOrderBtn?.addEventListener("click", async () => {
+      if (emailTimer) clearTimeout(emailTimer);
+      commitEmail();
 
-  // ------------------------------
-  // UPDATE STATS AND COST FUNCTION
-  // ------------------------------
-  async function updateSpecsAndCost(isBackgroundPolling = false) {
-    if (!data_storage.egg_id || !data_storage.location || !data_storage.subplan)
-      return;
+      if (orderBlocker) orderBlocker.removeAttribute("hidden");
 
-    try {
-      const res = await fetch(specs_api, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          egg_id: data_storage.egg_id,
-          location: data_storage.location,
-          subplan: data_storage.subplan,
-        }),
-      });
+      let statusInterval: any = null;
+      let isOrderFinished = false;
 
-      if (!res.ok && res.status !== 429)
-        throw new Error(
-          `Failed to fetch specs and cost. Status: ${res.status}`,
-        );
+      try {
+        setStatus("Processing deployment task...");
 
-      const contentType = res.headers.get("content-type");
-      if (contentType && contentType.includes("text/html")) {
-        return;
-      }
+        statusInterval = setInterval(async () => {
+          try {
+            const statusRes = await fetch(status_api);
+            if (statusRes.ok) {
+              const statusData = await statusRes.json();
+              if (!isOrderFinished && statusData?.result) {
+                setStatus(statusData.result);
+              }
+            }
+          } catch (statusErr) {
+            console.error(statusErr);
+          }
+        }, 500);
 
-      const textData = await res.text();
+        const res = await fetch(order_api, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data_storage),
+        });
 
-      if (!textData || textData.trim() === "") {
-        throw new Error("Server returned an empty response body.");
-      }
+        isOrderFinished = true;
+        clearInterval(statusInterval);
 
-      const data = JSON.parse(textData);
+        const textData = await res.text();
+        if (!textData) throw new Error("Empty server response.");
 
-      if (data.result === "Rate limited" || res.status === 429) {
-        if (!isCurrentlyRateLimited) {
-          isCurrentlyRateLimited = true;
+        const data = JSON.parse(textData);
+
+        if (data.result === "Rate limited" || res.status === 429) {
+          if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
           triggerCustomAlert(
-            "Rate Limited",
-            "You are making requests too quickly. Please wait a moment before trying again.",
+            "Order Throttled",
+            "Please wait a moment and try placing your order again.",
             "warn",
           );
+          return;
         }
-        return;
-      }
 
-      isCurrentlyRateLimited = false;
+        if (data.error) throw new Error(data.error);
 
-      const canDeploy =
-        typeof data.can_deploy === "boolean" ? data.can_deploy : false;
-
-      const cpuBaseRaw = Math.max(0, Number(data.cpu) || 0);
-      const cpuBoostRaw = Math.max(0, Number(data.boost?.cpu) || 0);
-      const cpuTotalRaw = cpuBaseRaw + cpuBoostRaw;
-      const cpuMaxTotal = 800;
-      const cpuBase = Math.min(100, (cpuBaseRaw / cpuMaxTotal) * 100);
-      const cpuTotal = Math.min(100, (cpuTotalRaw / cpuMaxTotal) * 100);
-
-      const ramBaseRaw = Math.max(0, Number(data.ram) || 0);
-      const ramBoostRaw = Math.max(0, Number(data.boost?.ram) || 0);
-      const ramBase = Math.max(0, Math.min(100, ramBaseRaw));
-      const ramTotal = Math.max(0, Math.min(100, ramBaseRaw + ramBoostRaw));
-
-      const ssdBaseRaw = Math.max(0, Number(data.disk) || 0);
-      const ssdBoostRaw = Math.max(0, Number(data.boost?.disk) || 0);
-      const ssdBase = Math.max(0, Math.min(100, ssdBaseRaw));
-      const ssdTotal = Math.max(0, Math.min(100, ssdBaseRaw + ssdBoostRaw));
-
-      if (cpuText) cpuText.textContent = `CPU - ${cpuTotalRaw}%`;
-      if (ramText) ramText.textContent = `RAM - ${ramTotal} GB`;
-      if (ssdText) ssdText.textContent = `SSD STORAGE - ${ssdTotal} GB`;
-
-      if (cpuBar) {
-        cpuBar.style.width = `${cpuBase}%`;
-        cpuBar.parentElement?.setAttribute(
-          "data-tooltip",
-          `${cpuBaseRaw}%+${cpuBoostRaw}% CPU (total ${cpuTotalRaw}% CPU)`,
-        );
-      }
-      if (boostCpuBar) boostCpuBar.style.width = `${cpuTotal}%`;
-
-      if (ramBar) {
-        ramBar.style.width = `${ramBase}%`;
-        ramBar.parentElement?.setAttribute(
-          "data-tooltip",
-          `${ramBaseRaw}+${ramBoostRaw} GB RAM (total ${ramBaseRaw + ramBoostRaw} GB)`,
-        );
-      }
-      if (boostRamBar) boostRamBar.style.width = `${ramTotal}%`;
-
-      if (ssdBar) {
-        ssdBar.style.width = `${ssdBase}%`;
-        ssdBar.parentElement?.setAttribute(
-          "data-tooltip",
-          `${ssdBaseRaw}+${ssdBoostRaw} GB Storage (total ${ssdBaseRaw + ssdBoostRaw} GB) </br> *Expandable storage - free of charge. Contact us via ticketing system after placing the order if you need more storage!`,
-        );
-      }
-      if (boostSsdBar) boostSsdBar.style.width = `${ssdTotal}%`;
-
-      if (estimatedCost) estimatedCost.textContent = `$${data.price}`;
-
-      const availability = Math.max(
-        0,
-        Math.min(100, Number(data.availability) || 0),
-      );
-      const availabilityAfter = Math.max(
-        0,
-        Math.min(100, Number(data.availability_after) || 0),
-      );
-
-      if (availabilityBar) availabilityBar.style.width = `${availability}%`;
-      if (availabilityAfterBar)
-        availabilityAfterBar.style.width = `${availabilityAfter}%`;
-
-      if (availabilityCircle) {
-        availabilityCircle.setAttribute(
-          "data-tooltip",
-          `${availability}% Available Resources ( After this order, ${availabilityAfter}% will be available )`,
-        );
-      }
-
-      if (availabilityBaseCircle) {
-        const dash = (availability / 100) * AVAILABILITY_CIRCUMFERENCE;
-        availabilityBaseCircle.setAttribute("stroke-dasharray", `${dash} 999`);
-      }
-
-      if (availabilityAfterCircle) {
-        const dashAfter =
-          (availabilityAfter / 100) * AVAILABILITY_CIRCUMFERENCE;
-        availabilityAfterCircle.setAttribute(
-          "stroke-dasharray",
-          `${dashAfter} 999`,
-        );
-      }
-
-      if (availabilityPercentText)
-        availabilityPercentText.textContent = `${availability}%`;
-
-      if (canDeployText) {
-        canDeployText.textContent = canDeploy
-          ? "Your server can be deployed!"
-          : "Your server cannot be deployed due to insufficient resources.";
-      }
-    } catch (err: any) {
-      if (!isBackgroundPolling) {
-        triggerCustomAlert(
-          "Failed to update pricing",
-          err.message || err,
-          "error",
-        );
-      }
-      console.error("Specs loop caught an error context:", err);
-    }
-  }
-
-  // ------------------------------
-  // CLIENT EMAIL INPUT HANDLING
-  // ------------------------------
-  let emailTimer: ReturnType<typeof setTimeout> | undefined;
-  function commitEmail() {
-    if (!clientEmailInput) return;
-    data_storage.client_email = clientEmailInput.value.trim();
-  }
-
-  clientEmailInput?.addEventListener("input", () => {
-    if (emailTimer) clearTimeout(emailTimer);
-    emailTimer = setTimeout(commitEmail, 2000);
-  });
-
-  clientEmailInput?.addEventListener("blur", () => {
-    if (emailTimer) clearTimeout(emailTimer);
-    commitEmail();
-  });
-
-  // ------------------------------
-  // Cloudflare Turnstile callbacks
-  // ------------------------------
-  (window as any).onTurnstileSuccess = (token: string) => {
-    data_storage.turnstile_token = token || "";
-  };
-  (window as any).onTurnstileExpired = () => {
-    data_storage.turnstile_token = "";
-  };
-
-  // ------------------------------
-  // FETCH EGGS
-  // ------------------------------
-  type Egg = {
-    id: number;
-    tags: string[];
-    name: string;
-    desc: string;
-    image: string;
-  };
-
-  async function fetchEggs() {
-    try {
-      const res = await fetch(egg_list);
-      if (!res.ok) throw new Error("Failed to fetch eggs");
-
-      const data = await res.json();
-      const container = eggOptions?.querySelector(".p-3");
-      if (!container || !eggTemplate) return;
-
-      container
-        .querySelectorAll(".egg_option, .category_header")
-        .forEach((el) => el.remove());
-
-      const eggs = Object.values(data).filter(
-        (item): item is Egg =>
-          typeof item === "object" && item !== null && "id" in item,
-      );
-
-      const grouped = eggs.reduce(
-        (acc, egg) => {
-          const category =
-            egg.tags && egg.tags.length > 0 ? egg.tags[0] : "Other";
-          if (!acc[category]) acc[category] = [];
-          acc[category].push(egg);
-          return acc;
-        },
-        {} as Record<string, Egg[]>,
-      );
-
-      const sortedCategories = Object.keys(grouped).sort();
-
-      for (const category of sortedCategories) {
-        const header = document.createElement("div");
-
-        header.style.gridColumn = "1 / -1";
-        header.className = "flex items-center w-full category_header";
-
-        const headerText = document.createElement("h3");
-        headerText.className =
-          "text-lg font-bold text-white/70 capitalize mr-4 shrink-0";
-        headerText.textContent = category;
-
-        const headerLine = document.createElement("div");
-        headerLine.className = "h-px bg-white/20 flex-grow";
-
-        header.appendChild(headerText);
-        header.appendChild(headerLine);
-        container.appendChild(header);
-
-        const sortedEggs = grouped[category].sort((a, b) =>
-          a.name.localeCompare(b.name),
-        );
-
-        for (const egg of sortedEggs) {
-          const eggOption = eggTemplate.cloneNode(true);
-          if (!(eggOption instanceof HTMLElement)) continue;
-
-          eggOption.id = "";
-          eggOption.classList.add("egg_option", "border", "border-transparent");
-          eggOption.dataset.egg_id = String(egg.id);
-          eggOption.dataset.tooltip = egg.desc;
-          eggOption.hidden = false;
-
-          const img = eggOption.querySelector("img");
-          if (img) {
-            img.src = egg.image || "/imgs/plc.png";
-            img.alt = egg.name || "";
-          }
-
-          const label = eggOption.querySelector("span");
-          if (label) label.textContent = egg.name || "";
-
-          eggOption.addEventListener("click", () => {
-            data_storage.egg_id = eggOption.getAttribute("data-egg_id") || "";
-            setSelectedEggOption(eggOption);
-            updateSpecsAndCost(false);
-          });
-
-          container.appendChild(eggOption);
-        }
-      }
-    } catch (e: any) {
-      triggerCustomAlert("Failed to fetch 'eggs'", e, "error");
-    }
-  }
-
-  // ------------------------------
-  // LOCATION PICKER SELECT
-  // ------------------------------
-  locationOptions
-    ?.querySelectorAll("[data-location_name]")
-    .forEach((option) => {
-      if (option instanceof HTMLElement)
-        option.classList.add("border", "border-transparent");
-
-      option.addEventListener("click", () => {
-        data_storage.location = option.getAttribute("data-location_name") || "";
-        setSelectedLocationOption(option);
-        updateSpecsAndCost(false);
-      });
-    });
-
-  // ------------------------------
-  // SUBPLAN GRID OPTION SELECT
-  // ------------------------------
-  subplanOptions?.querySelectorAll("[data-subplan_name]").forEach((option) => {
-    if (option instanceof HTMLElement)
-      option.classList.add("border", "border-transparent");
-
-    option.addEventListener("click", () => {
-      data_storage.subplan = option.getAttribute("data-subplan_name") || "";
-      setSelectedSubplanOption(option);
-      updateSpecsAndCost(false);
-    });
-  });
-
-  // ------------------------------
-  // PLACE ORDER
-  // ------------------------------
-  placeOrderBtn?.addEventListener("click", async () => {
-    if (emailTimer) clearTimeout(emailTimer);
-    commitEmail();
-
-    if (orderBlocker) orderBlocker.removeAttribute("hidden");
-
-    let statusInterval: any = null;
-    let isOrderFinished = false;
-
-    try {
-      setStatus("Waiting for API response...");
-
-      statusInterval = setInterval(async () => {
-        try {
-          const statusRes = await fetch(status_api);
-          if (statusRes.ok) {
-            const statusData = await statusRes.json();
-
-            if (!isOrderFinished && statusData && statusData.result) {
-              setStatus(statusData.result);
-            }
-          }
-        } catch (statusErr) {
-          console.error("Error fetching status update:", statusErr);
-        }
-      }, 500);
-
-      const res = await fetch(order_api, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data_storage),
-      });
-
-      isOrderFinished = true;
-      clearInterval(statusInterval);
-
-      if (!res.ok && res.status !== 429)
-        throw new Error(
-          `Server returned status ${res.status} (Can't reach the target URL)`,
-        );
-
-      const textData = await res.text();
-      if (!textData) {
-        throw new Error(
-          "Server processed the order but returned an empty response body.",
-        );
-      }
-
-      const data = JSON.parse(textData);
-
-      if (data.result === "Rate limited" || res.status === 429) {
-        if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
-        triggerCustomAlert(
-          "Order Throttled",
-          "Your order submission was rate limited. Please hold on a moment and click place order again.",
-          "warn",
-        );
-        return;
-      }
-
-      if (data.error) throw new Error(data.error);
-
-      if (data.status === "task_created") {
-        setStatus("Action completed successfully! Redirecting...");
-        setTimeout(() => {
+        if (data.status === "task_created") {
+          setStatus("Success! Redirecting to panel...");
+          setTimeout(() => {
+            if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
+            window.location.href =
+              data.redirect_url || "https://panel.nikostuff.com";
+          }, 2000);
+        } else {
           if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
-          const redirectUrl =
-            typeof data.redirect_url === "string"
-              ? data.redirect_url
-              : "https://panel.nikostuff.com";
-          window.location.href = redirectUrl;
-        }, 3000);
-      } else {
+          triggerCustomAlert(
+            "Order Failed",
+            "Deployment encountered an issue. Please try again.",
+            "error",
+          );
+        }
+      } catch (err: any) {
+        isOrderFinished = true;
+        if (statusInterval) clearInterval(statusInterval);
         if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
         triggerCustomAlert(
-          "Order Failed",
-          "Oops. Something went wrong. Please try again later.",
+          "Order Exception",
+          err.message || String(err),
           "error",
         );
       }
-    } catch (err) {
-      isOrderFinished = true;
-      if (statusInterval) clearInterval(statusInterval);
 
-      if (orderBlocker) orderBlocker.setAttribute("hidden", "true");
-      const errMsg =
-        err && typeof err === "object" && "message" in err
-          ? (err as any).message
-          : String(err);
-      triggerCustomAlert(
-        "Order Failed",
-        "Failed to place order: " + errMsg,
-        "error",
-      );
-    }
+      if ((window as any).turnstile?.reset) (window as any).turnstile.reset();
+    });
 
-    if ((window as any).turnstile?.reset) (window as any).turnstile.reset();
-  });
+    fetchEggs();
 
-  // ------------------------------
-  // INIT & LOAD MANAGEMENT
-  // ------------------------------
-  fetchEggs();
-
-  document.addEventListener("DOMContentLoaded", () => {
     const defaultLocation = locationOptions?.querySelector(
       '[data-location_name="europe_free"]',
     );
     if (defaultLocation) {
       data_storage.location = "europe_free";
-      setSelectedLocationOption(defaultLocation);
+      setSelectedOption(
+        locationOptions,
+        "[data-location_name]",
+        defaultLocation,
+      );
     }
 
     const defaultSubplan = subplanOptions?.querySelector(
@@ -1006,11 +891,13 @@
     );
     if (defaultSubplan) {
       data_storage.subplan = "free";
-      setSelectedSubplanOption(defaultSubplan);
+      setSelectedOption(subplanOptions, "[data-subplan_name]", defaultSubplan);
     }
 
     updateSpecsAndCost(false);
+    setInterval(() => updateSpecsAndCost(true), 3000);
+  }
 
-    setInterval(() => updateSpecsAndCost(true), 2000);
-  });
+  initHostingCalculator();
+  document.addEventListener("astro:page-load", initHostingCalculator);
 </script>

@@ -1,36 +1,9 @@
 ---
 import PageLayout from "@layouts/PageLayout.astro";
 import { SITE } from "@consts";
-import MeteorShower from "@components/MeteorShower.astro";
-import TwinklingStars from "@components/TwinklingStars.astro";
-import BackgroundFX from "@components/page_effects/BackgroundFX.astro";
-// import POD from "@components/POD.astro";
-import FancyDiv from "@components/FancyDiv.astro";
 ---
 
 <PageLayout title="Pack Converter" description={SITE.DESCRIPTION}>
-  <!-- <script is:inline data-astro-rerun async src="/js/scroll_animation.js"
-  ></script> -->
-
-  <!-- <POD /> -->
-  <!-- Dark Theme: Stars -->
-  <div class="absolute inset-0block">
-    <div id="stars1" class="fixed inset-0"></div>
-    <div id="stars2" class="fixed inset-0"></div>
-    <div id="stars3" class="fixed inset-0"></div>
-  </div>
-
-  <!-- Dark Theme: Twinkling Stars / Metors -->
-  <div id="galaxy" class="fixed inset-0">
-    <div>
-      <TwinklingStars />
-      <MeteorShower />
-    </div>
-  </div>
-
-  <!-- <script is:inline defer src="/js/bg.js"></script> -->
-  <BackgroundFX />
-
   <!-- HERO -->
   <section
     id="hero_fade"
@@ -38,321 +11,350 @@ import FancyDiv from "@components/FancyDiv.astro";
   >
   </section>
 
-  <div class="relative">
-    <div class="w-svw">
-      <FancyDiv isAnimated={true} theme="default_big" margin_bottom="10">
-        <div class="transition-all">
-          <p
-            class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
+  <div class="relative animate w-full max-w-7xl mx-auto px-4 md:px-8 space-y-12 pb-16">
+    <!-- Modpack Converter Card Section -->
+    <section class="fi-section p-6 md:p-10 space-y-6 text-left">
+      <div class="space-y-1">
+        <span
+          class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+        >
+          Tools & Utilities
+        </span>
+        <h2
+          class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
+        >
+          Modpack Converter
+        </h2>
+        <p class="animate text-xs text-[rgb(var(--c-400))]">
+          Convert .mrpack files to .zip for easy installation (included .jars
+          inside)
+        </p>
+      </div>
+
+      <div class="space-y-4 animate pt-2" id="calculator">
+        <!-- URL input -->
+        <div class="relative" id="url_input_div">
+          <input
+            id="url_input"
+            type="text"
+            placeholder="https://modrinth.com/modpack/example"
+            class="fi-input animate w-full p-3 bg-[rgb(var(--c-900))] text-[rgb(var(--c-50))] border border-hairline focus:border-primary-500 focus:outline-none transition-colors text-xs"
+          />
+        </div>
+      </div>
+
+      <p class="animate text-center text-2xl text-[rgb(var(--c-400))]">or</p>
+
+      <!-- File input -->
+      <div class="animate relative" id="file_input_div">
+        <input id="file_input" type="file" accept=".mrpack" class="hidden" />
+        <label
+          for="file_input"
+          id="file_input_label"
+          class="fi-input fi-btn group w-full p-3 flex items-center justify-between bg-[rgb(var(--c-900))] text-[rgb(var(--c-50))] border border-hairline rounded-sm hover:bg-white/3 cursor-pointer transition-all duration-300 ease-in-out"
+        >
+          <span class="text-xs">Choose File…</span>
+          <span
+            id="file_input_text"
+            class="text-xs text-[rgb(var(--c-400))] font-mono"
+            >No file chosen</span
           >
-            Modpack Converter
-          </p>
-          <p class="font-bold text-sm mb-2 animate">
-            Convert .mrpack files to .zip for easy installation (included .jars
-            inside)
-          </p>
+        </label>
+      </div>
 
-          <div class="space-y-4 animate" id="calculator">
-            <!-- URL input -->
-            <div class="relative" id="url_input_div">
-              <input
-                id="url_input"
-                type="text"
-                placeholder="https://modrinth.com/modpack/example"
-                class="w-full p-4 mt-5 border rounded-lg
-                    bg-transparent
-                  border-white/20
-                  hover:bg-white/10
-                    focus:outline-none
-                  focus:border-white/40
-                    focus:ring-2 focus:focus:ring-white/20
-                    focus:ring-offset-0
-                    transition-all duration-300 ease-out"
-              />
+      <!-- Convert button -->
+      <div class="animate mb-0 hidden">
+        <button
+          id="convert_to_zip_btn"
+          class="fi-btn group w-full p-4 gap-3 flex items-center border border-hairline rounded-sm bg-transparent hover:bg-white/3 transition-all duration-300 ease-in-out"
+        >
+          <span
+            class="w-full z-10 relative group-hover:text-[rgb(var(--c-50))] text-center text-xs font-semibold text-[rgb(var(--c-200))] transition-colors duration-300"
+          >
+            Convert to ZIP server pack!
+          </span>
+        </button>
+      </div>
+
+      <p class="mb-6 mt-0">
+        <small class="text-[0.6875rem] text-[rgb(var(--c-400))] font-mono"
+          >Runs in your browser — no uploads. External download links may be
+          blocked by CORS.</small
+        >
+      </p>
+
+      <!-- Modpack browser -->
+      <div
+        id="modpack_browser"
+        class="flex flex-col gap-2 p-4 border border-hairline rounded-sm
+          h-60 overflow-y-scroll
+          bg-white/1
+          hover:bg-white/3
+          transition-all duration-300 ease-in-out hide_scrollbar"
+      >
+        <div
+          class="template flex items-center justify-between font-mono text-xs text-[rgb(var(--c-300))]"
+        >
+          <div class="flex items-center gap-3 min-w-0">
+            <div
+              class="mod_circle h-2 w-2 rounded-full shrink-0 aspect-square bg-[rgb(var(--c-600))] animate-pulse"
+            >
             </div>
+            <span class="mod_name truncate min-w-0"> Mod Name </span>
+          </div>
+          <span
+            class="mod_status text-right whitespace-nowrap ml-3 shrink-0 text-[rgb(var(--c-400))] font-mono"
+          >
+            Status
+          </span>
+        </div>
+        <!-- content will be dynamically added here -->
+      </div>
 
-            <p class="text-center italic">or</p>
+      <!-- Debug console -->
+      <div
+        id="debug_console"
+        class="font-mono text-xs overflow-scroll h-30 w-full p-4 border border-hairline rounded-sm
+          flex flex-col justify-between gap-2
+          bg-white/1
+          hover:bg-white/3
+          transition-all duration-300 ease-in-out hide_scrollbar text-[rgb(var(--c-300))]"
+      >
+        <div id="log_messages">Waiting for file...</div>
+        <div id="progress-line" class="text-[rgb(var(--c-400))] whitespace-pre">
+          <!-- progress will update here -->
+        </div>
+      </div>
 
-            <!-- File input-->
-            <div class="relative" id="file_input_div">
-              <input
-                id="file_input"
-                type="file"
-                accept=".mrpack"
-                class="hidden"
-              />
-              <label
-                for="file_input"
-                id="file_input_label"
-                class="group w-full p-4 mt-5 flex items-center justify-between border rounded-lg
-         hover:bg-white/10 border-white/20
-         cursor-pointer transition-all duration-300 ease-in-out"
-              >
-                <span>Choose File…</span>
-                <span id="file_input_text" class="text-gray-400"
-                  >No file chosen</span
-                >
-              </label>
+      <!-- Resources usage bars -->
+      <div class="mt-4 flex gap-4">
+        <div class="flex-1">
+          <div
+            class="w-full bg-[rgb(var(--c-700))] rounded-full h-0.5 overflow-hidden"
+          >
+            <div
+              id="cpu_usage"
+              class="bg-primary-500 h-0.5 rounded-full transition-all duration-500 ease-in-out"
+              style="width: 0%"
+            >
             </div>
+          </div>
+        </div>
 
-            <!-- Convert button -->
-            <div class="animate mb-0 hidden">
-              <button
-                id="convert_to_zip_btn"
-                class="group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out"
-              >
-                <span
-                  class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300"
-                >
-                  Convert to ZIP server pack!
-                </span>
-              </button>
+        <div class="flex-1">
+          <div
+            class="w-full bg-[rgb(var(--c-700))] rounded-full h-0.5 overflow-hidden"
+          >
+            <div
+              id="progress_bar"
+              class="bg-emerald-500 h-0.5 rounded-full transition-all duration-500 ease-in-out"
+              style="width: 0%"
+            >
             </div>
-            <p class="mb-10 mt-0">
-              <small
-                >Runs in your browser — no uploads. External download links may
-                be blocked by CORS.</small
-              >
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modpack Browser Section -->
+  <section class="fi-section mb-10 relative animate w-full max-w-7xl mx-auto px-4 md:px-8 space-y-12 pb-16 p-6 md:p-10 text-left">
+    <div class="space-y-1">
+      <span
+        class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+      >
+        Discovery
+      </span>
+      <h2
+        class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
+      >
+        Modpack Browser
+      </h2>
+      <p class="animate text-xs text-[rgb(var(--c-400))]">
+        Quickly search through mods without leaving the page.
+      </p>
+    </div>
+
+    <!-- Modpack search input -->
+    <div class="mb-3 animate">
+      <input
+        id="modrint_search"
+        type="text"
+        placeholder="Search modpacks…"
+        class="w-full p-4 border border-hairline rounded-sm
+            bg-transparent
+            text-[rgb(var(--c-50))]
+            placeholder:text-[rgb(var(--c-500))]
+            hover:bg-white/3
+            focus:outline-none
+            focus:border-primary-500
+            focus:ring-2 focus:ring-primary-500/20
+            focus:ring-offset-0
+            transition-all duration-300 ease-out"
+      />
+    </div>
+
+    <div class="animate">
+      <div
+        id="modrint_mod_browser"
+        class="relative flex flex-col gap-2 p-4 border border-hairline rounded-sm
+               h-125 overflow-y-scroll
+               bg-white/1
+               hover:bg-white/3
+               transition-all duration-300 ease-in-out hide_scrollbar"
+      >
+        <!-- Template -->
+        <div
+          class="mdr_template group relative hidden flex-col h-auto border border-hairline rounded-sm overflow-hidden shrink-0"
+        >
+          <div
+            class="mdr_template_image absolute inset-0 bg-cover bg-center blur-sm transition-transform duration-500 group-hover:scale-125 opacity-40"
+            style="background-image: url('/imgs/plc.png');"
+          >
+          </div>
+          <div class="absolute inset-0 bg-black/60"></div>
+
+          <div
+            class="relative z-10 p-6 flex flex-col justify-center items-center text-center text-[rgb(var(--c-50))]"
+          >
+            <span
+              class="mdr_mod_name block font-bold text-xl mb-2 transition-all duration-300 group-hover:scale-105"
+            >
+              Mod Name
+            </span>
+
+            <p
+              class="mdr_modpack_version absolute top-2 left-2 z-20
+                rounded-sm bg-black/60 px-2 py-1
+                text-[10px] font-mono text-[rgb(var(--c-300))] border border-hairline
+                transition-all duration-300 group-hover:opacity-0 truncate max-w-1/2"
+            >
+              -
             </p>
 
-            <!-- Modpack browser -->
-            <div
-              id="modpack_browser"
-              class="flex flex-col gap-2 p-4 mt-2 border rounded-lg
-              h-60 overflow-y-scroll
-            hover:bg-white/10
-            border-white/20
-              transition-all duration-300 ease-in-out hide_scrollbar"
-            >
-              <div
-                class="template flex items-center justify-between font-mono text-sm text-gray-300"
+            <div class="relative w-full">
+              <p
+                class="mdr_mod_description text-xs text-[rgb(var(--c-300))] opacity-90 transition-all duration-300 group-hover:opacity-0"
               >
-                <div class="flex items-center gap-3 min-w-0">
-                  <div
-                    class="mod_circle h-2.5 w-2.5 rounded-full shrink-0 aspect-square bg-gray-600 animate-pulse"
-                  >
-                  </div>
-                  <span class="mod_name truncate min-w-0"> Mod Name </span>
-                </div>
-                <span
-                  class="mod_status text-right whitespace-nowrap ml-3 shrink-0"
-                >
-                  Status
-                </span>
-              </div>
-              <!-- content will be dynamically added here -->
-            </div>
+                This is a short description.
+              </p>
 
-            <!-- Debug console -->
-            <div
-              id="debug_console"
-              class="font-mono text-sm overflow-scroll h-30 w-full p-4 mt-5 border rounded-lg
-              flex flex-col justify-between gap-2
-            hover:bg-white/10
-            border-white/20
-              transition-all duration-300 ease-in-out hide_scrollbar"
-            >
-              <div id="log_messages">Waiting for file...</div>
-              <div id="progress-line" class="text-gray-300 whitespace-pre">
-                <!-- progress will update here -->
-              </div>
-            </div>
-
-            <!-- Resources usage bars -->
-            <div class="mt-4 flex gap-4">
-              <div class="flex-1">
-                <div class="w-full bg-gray-700 rounded-full h-[0.3px]">
-                  <div
-                    id="cpu_usage"
-                    class="bg-white h-[0.3px] rounded-full transition-all duration-500 ease-in-out"
-                    style="width: 0%"
-                  >
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex-1">
-                <div class="w-full bg-gray-700 rounded-full h-[0.3px]">
-                  <div
-                    id="progress_bar"
-                    class="bg-white h-[0.3px] rounded-full transition-all duration-500 ease-in-out"
-                    style="width: 0%"
-                  >
-                  </div>
-                </div>
-              </div>
+              <p
+                class="click-to-convert absolute inset-0 opacity-0 transition-all duration-300 flex items-center justify-center group-hover:opacity-100 font-mono text-xs text-primary-400 font-semibold"
+              >
+                Click to Convert
+              </p>
             </div>
           </div>
         </div>
-      </FancyDiv>
 
-      <FancyDiv isAnimated="true" theme="default_big" margin_bottom="50">
-        <div class="transition-all">
-          <p
-            class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
-          >
-            Modpack Browser
-          </p>
-          <p class="font-bold text-sm mb-2 animate">
-            Quickly search through mods without leaving the page.
-          </p>
+        <!-- Full cover loading -->
+        <div
+          id="mdr_loading"
+          class="hidden absolute inset-0 z-10 items-center justify-center rounded-sm overflow-hidden bg-black/80 backdrop-blur-md"
+        >
+          <img
+            src="/imgs/plc.png"
+            alt="Loading Meme"
+            class="random_loading_meme absolute inset-0 w-full h-full object-contain animate-pulse opacity-20 filter blur-sm"
+          />
 
-          <!-- Modpack browser -->
-          <div class="mb-3 animate">
-            <input
-              id="modrint_search"
-              type="text"
-              placeholder="Search modpacks…"
-              class="w-full p-4 mt-5 border rounded-lg
-                bg-transparent
-                border-white/20
-                hover:bg-white/10
-                focus:outline-none
-                focus:border-white/40
-                focus:ring-2 focus:ring-white/20
-                focus:ring-offset-0
-                transition-all duration-300 ease-out"
-            />
-          </div>
+          <div class="absolute inset-0 bg-black/40"></div>
 
-          <div class="animate">
-            <div
-              id="modrint_mod_browser"
-              class="flex flex-col gap-2 p-4 mt-2 border rounded-lg
-                   h-125 overflow-y-scroll
-                 hover:bg-white/10
-                 border-white/20
-                   transition-all duration-300 ease-in-out hide_scrollbar"
+          <div class="relative z-20 flex flex-col items-center space-y-2 p-2">
+            <p
+              class="mdr_loading_text animate-pulse text-[rgb(var(--c-50))] px-4 py-2 rounded-sm bg-[rgb(var(--c-800))] border border-hairline text-xs font-semibold text-center"
             >
-              <!-- Template -->
-              <div
-                class="mdr_template group relative hidden flex-col h-auto border border-white/20 rounded-lg overflow-hidden shrink-0"
-              >
-                <div
-                  class="mdr_template_image absolute inset-0 bg-cover bg-center blur-sm transition-transform duration-500 group-hover:scale-125"
-                  style="background-image: url('/imgs/plc.png');"
-                >
-                </div>
-                <div class="absolute inset-0 bg-black/50"></div>
+              Loading modpacks…
+            </p>
 
-                <div
-                  class="relative z-10 p-6 flex flex-col justify-center items-center text-center text-white"
-                >
-                  <span
-                    class="mdr_mod_name block font-bold text-2xl mb-3 transition-all duration-300 group-hover:scale-110"
-                  >
-                    Mod Name
-                  </span>
-
-                  <p
-                    class="mdr_modpack_version absolute top-2 left-2 z-20
-                     rounded-md bg-black/60 px-2 py-1
-                     text-[11px] font-mono text-white
-                    transition-all duration-300 group-hover:opacity-0 truncate max-w-1/2"
-                  >
-                    -
-                  </p>
-
-                  <div class="relative w-full">
-                    <p
-                      class="mdr_mod_description text-base opacity-90 transition-all duration-300 group-hover:opacity-0 group-hover:scale-20"
-                    >
-                      This is a short description.
-                    </p>
-
-                    <p
-                      class="click-to-convert absolute inset-0 opacity-0 transition-all duration-300 flex items-center justify-center group-hover:opacity-100 group-hover:scale-110 font-mono"
-                    >
-                      Click to Convert
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Full cover loading -->
-              <div
-                id="mdr_loading"
-                class="hidden absolute inset-0 z-10 items-center justify-center rounded-2xl overflow-hidden"
-              >
-                <img
-                  src="/imgs/plc.png"
-                  alt="Loading Meme"
-                  class="random_loading_meme absolute inset-0 w-full h-full object-contain animate-pulse"
-                />
-
-                <div class="absolute inset-0 bg-black/40"></div>
-
-                <div
-                  class="relative z-20 flex flex-col items-center space-y-2 p-2"
-                >
-                  <p
-                    class="mdr_loading_text animate-bounce text-white px-4 py-2 rounded-full bg-black/70 text-lg font-semibold text-center wrap-anywhere break-normal"
-                  >
-                    Loading modpacks…
-                  </p>
-
-                  <p
-                    class="text-xs text-white px-3 py-1 rounded-full bg-black/60 animate-pulse text-center"
-                  >
-                    Stuck? Try another search query!
-                  </p>
-                </div>
-              </div>
-            </div>
+            <p
+              class="text-[0.6875rem] text-[rgb(var(--c-400))] px-3 py-1 rounded-sm bg-white/3 animate-pulse text-center font-mono"
+            >
+              Stuck? Try another search query!
+            </p>
           </div>
         </div>
-      </FancyDiv>
-
-      <FancyDiv isAnimated={true} theme="default_big">
-        <div class="transition-all">
-          <p
-            class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
-          >
-            How to use
-          </p>
-          <p class="font-bold text-sm mb-2 animate">
-            Follow these steps to convert a Modrinth .mrpack file to a
-            server-ready .zip file:
-          </p>
-          <ol class="list-decimal list-inside space-y-2 mt-4 animate">
-            <li>
-              Obtain a <code>.mrpack</code> file from a Modrinth modpack page.
-            </li>
-            <li>
-              Either upload the <code>.mrpack</code> file using the "Choose File…"
-              button, or paste the modpack URL into the input field at the top.
-            </li>
-            <li>
-              Wait for the process to complete. The log and mod browser will
-              update with progress information.
-            </li>
-            <li>
-              Once finished, a ZIP file will be automatically downloaded to your
-              device.
-            </li>
-            <li>
-              Extract the ZIP file and install the included JAR files on your
-              server.
-            </li>
-            <li>
-              If any client-only mods were removed, refer to the
-              <code>deleted_mods.txt</code> file inside the ZIP for details.
-            </li>
-          </ol>
-
-          <div class="mt-6 animate">
-            <strong>Note:</strong> This tool runs entirely in your browser. No files
-            are uploaded to any server, ensuring your privacy and security. However,
-            some external download links may be blocked due to CORS restrictions.
-            Also note that large modpacks may take longer to process.<br />
-            Pro Tip: You can include advanced search queries in the modpack browser,
-            such as <code>[version:1.20.4]</code> or <code>[loader:fabric]</code
-            > to filter modpacks by Minecraft version or mod loader.
-          </div>
-        </div>
-      </FancyDiv>
+      </div>
     </div>
-  </div>
+  </section>
+
+  <!-- How to Use Section -->
+  <section class="fi-section relative animate w-full max-w-7xl mx-auto px-4 md:px-8 space-y-12 pb-16 p-6 md:p-10 text-left">
+    <div class="space-y-1">
+      <span
+        class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+      >
+        Guide
+      </span>
+      <h2
+        class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
+      >
+        How to use
+      </h2>
+      <p class="font-bold text-xs text-[rgb(var(--c-400))] animate mb-2">
+        Follow these steps to convert a Modrinth .mrpack file to a server-ready
+        .zip file:
+      </p>
+    </div>
+
+    <ol
+      class="list-decimal list-inside space-y-2 text-xs text-[rgb(var(--c-300))] animate marker:text-primary-500"
+    >
+      <li class="pl-1">
+        Obtain a <code
+          class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono"
+          >.mrpack</code
+        > file from a Modrinth modpack page.
+      </li>
+      <li class="pl-1">
+        Either upload the <code
+          class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono"
+          >.mrpack</code
+        > file using the "Choose File…" button, or paste the modpack URL into the
+        input field at the top.
+      </li>
+      <li class="pl-1">
+        Wait for the process to complete. The log and mod browser will update
+        with progress information.
+      </li>
+      <li class="pl-1">
+        Once finished, a ZIP file will be automatically downloaded to your
+        device.
+      </li>
+      <li class="pl-1">
+        Extract the ZIP file and install the included JAR files on your server.
+      </li>
+      <li class="pl-1">
+        If any client-only mods were removed, refer to the
+        <code
+          class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono"
+          >deleted_mods.txt</code
+        > file inside the ZIP for details.
+      </li>
+    </ol>
+
+    <div
+      class="mt-6 text-xs text-[rgb(var(--c-400))] leading-relaxed animate border-t border-hairline pt-4 font-mono"
+    >
+      <strong class="text-[rgb(var(--c-200))] font-semibold">Note:</strong> This tool
+      runs entirely in your browser. No files are uploaded to any server, ensuring
+      your privacy and security. However, some external download links may be blocked
+      due to CORS restrictions. Also note that large modpacks may take longer to process.<br
+      />
+      <span class="block mt-2 text-[rgb(var(--c-300))]"
+        ><strong class="text-[rgb(var(--c-200))] font-semibold">Pro Tip:</strong
+        > You can include advanced search queries in the modpack browser, such as
+        <code
+          class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono"
+          >[version:1.20.4]</code
+        > or <code
+          class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono"
+          >[loader:fabric]</code
+        > to filter modpacks by Minecraft version or mod loader.</span
+      >
+    </div>
+  </section>
 </PageLayout>
 
 <script>
@@ -702,12 +704,7 @@ import FancyDiv from "@components/FancyDiv.astro";
   };
 
   type Phase =
-    | "load"
-    | "download"
-    | "overrides"
-    | "metadata"
-    | "cleanup"
-    | "compress";
+    "load" | "download" | "overrides" | "metadata" | "cleanup" | "compress";
 
   const PHASE_WEIGHTS: Record<Phase, number> = {
     load: 5,
@@ -1297,7 +1294,11 @@ import FancyDiv from "@components/FancyDiv.astro";
   convertBtn.addEventListener("click", async () => {
     const file = fileInput.files?.[0];
     if (!file) {
-      triggerCustomAlert("Failed to convert", "Please select a .mrpack file", "warn");
+      triggerCustomAlert(
+        "Failed to convert",
+        "Please select a .mrpack file",
+        "warn",
+      );
       return;
     }
 
@@ -1309,7 +1310,11 @@ import FancyDiv from "@components/FancyDiv.astro";
   url_input!.addEventListener("change", async () => {
     const url = url_input!.value.trim();
     if (!url) {
-      triggerCustomAlert("Failed to convert", "Please enter a Modrinth modpack URL", "warn");
+      triggerCustomAlert(
+        "Failed to convert",
+        "Please enter a Modrinth modpack URL",
+        "warn",
+      );
       return;
     }
 
@@ -1328,7 +1333,11 @@ import FancyDiv from "@components/FancyDiv.astro";
     } else if (modpackMatch) {
       modpackId = modpackMatch[1];
     } else {
-      triggerCustomAlert("Failed to convert", "Invalid Modrinth modpack URL", "warn");
+      triggerCustomAlert(
+        "Failed to convert",
+        "Invalid Modrinth modpack URL",
+        "warn",
+      );
       return;
     }
 

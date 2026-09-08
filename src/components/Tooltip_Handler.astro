@@ -3,7 +3,8 @@
     const tooltip = document.createElement("div");
     tooltip.id = "custom-tooltip";
     tooltip.className = `
-      fixed px-2 py-1 text-xs
+      fixed top-0 left-0
+      px-2 py-1 text-xs
       max-w-1/3 h-fit
       top_left_rounded
       line-clamp-6
@@ -16,6 +17,7 @@
       opacity-0 transition-[opacity,border-radius] duration-500 ease-in-out
       will-change-[transform,border-radius,opacity]
       z-50
+      text-[#eef0f2]
     `;
     document.body.appendChild(tooltip);
 
@@ -46,11 +48,13 @@
         tl: "top_left_rounded",
         tr: "top_right_rounded",
         bl: "bottom_left_rounded",
-        br: "bottom_right_rounded"
+        br: "bottom_right_rounded",
       };
 
-      Object.values(cornerClasses).forEach(cls => tooltip.classList.remove(cls));
-      
+      Object.values(cornerClasses).forEach((cls) =>
+        tooltip.classList.remove(cls),
+      );
+
       tooltip.classList.add(cornerClasses[corner]);
       tooltipCorner = corner;
     }
@@ -93,14 +97,14 @@
         // respect html in tooltip text
         tooltip.innerHTML = text;
         tooltip.classList.replace("opacity-0", "opacity-100");
-      }, 150); 
+      }, 150);
     });
 
     let rafId: number | null = null;
     document.addEventListener("pointermove", (e: PointerEvent) => {
       if (!hoveredEl) return;
       if (rafId) cancelAnimationFrame(rafId);
-      
+
       rafId = requestAnimationFrame(() => {
         const offsetX = 14;
         const offsetY = 18;

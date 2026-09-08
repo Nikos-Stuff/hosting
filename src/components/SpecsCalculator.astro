@@ -1,13 +1,19 @@
-<div>
-  <div class="space-y-6 animate">
-    <div class="space-y-2 animate">
-      <div class="flex justify-between items-center text-sm font-medium">
-        <label for="q_players" class="flex items-center gap-2 text-white/80">
-          <i class="ph ph-users text-lg"></i>
+<div class="animate space-y-6 text-left">
+  <!-- Inputs Stack -->
+  <div class="space-y-5">
+    <!-- Player Count Slider -->
+    <div class="fi-section animate p-4 space-y-2.5">
+      <div class="flex justify-between items-center text-xs font-medium">
+        <label
+          for="q_players"
+          class="flex items-center gap-2 text-[rgb(var(--c-50))]"
+        >
+          <i class="ph ph-users text-base text-primary-500"></i>
           Expected Player Count?
         </label>
-        <span id="q_players_val" class="font-bold text-white"
-          >1 - 5 players</span
+        <span
+          id="q_players_val"
+          class="font-mono font-semibold text-primary-500">1 - 5 players</span
         >
       </div>
       <input
@@ -17,21 +23,29 @@
         max="4"
         step="1"
         value="1"
-        class="w-full accent-white h-2 bg-white/10 rounded-lg appearance-none cursor-pointer"
+        class="w-full accent-[rgb(var(--primary-500))] h-1.5 bg-[rgb(var(--c-900))] border border-hairline rounded-lg appearance-none"
       />
-      <div class="flex justify-between text-[10px] text-white/40 px-1">
+      <div
+        class="flex justify-between text-[0.625rem] text-[rgb(var(--c-400))] px-0.5 font-mono"
+      >
         <span>Small Group</span>
         <span>Community (50+)</span>
       </div>
     </div>
 
-    <div class="space-y-2 animate">
-      <div class="flex justify-between items-center text-sm font-medium">
-        <label for="q_mods" class="flex items-center gap-2 text-white/80">
-          <i class="ph ph-plugs-connected text-lg"></i>
+    <!-- Mods & Addons Slider -->
+    <div class="fi-section animate p-4 space-y-2.5">
+      <div class="flex justify-between items-center text-xs font-medium">
+        <label
+          for="q_mods"
+          class="flex items-center gap-2 text-[rgb(var(--c-50))]"
+        >
+          <i class="ph ph-plugs-connected text-base text-primary-500"></i>
           Addons, Mods, or Plugins?
         </label>
-        <span id="q_mods_val" class="font-bold text-white">Vanilla / None</span>
+        <span id="q_mods_val" class="font-mono font-semibold text-primary-500"
+          >Vanilla / None</span
+        >
       </div>
       <input
         id="q_mods"
@@ -40,21 +54,27 @@
         max="4"
         step="1"
         value="1"
-        class="w-full accent-white h-2 bg-white/10 rounded-lg appearance-none cursor-pointer"
+        class="w-full accent-[rgb(var(--primary-500))] h-1.5 bg-[rgb(var(--c-900))] border border-hairline rounded-lg appearance-none"
       />
-      <div class="flex justify-between text-[10px] text-white/40 px-1">
+      <div
+        class="flex justify-between text-[0.625rem] text-[rgb(var(--c-400))] px-0.5 font-mono"
+      >
         <span>Vanilla</span>
         <span>Heavy Modpack (150+)</span>
       </div>
     </div>
 
-    <div class="space-y-2 animate">
-      <div class="flex justify-between items-center text-sm font-medium">
-        <label for="q_world" class="flex items-center gap-2 text-white/80">
-          <i class="ph ph-globe text-lg"></i>
+    <!-- World Size Slider -->
+    <div class="fi-section animate p-4 space-y-2.5">
+      <div class="flex justify-between items-center text-xs font-medium">
+        <label
+          for="q_world"
+          class="flex items-center gap-2 text-[rgb(var(--c-50))]"
+        >
+          <i class="ph ph-globe text-base text-primary-500"></i>
           World Size & Map Type?
         </label>
-        <span id="q_world_val" class="font-bold text-white"
+        <span id="q_world_val" class="font-mono font-semibold text-primary-500"
           >Standard / Fresh Map</span
         >
       </div>
@@ -65,38 +85,61 @@
         max="3"
         step="1"
         value="1"
-        class="w-full accent-white h-2 bg-white/10 rounded-lg appearance-none cursor-pointer"
+        class="w-full accent-[rgb(var(--primary-500))] h-1.5 bg-[rgb(var(--c-900))] border border-hairline rounded-lg appearance-none"
       />
-      <div class="flex justify-between text-[10px] text-white/40 px-1">
+      <div
+        class="flex justify-between text-[0.625rem] text-[rgb(var(--c-400))] px-0.5 font-mono"
+      >
         <span>Standard</span>
         <span>Massive / Long-term</span>
       </div>
     </div>
   </div>
 
-  <hr class="border-white/25 animate my-5" />
+  <hr class="animate" />
 
-  <div class="grid grid-cols-3 gap-3 text-center text-xs pt-1 animate">
+  <!-- Results Output Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center text-xs">
     <div
-      class="bg-white/5 border border-white/10 rounded-lg p-3 flex flex-col items-center justify-center gap-1"
+      class="fi-section animate bg-[rgb(var(--c-900))] p-4 flex flex-col items-center justify-center gap-1.5"
     >
-      <i class="ph ph-cpu text-lg text-white/60"></i>
-      <span class="block text-white/40">CPU Needed</span>
-      <span id="spec_cpu" class="font-bold text-base text-white">100%</span>
+      <i class="ph ph-cpu text-lg text-[rgb(var(--c-400))]"></i>
+      <span
+        class="block text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+        >CPU Needed</span
+      >
+      <span
+        id="spec_cpu"
+        class="font-mono font-bold text-lg text-[rgb(var(--c-50))]">100%</span
+      >
     </div>
+
     <div
-      class="bg-white/5 border border-white/10 rounded-lg p-3 flex flex-col items-center justify-center gap-1"
+      class="fi-section animate bg-[rgb(var(--c-900))] p-4 flex flex-col items-center justify-center gap-1.5"
     >
-      <i class="ph ph-memory text-lg text-white/60"></i>
-      <span class="block text-white/40">RAM Suggested</span>
-      <span id="spec_ram" class="font-bold text-base text-white">2 GB</span>
+      <i class="ph ph-memory text-lg text-[rgb(var(--c-400))]"></i>
+      <span
+        class="block text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+        >RAM Suggested</span
+      >
+      <span
+        id="spec_ram"
+        class="font-mono font-bold text-lg text-[rgb(var(--c-50))]">2 GB</span
+      >
     </div>
+
     <div
-      class="bg-white/5 border border-white/10 rounded-lg p-3 flex flex-col items-center justify-center gap-1"
+      class="fi-section animate bg-[rgb(var(--c-900))] p-4 flex flex-col items-center justify-center gap-1.5"
     >
-      <i class="ph ph-hard-drive text-lg text-white/60"></i>
-      <span class="block text-white/40">SSD Storage</span>
-      <span id="spec_ssd" class="font-bold text-base text-white">10 GB</span>
+      <i class="ph ph-hard-drive text-lg text-[rgb(var(--c-400))]"></i>
+      <span
+        class="block text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+        >SSD Storage</span
+      >
+      <span
+        id="spec_ssd"
+        class="font-mono font-bold text-lg text-[rgb(var(--c-50))]">10 GB</span
+      >
     </div>
   </div>
 </div>
@@ -104,7 +147,7 @@
 <script>
   import { gsap } from "gsap";
 
-  document.addEventListener("DOMContentLoaded", (): void => {
+  function initSpecsCalculator(): void {
     const pSlider = document.getElementById(
       "q_players",
     ) as HTMLInputElement | null;
@@ -240,5 +283,8 @@
     wSlider.addEventListener("input", calculateSystemRequirements);
 
     calculateSystemRequirements();
-  });
+  }
+
+  initSpecsCalculator();
+  document.addEventListener("astro:page-load", initSpecsCalculator);
 </script>

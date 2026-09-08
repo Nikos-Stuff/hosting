@@ -1,84 +1,115 @@
 ---
-import { SITE, SOCIALS } from "@consts"
-import Container from "@components/Container.astro"
-import HeaderIcon from "@components/web_icon.astro"
+import { SITE, SOCIALS } from "@consts";
+import Container from "@components/Container.astro";
+import HeaderIcon from "@components/web_icon.astro";
 
-import PageVersion from "@components/GitVer.astro"
-
+import PageVersion from "@components/GitVer.astro";
 
 // Get current Year
 const currentYear = new Date().getFullYear();
-
-// import InfoButton from '@components/info_button/button.astro';
 ---
-
-<!--<InfoButton/>-->
 
 <!-- System detection -->
 <script is:inline async src="/js/system_detection.js"></script>
 
-<footer class="relative"> <!-- Footer  bg-white dark:bg-black -->
-  <div> <!-- Footer content | before had animate class -->
+<footer class="relative">
+  <div>
+    <!-- Back to top section -->
     <section class="py-5">
       <Container size="md">
         <div class="flex items-center justify-center sm:justify-end">
-          <button id="back-to-top" aria-label="Back to top of page" class="group flex w-fit p-1.5 gap-1.5 text-sm items-center border rounded hover:bg-white/10 border-white/20 transition-colors duration-300 ease-in-out">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="stroke-current group-hover:stroke-white rotate-90">
-              <line x1="19" y1="12" x2="5" y2="12" class="scale-x-0 group-hover:scale-x-100 translate-x-3 group-hover:translate-x-0 transition-all duration-300 ease-in-out" />
-              <polyline points="12 19 5 12 12 5" class="translate-x-1 group-hover:translate-x-0 transition-all duration-300 ease-in-out" />
+          <button
+            id="back-to-top"
+            aria-label="Back to top of page"
+            class="fi-btn group flex w-fit gap-1.5 text-xs items-center bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="stroke-current group-hover:stroke-white rotate-90"
+            >
+              <line
+                x1="19"
+                y1="12"
+                x2="5"
+                y2="12"
+                class="scale-x-0 group-hover:scale-x-100 translate-x-3 group-hover:translate-x-0 transition-all duration-300 ease-in-out"
+              ></line>
+              <polyline
+                points="12 19 5 12 12 5"
+                class="translate-x-1 group-hover:translate-x-0 transition-all duration-300 ease-in-out"
+              ></polyline>
             </svg>
-            <div class="w-full group-hover:text-white transition-colors duration-300 ease-in-out">
-               Back to top
-            </div>
+            <span class="group-hover:text-[rgb(var(--c-50))] transition-colors">
+              Back to top
+            </span>
           </button>
         </div>
       </Container>
     </section>
-  
-    <section class=" py-5 overflow-hidden whitespace-nowrap border-t border-white/25 backdrop-blur-xl transition-all">
+
+    <!-- Brand row -->
+    <section
+      class="py-5 overflow-hidden whitespace-nowrap border-t border-hairline backdrop-blur-xl transition-all"
+    >
       <Container size="md">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div class="flex flex-col items-center sm:items-start">
-            <a href="/" class="flex gap-3 place-items-center w-fit font-semibold text-current hover:text-white transition-colors duration-300 ease-in-out">
-              <HeaderIcon/>
+            <a
+              href="/"
+              class="flex gap-3 place-items-center w-fit font-semibold text-[rgb(var(--c-50))] hover:text-primary-500 transition-colors duration-300 ease-in-out"
+            >
+              <HeaderIcon />
               {SITE.TITLE}
             </a>
           </div>
-          <!--<div class="flex gap-2 justify-center sm:justify-end items-center hover:scale-95 transition-all duration-300 ease-in-out" >-->
-          <!--  <iframe src="https://status.nikostuff.com/badge?theme=white"-->
-          <!--          width="250"-->
-          <!--          height="30"-->
-          <!--          title="Status"-->
-          <!--          style="border-radius: 9999px; overflow: hidden;"></iframe>-->
-
-          <!--</div>-->
         </div>
       </Container>
     </section>
-  
-    <section class=" py-5 overflow-hidden whitespace-nowrap border-t border-white/25">
+
+    <!-- Links & Socials row -->
+    <section
+      class="py-5 overflow-hidden whitespace-nowrap border-t border-hairline"
+    >
       <Container size="md">
         <div class="h-full grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div class="order-2 sm:order-1 flex flex-col items-center justify-center sm:items-start">
-            <div class="legal hover:scale-125 transition-all duration-300 ease-in-out">
-              <a href="https://dc.nikostuff.com" class="text-current hover:text-white transition-all duration-300 ease-in-out">
+          <div
+            class="order-2 sm:order-1 flex flex-col items-center justify-center sm:items-start"
+          >
+            <div class="legal transition-all duration-300 ease-in-out">
+              <a
+                href="https://dc.nikostuff.com"
+                class="text-xs text-[rgb(var(--c-400))] hover:text-[rgb(var(--c-50))] transition-all duration-300 ease-in-out"
+              >
                 Created & Built with ❤️ by Niko / M.F.
               </a>
             </div>
             <!-- ToS and Privacy Policy links -->
             <div class="flex gap-4 mt-2">
-              <a href="/legal/terms/" class="text-sm text-gray-400 hover:text-gray-200 transition-colors duration-300 ease-in-out">
+              <a
+                href="/legal/terms/"
+                class="text-xs text-[rgb(var(--c-400))] hover:text-primary-500 transition-colors duration-300 ease-in-out"
+              >
                 Terms of Service
               </a>
-              <a href="/legal/privacy/" class="text-sm text-gray-400 hover:text-gray-200 transition-colors duration-300 ease-in-out">
+              <a
+                href="/legal/privacy/"
+                class="text-xs text-[rgb(var(--c-400))] hover:text-primary-500 transition-colors duration-300 ease-in-out"
+              >
                 Privacy Policy
               </a>
             </div>
-            <div class="text-sm mt-2">
-              &copy; {currentYear} | <PageVersion/>
+            <div class="text-xs font-mono text-[rgb(var(--c-400))] mt-2">
+              &copy; {currentYear} | <PageVersion />
             </div>
           </div>
-  
+
           <div class="order-1 sm:order-2 flex justify-center sm:justify-end">
             <div class="flex flex-wrap gap-1 items-center justify-center">
               {
@@ -87,37 +118,38 @@ const currentYear = new Date().getFullYear();
                     href={SOCIAL.HREF}
                     target="_blank"
                     aria-label={`${SITE.TITLE} on ${SOCIAL.NAME}`}
-                    class="group size-10 rounded-full p-2 items-center justify-center hover:bg-white/20  blend"
+                    class="group fi-btn size-10 rounded-full p-2 flex items-center justify-center bg-transparent border-hairline hover:bg-white/3 transition-colors"
                   >
-                    <div class="size-full flex items-center justify-center fill-current group-hover:fill-white blend">
-                      <i class={`${SOCIAL.ICON} text-2xl`}></i>
+                    <div class="size-full flex items-center justify-center fill-current group-hover:text-primary-500 transition-colors">
+                      <i
+                        class={`${SOCIAL.ICON} text-xl text-[rgb(var(--c-400))] group-hover:text-primary-500`}
+                      />
                     </div>
                   </a>
                 ))
               }
-              </div>
+            </div>
           </div>
         </div>
       </Container>
     </section>
   </div>
-
 </footer>
 
 <script is:inline>
   function goBackToTop(event) {
-    event.preventDefault()
+    event.preventDefault();
     window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    })
+      top: 0,
+      behavior: "smooth",
+    });
   }
 
   function inintializeBackToTop() {
-    const backToTop = document.getElementById("back-to-top")
-    backToTop?.addEventListener("click", goBackToTop)
+    const backToTop = document.getElementById("back-to-top");
+    backToTop?.addEventListener("click", goBackToTop);
   }
 
-  document.addEventListener("astro:after-swap", inintializeBackToTop)
-  inintializeBackToTop()
+  document.addEventListener("astro:after-swap", inintializeBackToTop);
+  inintializeBackToTop();
 </script>

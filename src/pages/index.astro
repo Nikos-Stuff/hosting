@@ -2,10 +2,6 @@
 import PageLayout from "@layouts/PageLayout.astro";
 import { SITE } from "@consts";
 import { getCollection } from "astro:content";
-import MeteorShower from "@components/MeteorShower.astro";
-import TwinklingStars from "@components/TwinklingStars.astro";
-import BackgroundFX from "@components/page_effects/BackgroundFX.astro";
-import POD from "@components/POD.astro";
 import DynamicTitle from "@components/TitleHeader.astro";
 import FancyDiv from "@components/FancyDiv.astro";
 import Accordion from "@components/Accordion.astro";
@@ -16,6 +12,11 @@ import { Image } from "astro:assets";
 
 import squid_servers from "@assets/hosting/squid_servers.png";
 import playit_gg from "@assets/hosting/playit.png";
+import steve from "@assets/steve.png";
+import terraria_bunny from "@assets/terraria_bunny.gif";
+import villager from "@assets/villager.png";
+
+import bg from "@assets/headerbg.png";
 
 import BlogSummary from "@components/BlogSummary";
 import ServerList from "@components/ServerList.astro";
@@ -50,7 +51,7 @@ const posts = (await getCollection("blog"))
     class="fixed inset-0 z-50 items-center justify-center hidden bg-black/50 backdrop-blur-md"
   >
     <div
-      class="relative border border-white/10 bg-neutral-950 rounded-xl p-6 flex flex-col items-center justify-center w-[26rem] min-h-[22rem] shadow-2xl text-center overflow-hidden"
+      class="relative border border-white/10 bg-neutral-950 rounded-xl p-6 flex flex-col items-center justify-center w-104 min-h-88 shadow-2xl text-center overflow-hidden"
     >
       <button
         id="close-ping-popup"
@@ -82,7 +83,7 @@ const posts = (await getCollection("blog"))
         </p>
 
         <div
-          class="grid grid-cols-2 gap-3 w-full border border-white/5 bg-white/[0.02] rounded-lg p-3 text-left text-xs mb-4"
+          class="grid grid-cols-2 gap-3 w-full border border-white/5 bg-white/2 rounded-lg p-3 text-left text-xs mb-4"
         >
           <div class="flex items-center gap-1.5 text-white/60">
             <i class="ph ph-waveform text-neutral-400"></i>
@@ -122,38 +123,22 @@ const posts = (await getCollection("blog"))
     </div>
   </div>
 
-  <POD />
-  <!-- Dark Theme: Stars -->
-  <div class="absolute inset-0">
-    <div id="stars1" class="fixed inset-0"></div>
-    <div id="stars2" class="fixed inset-0"></div>
-    <div id="stars3" class="fixed inset-0"></div>
-  </div>
-
-  <!-- Dark Theme: Twinkling Stars / Metors -->
-  <div id="galaxy" class="fixed inset-0">
-    <div>
-      <TwinklingStars />
-      <MeteorShower />
-    </div>
-  </div>
-
-  <!-- <script is:inline defer src="/js/bg.js"></script> -->
-  <BackgroundFX />
   <!-- HERO -->
   <section
     id="hero_fade"
-    class="snap-center grid w-full h-svh place-items-center relative text-center overflow-hidden transition-all"
+    class="snap-center grid w-full min-h-svh pt-16 place-items-start relative text-center overflow-x-hidden transition-all"
   >
-    <!-- <div id="planetcont" class='animate absolute inset-0 top-3/4 overflow-hidden z-10'> PLANET HAS BEEN REMOVED FOR A TEST NEW LAYOUT
-            <div id="crescent"
-                 class='absolute top-0 left-1/2 -translate-x-1/2 w-[250vw] min-h-[100vh] aspect-square rounded-full p-[1px] bg-gradient-to-b from-black/25  from-white/75 from-0% to-transparent to-5%'>
-                <div id="planet"
-                     class='w-full h-full bg-white  bg-black rounded-full p-[1px] overflow-hidden flex justify-center'>
-                    <div id="blur" class='w-full h-5 rounded-full bg-neutral-900/25  bg-white/25 blur-2xl'/>
-                </div>
-            </div>
-        </div> -->
+    <div
+      class="absolute top-0 bottom-0 -left-20 -right-20 pointer-events-none z-0 overflow-visible opacity-50 filter blur-[50px] flex items-center justify-center"
+    >
+      <Image
+        src={bg}
+        loading="eager"
+        alt="Background decoration"
+        class="w-full h-full object-cover max-w-none mask-[radial-gradient(ellipse_at_center,black_30%,transparent_70%)]"
+      />
+    </div>
+
     <DynamicTitle
       sub="Niko's Stuff - Hosting"
       buttons={true}
@@ -165,603 +150,791 @@ const posts = (await getCollection("blog"))
   <div
     hidden
     id="order_blocker"
-    class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-2xl"
+    class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center backdrop-blur-md p-4"
   >
     <div
       data-cursor-hover="true"
       data-cursor-parallax="true"
-      class="border border-white/20 bg-black rounded-lg p-6 flex flex-col items-center"
+      class="fi-section w-full max-w-md p-6 sm:p-8 flex flex-col items-center text-center space-y-4 shadow-2xl"
     >
       <svg
-        class="animate-spin h-12 w-12 mr-3 fill-white"
+        class="animate-spin h-10 w-10 text-primary-500 fill-current"
         viewBox="0 -960 960 960"
       >
         <path
           d="M479.98-116q-74.81 0-141.26-27.84-66.44-27.84-116.74-78.14t-78.14-116.69Q116-405.06 116-480.15q0-75.09 28-141.47T222-738q50-50 116.6-78 66.59-28 141.4-28 7.93 0 12.96 4.77 5.04 4.78 5.04 12.58 0 7.81-5.04 12.73Q487.93-809 480-809q-136.75 0-232.88 96.17-96.12 96.18-96.12 233Q151-343 247.17-247q96.18 96 233 96Q617-151 713-247.12q96-96.13 96-232.88 0-7.98 4.96-12.99 4.95-5.01 12.76-5.01t12.54 5.04Q844-487.93 844-480q0 74.81-28 141.4Q788-272 738-222t-116.6 78q-66.61 28-141.42 28Z"
         ></path>
       </svg>
-      <h2 class="text-lg font-semibold mb-2">Creating your server!</h2>
-      <p class="text-sm text-muted text-center mb-2">
-        Please wait while we set up your free game server. This process usually
-        takes less than a minute.
-      </p>
 
-      <p class="font-bold mb-5 text-amber-600">
-        Check your e-mail for messages!
-      </p>
+      <div class="space-y-1">
+        <h2 class="text-xl font-bold tracking-tight text-[rgb(var(--c-50))]">
+          Creating your server!
+        </h2>
+        <p class="text-xs text-[rgb(var(--c-400))] leading-relaxed max-w-xs">
+          Please wait while we set up your free game server. This process
+          usually takes less than a minute.
+        </p>
+      </div>
 
-      <p id="order_activity" class="text-xs">Waiting...</p>
+      <div
+        class="w-full bg-[rgb(var(--c-900))] border border-hairline rounded-sm p-3 text-left"
+      >
+        <p
+          class="text-[0.6875rem] font-semibold text-amber-400 flex items-center gap-1.5"
+        >
+          <span>⚠️</span> Check your e-mail for messages!
+        </p>
+      </div>
+
+      <p
+        id="order_activity"
+        class="text-xs font-mono text-[rgb(var(--c-400))] pt-1"
+      >
+        Waiting...
+      </p>
     </div>
   </div>
 
   <div class="relative">
-    <!-- Beefy CPU with 3d model -->
-    <div class="relative w-svw h-svh overflow-hidden bg-black/90">
+    <!-- Hardware Section -->
+    <section class="animate w-full max-w-7xl mx-auto py-12 px-4 md:px-8 mb-40">
       <div
-        class="absolute inset-0 z-10 flex flex-col items-center justify-center px-10 text-center"
+        class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center min-h-100"
       >
-        <p
-          class="animate uppercase text-5xl md:text-7xl lg:text-9xl font-black leading-none text-white text-shadow-2xs"
-        >
-          BEEFY HARDWARE
-        </p>
-        <p class="animate mt-4 max-w-3xl text-sm md:text-base text-white/90">
-          We are not messing around! Using top-of-the-line AMD CPUs - Ensuring
-          maximum performance for your experience.
-        </p>
-      </div>
-
-      <canvas
-        id="cpu_canvas"
-        data-model-url={AMDCpuModel}
-        class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
-    </div>
-
-    <!-- Is that even real? section -->
-    <div id="scroller_wrapper" class="overflow-hidden">
-      <div id="scroller_isthatevenreal" class="h-svh w-full relative">
+        <!-- 3D Canvas Column -->
         <div
-          class="slide absolute inset-0 flex items-center justify-center p-10"
+          class="lg:col-span-6 animate relative w-full h-80 md:h-96 lg:h-112.5"
         >
-          <p class="title text-5xl font-black text-center uppercase">
-            Okay! But is that even real?
-          </p>
+          <canvas
+            id="cpu_canvas"
+            data-model-url={AMDCpuModel}
+            class="w-full h-full pointer-events-none"></canvas>
         </div>
 
+        <!-- Details Column -->
         <div
-          class="slide absolute inset-0 opacity-0 flex items-center justify-center p-6"
+          class="lg:col-span-6 flex flex-col justify-center items-center lg:items-start"
         >
-          <span
-            class="num absolute inset-0 flex items-center justify-center text-[20rem] font-black opacity-10 select-none"
-            >1</span
-          >
-          <div
-            class="content relative z-10 flex flex-col md:flex-row items-center gap-8"
-          >
-            <h2 class="text-left-part text-6xl font-bold">01</h2>
-            <p class="text-right-part text-xl max-w-md">
-              Enjoy a clean, unmodded Pelican panel experience. No ads, no
-              popups, just pure hosting goodness.
-            </p>
-          </div>
-        </div>
+          <!-- Inner wrapper kept left-aligned, but centered via mx-auto on mobile -->
+          <div class="w-full max-w-md text-left space-y-3 mx-auto lg:mx-0">
+            <span
+              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+            >
+              Infrastructure
+            </span>
 
-        <div
-          class="slide absolute inset-0 opacity-0 flex items-center justify-center p-6"
-        >
-          <span
-            class="num absolute inset-0 flex items-center justify-center text-[20rem] font-black opacity-10 select-none"
-            >2</span
-          >
-          <div
-            class="content relative z-10 flex flex-col md:flex-row items-center gap-8"
-          >
-            <h2 class="text-left-part text-6xl font-bold">02</h2>
-            <p class="text-right-part text-xl max-w-md">
-              Host anything! Minecraft, Terraria, Discord bots, websites, you
-              name it!<br />(Psst! If we're missing something, let us know!)
-            </p>
-          </div>
-        </div>
+            <h2
+              class="animate text-3xl md:text-5xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase leading-none"
+            >
+              Beefy Hardware
+            </h2>
 
-        <div
-          class="slide absolute inset-0 opacity-0 flex items-center justify-center p-6"
-        >
-          <span
-            class="num absolute inset-0 flex items-center justify-center text-[20rem] font-black opacity-10 select-none"
-            >3</span
-          >
-          <div
-            class="content relative z-10 flex flex-col md:flex-row items-center gap-8"
-          >
-            <h2 class="text-left-part text-6xl font-bold">03</h2>
-            <p class="text-right-part text-xl max-w-md">
-              Always online! Forget about renewing your server every few hours.
-              Our hosting runs 24/7 with no interruptions.
+            <p
+              class="animate text-xs md:text-sm text-[rgb(var(--c-400))] leading-relaxed"
+            >
+              We are not messing around! Powered by top-of-the-line AMD CPUs to
+              ensure maximum performance and low latency for your hosting
+              experience.
             </p>
-          </div>
-        </div>
 
-        <div
-          class="slide absolute inset-0 opacity-0 flex items-center justify-center p-6"
-        >
-          <span
-            class="num absolute inset-0 flex items-center justify-center text-[20rem] font-black opacity-10 select-none"
-            >4</span
-          >
-          <div
-            class="content relative z-10 flex flex-col md:flex-row items-center gap-8"
-          >
-            <h2 class="text-left-part text-6xl font-bold">04</h2>
-            <p class="text-right-part text-xl max-w-md">
-              And that's not all! We're just getting started. Expect new
-              features, more games, and exciting updates in the near future!
-            </p>
+            <!-- Hardware Spec Table (native .hl-health style) -->
+            <div class="animate pt-2 w-full">
+              <div class="hl-health">
+                <div class="hl-health-row">
+                  <span class="hl-dot hl-ok"></span>
+                  <span class="hl-health-name text-[rgb(var(--c-50))]"
+                    >Processor</span
+                  >
+                  <span
+                    class="hl-health-summary font-mono text-[rgb(var(--c-300))]"
+                    >AMD Ryzen / EPYC</span
+                  >
+                </div>
+                <div class="hl-health-row">
+                  <span class="hl-dot hl-ok"></span>
+                  <span class="hl-health-name text-[rgb(var(--c-50))]"
+                    >Memory</span
+                  >
+                  <span
+                    class="hl-health-summary font-mono text-[rgb(var(--c-300))]"
+                    >DDR5 ECC RAM</span
+                  >
+                </div>
+                <div class="hl-health-row">
+                  <span class="hl-dot hl-ok"></span>
+                  <span class="hl-health-name text-[rgb(var(--c-50))]"
+                    >Storage</span
+                  >
+                  <span
+                    class="hl-health-summary font-mono text-[rgb(var(--c-300))]"
+                    >Enterprise NVMe SSDs</span
+                  >
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="24">
-      <section class="relative animate">
-        <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
+    <!-- Benefits Grid Section -->
+    <section class="animate w-full max-w-7xl mx-auto py-12 px-4 md:px-8">
+      <div class="mb-8 text-left space-y-1">
+        <span
+          class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
         >
-          Our hosting vs Other solutions
-        </p>
-        <p class="font-bold text-sm mb-2 animate">Quick summary of stuff</p>
+          Why Choose Us
+        </span>
+        <h2
+          class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]"
+        >
+          Okay! But is that even real?
+        </h2>
+      </div>
 
-        <div class="overflow-x-auto mt-6 animate rounded-lg">
-          <table class="min-w-full border border-zinc-900">
-            <thead class="bg-zinc-900">
+      <!-- Benefits Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Card 01 -->
+        <div class="fi-section fi-section-hoverable animate p-5">
+          <div class="flex items-start gap-4">
+            <span
+              class="text-base font-bold font-mono text-primary-500 shrink-0 mt-0.5"
+            >
+              01
+            </span>
+            <div class="space-y-1 text-left">
+              <h3 class="text-sm font-semibold text-[rgb(var(--c-50))]">
+                Pure Pelican Experience
+              </h3>
+              <p class="text-xs text-[rgb(var(--c-300))] leading-relaxed">
+                Enjoy a clean, unmodded Pelican panel experience. No ads, no
+                popups, just pure hosting goodness.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 02 -->
+        <div class="fi-section fi-section-hoverable animate p-5">
+          <div class="flex items-start gap-4">
+            <span
+              class="text-base font-bold font-mono text-primary-500 shrink-0 mt-0.5"
+            >
+              02
+            </span>
+            <div class="space-y-1 text-left">
+              <h3 class="text-sm font-semibold text-[rgb(var(--c-50))]">
+                Host Anything
+              </h3>
+              <p class="text-xs text-[rgb(var(--c-300))] leading-relaxed">
+                Minecraft, Terraria, Discord bots, websites, you name it! If
+                we're missing something, let us know!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 03 -->
+        <div class="fi-section fi-section-hoverable animate p-5">
+          <div class="flex items-start gap-4">
+            <span
+              class="text-base font-bold font-mono text-primary-500 shrink-0 mt-0.5"
+            >
+              03
+            </span>
+            <div class="space-y-1 text-left">
+              <h3 class="text-sm font-semibold text-[rgb(var(--c-50))]">
+                Always Online 24/7
+              </h3>
+              <p class="text-xs text-[rgb(var(--c-300))] leading-relaxed">
+                Forget about renewing your server every few hours. Our hosting
+                runs continuously with no interruptions.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 04 -->
+        <div class="fi-section fi-section-hoverable animate p-5">
+          <div class="flex items-start gap-4">
+            <span
+              class="text-base font-bold font-mono text-primary-500 shrink-0 mt-0.5"
+            >
+              04
+            </span>
+            <div class="space-y-1 text-left">
+              <h3 class="text-sm font-semibold text-[rgb(var(--c-50))]">
+                Constant Updates
+              </h3>
+              <p class="text-xs text-[rgb(var(--c-300))] leading-relaxed">
+                We're just getting started. Expect new features, more games, and
+                exciting performance updates soon.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="animate w-full max-w-7xl mx-auto py-12 px-4 md:px-8 mb-40">
+      <div class="mb-6 text-left space-y-1">
+        <span
+          class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+        >
+          Comparison
+        </span>
+        <h2
+          class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]"
+        >
+          Our Hosting vs Other Solutions
+        </h2>
+        <p class="animate text-xs text-[rgb(var(--c-400))]">
+          A quick overview of features, hardware, and service limitations.
+        </p>
+      </div>
+
+      <!-- Scrollable Wrapper -->
+      <div class="hl-overview animate w-full overflow-x-auto! hide_scrollbar">
+        <div class="inline-block min-w-full align-middle">
+          <table class="hl-table whitespace-nowrap min-w-162.5">
+            <thead>
               <tr>
-                <th class="px-4 py-3 text-left text-sm font-bold text-zinc-300">
-                  Feature
-                </th>
-                <th
-                  class="px-4 py-3 text-left text-sm font-bold text-green-600"
-                >
-                  Our Hosting
-                </th>
-                <th class="px-4 py-3 text-left text-sm font-bold text-zinc-400">
-                  Aternos.org
-                </th>
-                <th class="px-4 py-3 text-left text-sm font-bold text-zinc-400">
-                  Playit.gg
-                </th>
-                <th class="px-4 py-3 text-left text-sm font-bold text-zinc-400">
-                  Other Free Hosting
-                </th>
+                <th>Feature</th>
+                <th class="text-primary-500">Our Hosting</th>
+                <th>Aternos.org</th>
+                <th>Playit.gg</th>
+                <th>Other Free Hosting</th>
               </tr>
             </thead>
 
-            <tbody class="divide-y divide-zinc-800">
+            <tbody>
+              <!-- Row 1: Ads -->
               <tr>
-                <td
-                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
-                >
-                  Ads
-                </td>
-                <td class="px-4 py-3 text-green-600 font-semibold">No ads</td>
-                <td class="px-4 py-3">Heavy ads</td>
-                <td class="px-4 py-3">No ads</td>
-                <td class="px-4 py-3">Usually yes</td>
+                <th class="text-[rgb(var(--c-50))]">Ads</th>
+                <td class="font-semibold text-primary-500">No ads</td>
+                <td class="text-[rgb(var(--c-300))]">Heavy ads</td>
+                <td class="text-[rgb(var(--c-300))]">No ads</td>
+                <td class="text-[rgb(var(--c-300))]">Usually yes</td>
               </tr>
 
+              <!-- Row 2: Uptime -->
               <tr>
-                <td
-                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
+                <th class="text-[rgb(var(--c-50))]">Uptime</th>
+                <td class="font-semibold text-primary-500"
+                  >24/7 Always Online</td
                 >
-                  Uptime
-                </td>
-                <td class="px-4 py-3 text-green-600 font-semibold">24/7</td>
-                <td class="px-4 py-3">Session-based</td>
-                <td class="px-4 py-3">Requires PC online</td>
-                <td class="px-4 py-3">Limited</td>
+                <td class="text-[rgb(var(--c-300))]">Session-based</td>
+                <td class="text-[rgb(var(--c-300))]">Requires PC online</td>
+                <td class="text-[rgb(var(--c-300))]">Limited</td>
               </tr>
 
+              <!-- Row 3: CPU -->
               <tr>
-                <td
-                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
+                <th class="text-[rgb(var(--c-50))]">CPU</th>
+                <td class="font-mono font-semibold text-primary-500"
+                  >Ryzen 5 / 7 / 9</td
                 >
-                  CPU
-                </td>
-                <td class="px-4 py-3 text-green-600 font-semibold">
-                  Ryzen 5 / 7 / 9
-                </td>
-                <td class="px-4 py-3">Shared / limited</td>
-                <td class="px-4 py-3">Your own PC</td>
-                <td class="px-4 py-3">Low-end VPS</td>
+                <td class="text-[rgb(var(--c-300))]">Shared / limited</td>
+                <td class="text-[rgb(var(--c-300))]">Your own PC</td>
+                <td class="text-[rgb(var(--c-300))]">Low-end VPS</td>
               </tr>
 
+              <!-- Row 4: Cost -->
               <tr>
-                <td
-                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
-                >
-                  Cost
-                </td>
-                <td class="px-4 py-3 text-green-600 font-semibold">
-                  Free forever
-                </td>
-                <td class="px-4 py-3">Free</td>
-                <td class="px-4 py-3">Free</td>
-                <td class="px-4 py-3">Free / upsells</td>
+                <th class="text-[rgb(var(--c-50))]">Cost</th>
+                <td class="font-semibold text-primary-500">Free forever</td>
+                <td class="text-[rgb(var(--c-300))]">Free</td>
+                <td class="text-[rgb(var(--c-300))]">Free</td>
+                <td class="text-[rgb(var(--c-300))]">Free / upsells</td>
               </tr>
 
+              <!-- Row 5: Business model -->
               <tr>
-                <td
-                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
-                >
-                  Business model
-                </td>
-                <td class="px-4 py-3 text-green-600 font-semibold">
-                  Nonprofit
-                </td>
-                <td class="px-4 py-3">Ad-driven</td>
-                <td class="px-4 py-3">Tunnels & limits</td>
-                <td class="px-4 py-3">Ads / paid tiers</td>
+                <th class="text-[rgb(var(--c-50))]">Business model</th>
+                <td class="font-semibold text-primary-500">Nonprofit</td>
+                <td class="text-[rgb(var(--c-300))]">Ad-driven</td>
+                <td class="text-[rgb(var(--c-300))]">Tunnels & limits</td>
+                <td class="text-[rgb(var(--c-300))]">Ads / paid tiers</td>
               </tr>
 
+              <!-- Row 6: Panel -->
               <tr>
-                <td
-                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
-                >
-                  Panel
-                </td>
-                <td class="px-4 py-3 text-green-600 font-semibold">
-                  Pelican Panel
-                </td>
-                <td class="px-4 py-3">Custom</td>
-                <td class="px-4 py-3">None</td>
-                <td class="px-4 py-3">Basic / custom</td>
+                <th class="text-[rgb(var(--c-50))]">Panel</th>
+                <td class="font-semibold text-primary-500">Pelican Panel</td>
+                <td class="text-[rgb(var(--c-300))]">Custom</td>
+                <td class="text-[rgb(var(--c-300))]">None</td>
+                <td class="text-[rgb(var(--c-300))]">Basic / custom</td>
               </tr>
 
+              <!-- Row 7: Community support -->
               <tr>
-                <td
-                  class="px-4 py-3 font-semibold bg-zinc-900 border-r border-zinc-800"
-                >
-                  Community support
-                </td>
-                <td class="px-4 py-3 text-green-600 font-semibold">Yes</td>
-                <td class="px-4 py-3">Limited</td>
-                <td class="px-4 py-3">Yes</td>
-                <td class="px-4 py-3">Varies</td>
+                <th class="text-[rgb(var(--c-50))]">Community support</th>
+                <td class="font-semibold text-primary-500">Yes</td>
+                <td class="text-[rgb(var(--c-300))]">Limited</td>
+                <td class="text-[rgb(var(--c-300))]">Yes</td>
+                <td class="text-[rgb(var(--c-300))]">Varies</td>
               </tr>
             </tbody>
           </table>
         </div>
-      </section>
-    </FancyDiv>
+      </div>
+    </section>
 
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
-      <section id="features" class="relative animate">
-        <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
-        >
-          Okay! You convinced me. What's next?
-        </p>
-
-        <p class="font-bold text-sm mb-2 animate">
-          Getting started is easy! Use our simple setup desk below to set up
-          your free game server in minutes.
-        </p>
-      </section>
-    </FancyDiv>
-
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="10">
-      <section class="relative animate">
-        <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
-        >
-          Support Us! Leave a tip :)
-        </p>
-        <p class="font-bold text-sm mb-2 animate">
-          If you like what we do and want to support the project, consider
-          leaving a tip. Every little bit helps us maintain and improve our free
-          hosting services.
-        </p>
-
-        <!-- Progress bar of the tip -->
-        <div class="flex items-center mb-4">
-          <span id="tip_value" class="text-sm text-muted mr-3">0$</span>
-          <div class="flex-1 bg-white/10 rounded-full h-2">
-            <div
-              id="tip_progress_bar"
-              class="bg-white h-2 rounded-full transition-all duration-500 ease-in-out"
-              style="width: 0%;"
-            >
-            </div>
-          </div>
-          <span class="text-sm text-muted ml-3">60$</span>
-        </div>
-
-        <button
-          id="tip_website_btn"
-          class="rainbow_button group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg bg-black hover:bg-black/5 hover: border-white/20 transition-all duration-300 ease-in-out"
-          onclick="window.open('https://ko-fi.com/niko96758', '_blank')"
-        >
-          <span
-            class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300"
-          >
-            Visit Ko-fi Page
-          </span>
-        </button>
-      </section>
-    </FancyDiv>
-
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="10">
-      <section class="relative animate" id="calculator">
-        <!-- OPEN BETA NOTICE -->
+    <!-- CTA bs crap ahh - yes this looks like ai slop i know - whatever - just using filament styling -->
+    <section
+      id="features"
+      class="animate w-full max-w-7xl mx-auto pt-32 pb-12 px-4 md:px-8"
+    >
+      <div class="relative w-full">
         <div
-          class="w-full p-4 mb-5 flex items-start gap-4 border rounded-lg bg-yellow-900/30 border-yellow-700 transition-all duration-300 ease-in-out"
+          class="animate absolute -top-32 md:-top-40 left-1/2 -translate-x-1/2 pointer-events-none z-0"
         >
-          <div class="text-3xl mt-0.5 select-none">
-            <i class="ph ph-bell-simple animate-pulse"></i>
-          </div>
-
-          <div class="leading-relaxed">
-            <p class="font-semibold text-lg mb-1">Limited availability</p>
-
-            <p class="text-sm opacity-90">
-              Due to high demand - our servers might be currently full. We are
-              working on adding more nodes to our locations and improving our
-              infrastructure to accommodate more users.
-            </p>
-
-            <p class="text-sm opacity-80 mt-2">
-              Thanks for your patience & support!
-            </p>
-          </div>
+          <Image
+            src={steve}
+            alt="Steve Minecraft character peeking"
+            class="w-64 md:w-80 h-auto object-contain drop-shadow-2xl"
+          />
         </div>
 
-        <!-- Free tier update -->
-        <div
-          class="w-full p-4 mb-5 flex items-start gap-4 border rounded-lg bg-yellow-900/30 border-yellow-700 transition-all duration-300 ease-in-out"
-        >
-          <div class="text-3xl mt-0.5 select-none">
-            <i class="ph ph-bell-simple animate-pulse"></i>
-          </div>
-
-          <div class="leading-relaxed">
-            <p class="font-semibold text-lg mb-1">
-              Account Verification Required
-            </p>
-
-            <p class="text-sm opacity-90">
-              We now require card verification to activate Free Tier resources.
-              This helps us stop bot abuse and ensure high performance for real
-              users.<br />
-              <strong>$0.00 charge</strong> — verification only.
-            </p>
-          </div>
-        </div>
-
-        <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
-        >
-          Setup Desk
-        </p>
-        <p class="font-bold text-sm mb-2 animate">
-          Easy server setup in 3 simple steps:
-        </p>
-
-        <Calculator />
-
-        <!-- Line -->
-        <hr class="border-white/25 animate my-5" />
-
-        <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
-        >
-          Requirement Estimator
-        </p>
-        <SpecsCalculator />
-
-        <!-- Line -->
-        <hr class="border-white/25 animate my-5" />
-
-        <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
-        >
-          Liked the idea? Share your interest!
-        </p>
-        <p class="font-bold text-sm mb-2 animate">
-          I was planning to launch something like this for a while. To provide a
-          good place to host your servers for free - for your friends or small
-          communities. If you liked what you saw and want to support the
-          project, please fill out the interest form below. It helps me a lot to
-          understand how many people would be interested in using such a
-          service.
-        </p>
-
-        <div class="animate">
-          <a
-            id="place_order_btn"
-            href="https://forms.gle/M6DXeg3NzyFWBsn17"
-            target="_blank"
-            class="group w-full p-4 mt-5 gap-3 flex items-center border rounded-lg hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out"
+        <div class="fi-section relative z-10 p-8 md:p-12 text-center">
+          <div
+            class="flex flex-col items-center justify-center text-center space-y-3"
           >
             <span
-              class="w-full z-10 relative group-hover:text-white text-center transition-color duration-300"
+              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
             >
-              Fill Out Interest Form
+              Next Steps
             </span>
+
+            <h2
+              class="animate text-2xl md:text-4xl font-bold tracking-tight text-[rgb(var(--c-50))]"
+            >
+              Okay! You convinced me. What's next?
+            </h2>
+
+            <p
+              class="animate text-xs md:text-sm text-[rgb(var(--c-400))] max-w-lg leading-relaxed"
+            >
+              Getting started is easy! Use our simple setup desk below to set up
+              your free game server in minutes.
+            </p>
+
+            <div class="animate pt-2">
+              <a
+                href="#calculator"
+                class="fi-btn inline-flex items-center justify-center px-4 py-2 text-xs font-medium rounded-md bg-primary-500 text-white hover:bg-[rgb(var(--primary-600))] border border-transparent transition-colors"
+              >
+                Configure Server
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Setup Desk & Ordering Section -->
+    <section
+      id="calculator"
+      class="animate w-full max-w-7xl mx-auto py-12 px-4 md:px-8 space-y-8"
+    >
+      <!-- Notices Container -->
+      <div class="space-y-4">
+        <!-- Notice 01: Limited Availability -->
+        <div
+          class="fi-section animate relative overflow-hidden border border-amber-500/20 bg-amber-500/10 p-4 sm:p-5 text-left transition-colors"
+        >
+          <div class="flex items-start gap-3.5">
+            <i
+              class="ph ph-bell-simple text-amber-400 text-xl shrink-0 mt-0.5 animate-pulse"
+            ></i>
+            <div class="space-y-1">
+              <h3 class="text-sm font-semibold text-[rgb(var(--c-50))]">
+                Limited availability
+              </h3>
+              <p class="text-xs text-[rgb(var(--c-300))] leading-relaxed">
+                Due to high demand, our servers might be currently full. We are
+                working on adding more nodes to our locations and improving our
+                infrastructure to accommodate more users.
+              </p>
+              <p
+                class="text-[0.6875rem] font-medium text-[rgb(var(--c-400))] pt-1"
+              >
+                Thanks for your patience & support!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notice 02: Account Verification -->
+        <div
+          class="fi-section animate relative overflow-hidden border border-amber-500/20 bg-amber-500/10 p-4 sm:p-5 text-left transition-colors"
+        >
+          <div class="flex items-start gap-3.5">
+            <i class="ph ph-shield-check text-amber-400 text-xl shrink-0 mt-0.5"
+            ></i>
+            <div class="space-y-1">
+              <h3 class="text-sm font-semibold text-[rgb(var(--c-50))]">
+                Account Verification Required
+              </h3>
+              <p class="text-xs text-[rgb(var(--c-300))] leading-relaxed">
+                We now require card verification to activate Free Tier
+                resources. This helps us stop bot abuse and ensure high
+                performance for real users.
+              </p>
+              <span
+                class="inline-block text-[0.6875rem] font-mono font-semibold text-amber-300 pt-0.5"
+              >
+                $0.00 charge — verification only.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Setup Desk Card -->
+      <div class="fi-section animate p-6 md:p-10 space-y-8 text-left">
+        <!-- Setup Desk Section -->
+        <div class="space-y-4">
+          <div class="space-y-1">
+            <span
+              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+            >
+              Configuration
+            </span>
+            <h2
+              class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]"
+            >
+              Setup Desk
+            </h2>
+            <p class="animate text-xs text-[rgb(var(--c-400))]">
+              Easy server setup in 3 simple steps:
+            </p>
+          </div>
+
+          <Calculator />
+        </div>
+
+        <hr class="animate" />
+
+        <!-- Requirement Estimator Section -->
+        <div class="space-y-4">
+          <div class="space-y-1">
+            <span
+              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+            >
+              Planning
+            </span>
+            <h2
+              class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]"
+            >
+              Requirement Estimator
+            </h2>
+          </div>
+
+          <SpecsCalculator />
+        </div>
+
+        <hr class="animate" />
+
+        <!-- Interest Form Section -->
+        <div class="space-y-4">
+          <div class="space-y-1 max-w-2xl">
+            <span
+              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+            >
+              Feedback
+            </span>
+            <h2
+              class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]"
+            >
+              Liked the idea? Share your interest!
+            </h2>
+            <p
+              class="animate text-xs text-[rgb(var(--c-400))] leading-relaxed pt-1"
+            >
+              To provide a good place to host your servers for free for your
+              friends or small communities, please fill out the interest form
+              below. It helps us understand demand and plan future capacity!
+            </p>
+          </div>
+
+          <a
+            href="https://forms.gle/M6DXeg3NzyFWBsn17"
+            target="_blank"
+            class="fi-btn animate w-full sm:w-auto shrink-0 bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors inline-flex items-center justify-center gap-2"
+          >
+            <i class="ph ph-microphone-stage text-sm"></i>
+            <span>Share your interest</span>
           </a>
         </div>
+      </div>
+    </section>
 
-        <!-- Line -->
-        <!-- <hr class="border-black/10  border-white/25 animate my-5" /> -->
+    <!-- Server Availability Tracker Section -->
+    <section
+      id="availability-tracker"
+      class="animate w-full max-w-7xl mx-auto py-12 px-4 md:px-8 mb-12.5"
+    >
+      <div class="fi-section p-6 md:p-10 space-y-6 text-left hidden">
+        <div class="space-y-1">
+          <span
+            class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+          >
+            Realtime Metrics
+          </span>
 
-        <!-- <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-black  text-white animate"
-        >
-          Zarządzaj Swoimi Usługami
-        </p>
-        <p class="font-bold text-sm mb-2 animate">
-          Przedłuż, modyfikuj lub anuluj swoje usługi.
-        </p>
+          <h2
+            class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]"
+          >
+            Server Availability Tracker
+          </h2>
 
-        <ExtendService /> -->
-      </section>
-    </FancyDiv>
+          <p class="animate text-xs text-[rgb(var(--c-400))]">
+            Check the current availability of our hosting nodes (only EU).
+          </p>
+        </div>
 
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
-      <section class="relative animate">
-        <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
-        >
-          Server Availability Tracker
-        </p>
-        <p class="font-bold text-sm mb-2 animate">
-          Check the current availability of our hosting nodes ( only EU )
-        </p>
+        <div class="animate pt-2">
+          <AvailabilityTracker />
+        </div>
+      </div>
+    </section>
 
-        <AvailabilityTracker />
-      </section>
-    </FancyDiv>
-
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
-      <section class="relative animate">
-        <h2 class="font-bold text-3xl mb-0 text-white uppercase">
-          Community Hub
-        </h2>
-        <p>Explore what’s live! Minecraft servers, Terraria, and much more!</p>
-
-        <ServerList />
-      </section>
-    </FancyDiv>
-
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
-      <section class="relative animate">
-        <h2 class="font-bold text-3xl mb-0 text-white uppercase">
-          Other cool solutions
-        </h2>
-        <p>Check out some interesting tools and projects!</p>
-
+    <!-- Community Hub Section -->
+    <section
+      id="community-hub"
+      class="animate w-full max-w-7xl mx-auto pt-16 pb-12 px-4 md:px-8 mb-40"
+    >
+      <div class="relative w-full">
+        <!-- Peeking Terraria Bunny (Locked proportionally to the top-right border) -->
         <div
-          class="relative w-full h-52 mt-6 overflow-hidden rounded-lg animate"
-          data-tooltip="*squids not included"
+          class="animate absolute -top-18 sm:-top-24 md:-top-30 right-6 sm:right-10 md:right-16 pointer-events-none z-0"
         >
           <Image
-            src={squid_servers}
-            alt="SquidServers background"
-            class="absolute inset-0 w-full h-full object-cover filter blur-sm"
+            src={terraria_bunny}
+            alt="Terraria bunny peeking"
+            class="w-24 sm:w-32 md:w-40 h-auto object-contain [image-rendering:pixelated] drop-shadow-2xl"
           />
+        </div>
 
-          <div class="absolute inset-0 bg-black/40"></div>
+        <!-- Community Hub Content Box -->
+        <div class="fi-section relative z-10 p-6 md:p-10 space-y-6 text-left">
+          <div class="space-y-1">
+            <span
+              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+            >
+              Ecosystem
+            </span>
 
-          <div
-            class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 animate"
-          >
-            <h3 class="text-2xl font-bold text-white mb-2 animate">
-              SquidServers
-            </h3>
-            <p class="text-white mb-4 animate">
-              Self-host your own server in minutes. <br />
-              No port forwarding. No complex setup. All owned by you.
+            <h2
+              class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
+            >
+              Community Hub
+            </h2>
+
+            <p class="animate text-xs text-[rgb(var(--c-400))]">
+              Explore what’s live! Minecraft servers, Terraria, and much more!
             </p>
-            <div class="animate">
-              <a
-                href="https://squidservers.com"
-                target="_blank"
-                class="group h-10 p-4 gap-3 flex items-center border rounded-lg hover:scale-105 hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out w-full sm:w-auto whitespace-normal wrap-break-word"
+          </div>
+
+          <div class="animate pt-2">
+            <ServerList />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Other Cool Solutions Section -->
+    <section
+      id="other-solutions"
+      class="animate w-full max-w-7xl mx-auto pt-16 pb-12 px-4 md:px-8 mb-12.5"
+    >
+      <div class="relative w-full">
+        <div
+          class="animate absolute -top-20 sm:-top-32 md:-top-44 left-6 sm:left-10 md:left-16 pointer-events-none z-0"
+        >
+          <Image
+            src={villager}
+            alt="Villager peeking"
+            class="w-24 sm:w-32 md:w-40 h-auto object-contain [image-rendering:pixelated] drop-shadow-2xl"
+          />
+        </div>
+
+        <!-- Other Solutions Content Box -->
+        <div class="fi-section relative z-10 p-6 md:p-10 space-y-6 text-left">
+          <div class="space-y-1">
+            <span
+              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+            >
+              Ecosystem
+            </span>
+
+            <h2
+              class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
+            >
+              Other cool solutions
+            </h2>
+
+            <p class="animate text-xs text-[rgb(var(--c-400))]">
+              Check out some interesting tools and projects!
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <!-- SquidServers Card -->
+            <div
+              class="relative w-full h-52 overflow-hidden fi-section fi-section-dark animate"
+              data-tooltip="*squids not included"
+            >
+              <Image
+                src={squid_servers}
+                alt="SquidServers background"
+                class="absolute inset-0 w-full h-full object-cover filter blur-sm opacity-60"
+              />
+
+              <div class="absolute inset-0 bg-black/50"></div>
+
+              <div
+                class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 animate"
               >
-                <span class="w-full z-10 relative text-white text-center">
-                  Check it out
-                </span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="stroke-white z-10"
+                <h3
+                  class="text-xl font-bold text-[rgb(var(--c-50))] mb-1.5 animate"
                 >
-                  <line
-                    x1="5"
-                    y1="12"
-                    x2="19"
-                    y2="12"
-                    class="scale-x-0 group-hover:scale-x-100 translate-x-4 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
-                  ></line>
-                  <polyline
-                    points="12 5 19 12 12 19"
-                    class="translate-x-0 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
-                  ></polyline>
-                </svg>
-              </a>
+                  SquidServers
+                </h3>
+                <p
+                  class="text-xs text-[rgb(var(--c-300))] mb-4 leading-relaxed animate"
+                >
+                  Self-host your own server in minutes. <br />
+                  No port forwarding. No complex setup. All owned by you.
+                </p>
+                <div class="animate">
+                  <a
+                    href="https://squidservers.com"
+                    target="_blank"
+                    class="fi-btn group inline-flex items-center gap-2 bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors"
+                  >
+                    <span class="relative z-10">Check it out</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="stroke-current z-10"
+                    >
+                      <line
+                        x1="5"
+                        y1="12"
+                        x2="19"
+                        y2="12"
+                        class="scale-x-0 group-hover:scale-x-100 translate-x-4 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
+                      ></line>
+                      <polyline
+                        points="12 5 19 12 12 19"
+                        class="translate-x-0 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
+                      ></polyline>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Playit.gg Card -->
+            <div
+              class="relative w-full h-52 overflow-hidden fi-section fi-section-dark animate"
+            >
+              <Image
+                src={playit_gg}
+                alt="Playit background"
+                class="absolute inset-0 w-full h-full object-cover filter blur-sm opacity-60"
+              />
+
+              <div class="absolute inset-0 bg-black/50"></div>
+
+              <div
+                class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 animate"
+              >
+                <h3
+                  class="text-xl font-bold text-[rgb(var(--c-50))] mb-1.5 animate"
+                >
+                  playit.gg
+                </h3>
+                <p
+                  class="text-xs text-[rgb(var(--c-300))] mb-4 leading-relaxed animate"
+                >
+                  playit.gg is a global proxy that allows anyone to host a
+                  server without port forwarding.
+                </p>
+                <div class="animate">
+                  <a
+                    href="https://playit.gg"
+                    target="_blank"
+                    class="fi-btn group inline-flex items-center gap-2 bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors"
+                  >
+                    <span class="relative z-10">Check it out</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="stroke-current z-10"
+                    >
+                      <line
+                        x1="5"
+                        y1="12"
+                        x2="19"
+                        y2="12"
+                        class="scale-x-0 group-hover:scale-x-100 translate-x-4 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
+                      ></line>
+                      <polyline
+                        points="12 5 19 12 12 19"
+                        class="translate-x-0 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
+                      ></polyline>
+                    </svg>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div
-          class="relative w-full h-52 mt-6 overflow-hidden rounded-lg animate"
-        >
-          <Image
-            src={playit_gg}
-            alt="Playit background"
-            class="absolute inset-0 w-full h-full object-cover filter blur-sm"
-          />
-
-          <div class="absolute inset-0 bg-black/40"></div>
-
-          <div
-            class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 animate"
+    <!-- FAQ Section -->
+    <section
+      id="faq"
+      class="animate w-full max-w-7xl mx-auto py-12 px-4 md:px-8 mb-12.5"
+    >
+      <div class="fi-section p-6 md:p-10 space-y-6 text-left">
+        <div class="space-y-1">
+          <span
+            class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
           >
-            <h3 class="text-2xl font-bold text-white mb-2 animate">
-              playit.gg
-            </h3>
-            <p class="text-white mb-4 animate">
-              playit.gg is a global proxy that allows anyone to host a server
-              without port forwarding.
-            </p>
-            <div class="animate">
-              <a
-                href="https://playit.gg"
-                target="_blank"
-                class="group h-10 p-4 gap-3 flex items-center border rounded-lg hover:scale-105 hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out w-full sm:w-auto whitespace-normal wrap-break-word"
-              >
-                <span class="w-full z-10 relative text-white text-center">
-                  Check it out
-                </span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="stroke-white z-10"
-                >
-                  <line
-                    x1="5"
-                    y1="12"
-                    x2="19"
-                    y2="12"
-                    class="scale-x-0 group-hover:scale-x-100 translate-x-4 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
-                  ></line>
-                  <polyline
-                    points="12 5 19 12 12 19"
-                    class="translate-x-0 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
-                  ></polyline>
-                </svg>
-              </a>
-            </div>
-          </div>
+            Support & Information
+          </span>
+
+          <h2
+            class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
+          >
+            FAQ
+          </h2>
+
+          <p class="animate text-xs text-[rgb(var(--c-400))]">
+            Got questions? We've got answers about our free hosting model,
+            specifications, and policies.
+          </p>
         </div>
-      </section>
-    </FancyDiv>
 
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
-      <section class="relative animate">
-        <h2 class="font-bold text-3xl mb-8 text-white">FAQ</h2>
-
-        <div>
+        <div class="space-y-3 pt-2">
           <Accordion
             title="Are you really nonprofit?"
             details="Yes! We operate on a nonprofit, value-for-value sustaining model. We have no ads, no trackers, and sell zero user data. 100% of the funds generated from our subplans and Ko-fi supporters go directly into maintaining and improving our hosting services. Our mission is to provide free, reliable hosting to gamers and communities around the world without any financial barriers."
@@ -769,8 +942,7 @@ const posts = (await getCollection("blog"))
 
           <Accordion
             title="Do you delete inactive servers?"
-            details="Because our Free plan uses the same high-end hardware as our paid tiers, we have to keep things tidy. All you need to do is hop into the panel at least once every 7 days to keep your server live.
-If life gets busy and you forget, don't sweat it—you’ve got a 72-hour safety net to log in before your server is deleted."
+            details="Because our Free plan uses the same high-end hardware as our paid tiers, we have to keep things tidy. All you need to do is hop into the panel at least once every 7 days to keep your server live. If life gets busy and you forget, don't sweat it—you’ve got a 72-hour safety net to log in before your server is deleted."
           />
 
           <Accordion
@@ -785,7 +957,7 @@ If life gets busy and you forget, don't sweat it—you’ve got a 72-hour safety
 
           <Accordion
             title="My server is 'Suspended'. What should I do?"
-            details="Try logging out of the panel and logging back in again. When someone creates an account it can take minute or two to setup everything correctly. This should be fixed / improved soon."
+            details="Try logging out of the panel and logging back in again. When someone creates an account it can take a minute or two to setup everything correctly. This should be fixed / improved soon."
           />
 
           <Accordion
@@ -810,7 +982,7 @@ If life gets busy and you forget, don't sweat it—you’ve got a 72-hour safety
 
           <Accordion
             title="How can I get better specs for my server?"
-            details="Better specifications are reserved for Ko-fi supporters. Consider supporting us on Ko-fi to get access to higher performance options. ( This is optional and not required to use our free hosting services )"
+            details="Better specifications are reserved for Ko-fi supporters. Consider supporting us on Ko-fi to get access to higher performance options. (This is optional and not required to use our free hosting services)"
           />
 
           <Accordion
@@ -825,23 +997,37 @@ If life gets busy and you forget, don't sweat it—you’ve got a 72-hour safety
 
           <Accordion
             title="What does supporting on Ko-fi provide?"
-            details="Supporting us on Ko-fi helps us maintain and improve our hosting services. As a token of appreciation, Ko-fi supporters gain access to enhanced server specifications, early acess to new nodes, and priority support."
+            details="Supporting us on Ko-fi helps us maintain and improve our hosting services. As a token of appreciation, Ko-fi supporters gain access to enhanced server specifications, early access to new nodes, and priority support."
           />
         </div>
-      </section>
-    </FancyDiv>
+      </div>
+    </section>
 
-    <FancyDiv isAnimated={true} theme="default_big" margin_bottom="50">
-      <section id="features" class="relative animate">
-        <p
-          class="text-xl md:text-2xl lg:text-3xl font-bold uppercase text-white animate"
-        >
-          Changelog
-        </p>
+    <!-- Changelog Section -->
+    <section
+      id="changelog"
+      class="animate w-full max-w-7xl mx-auto py-12 px-4 md:px-8 mb-12.5"
+    >
+      <div class="fi-section p-6 md:p-10 space-y-6 text-left">
+        <div class="space-y-1">
+          <span
+            class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+          >
+            Updates & News
+          </span>
 
-        <p class="font-bold text-sm mb-2 animate">What's new?</p>
+          <h2
+            class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
+          >
+            Changelog
+          </h2>
 
-        <div>
+          <p class="animate text-xs text-[rgb(var(--c-400))]">
+            What's new? Check out the latest changes and improvements.
+          </p>
+        </div>
+
+        <div class="pt-2">
           <ul class="space-y-4">
             {
               posts.map((post) => (
@@ -852,8 +1038,8 @@ If life gets busy and you forget, don't sweat it—you’ve got a 72-hour safety
             }
           </ul>
         </div>
-      </section>
-    </FancyDiv>
+      </div>
+    </section>
   </div>
 </PageLayout>
 
@@ -1043,7 +1229,7 @@ If life gets busy and you forget, don't sweat it—you’ve got a 72-hour safety
       loader.load(modelUrl, (gltf) => {
         model = gltf.scene;
 
-        model.scale.set(1.7, 1.7, 1.7);
+        model.scale.set(1.3, 1.3, 1.3);
 
         model.traverse((obj) => {
           if (obj instanceof THREE.Mesh) {
@@ -1101,43 +1287,4 @@ If life gets busy and you forget, don't sweat it—you’ve got a 72-hour safety
 
     window.addEventListener("pagehide", cleanup, { once: true });
   }
-</script>
-
-<script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  const slides = gsap.utils.toArray<HTMLElement>(".slide");
-
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: "#scroller_wrapper",
-      start: "top top",
-      end: "+=300%",
-      scrub: 1,
-      pin: true,
-      anticipatePin: 1,
-    },
-  });
-
-  slides.forEach((slide, i) => {
-    if (i === 0) {
-      tl.to(slide, { opacity: 0, duration: 1 });
-    } else {
-      const num = slide.querySelector(".num");
-      const leftPart = slide.querySelector(".text-left-part");
-      const rightPart = slide.querySelector(".text-right-part");
-
-      tl.fromTo(slide, { opacity: 0 }, { opacity: 1, duration: 0.5 })
-        .from(leftPart, { x: -100, opacity: 0, duration: 1 }, "<")
-        .from(rightPart, { x: 100, opacity: 0, duration: 1 }, "<")
-        .from(num, { scale: 0.8, opacity: 0, duration: 1.2 }, "-=0.5");
-
-      if (i < slides.length - 1) {
-        tl.to(slide, { opacity: 0, duration: 1, delay: 0.5 });
-      }
-    }
-  });
 </script>

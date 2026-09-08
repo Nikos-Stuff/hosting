@@ -2,88 +2,88 @@
 
 ---
 
-<div
-  id="server-list-container"
-  class="mt-6 mb-2 overflow-y-auto overflow-x-hidden h-125 hide_scrollbar border border-white/20 rounded-md"
->
+<div class="space-y-4">
   <div
-    id="server-template"
-    class="server-item p-4 border-b border-white/20 flex flex-col md:flex-row md:items-center gap-4 hover:bg-white/5 transition-colors cursor-default"
-    style="display: none;"
+    id="server-list-container"
+    class="mt-6 mb-2 overflow-y-auto overflow-x-hidden h-125 hide_scrollbar fi-section fi-section-dark p-3"
   >
     <div
-      class="server-icon-container shrink-0 flex items-center justify-center w-10 h-10 bg-white/5 rounded-lg"
+      id="server-template"
+      class="server-item fi-section p-4 border-b border-hairline flex flex-col md:flex-row md:items-center gap-4 hover:bg-white/3 transition-colors cursor-default"
+      style="display: none;"
     >
-      <i class="ph ph-hard-drives text-2xl text-gray-300"></i>
-    </div>
+      <div
+        class="server-icon-container shrink-0 flex items-center justify-center w-10 h-10 fi-section bg-[rgb(var(--c-900))] rounded-sm"
+      >
+        <i class="ph ph-hard-drives text-xl text-[rgb(var(--c-400))]"></i>
+      </div>
 
-    <div class="grow min-w-0">
-      <h4 class="server-name font-bold text-md text-white truncate break-all">
-      </h4>
-      <p
-        class="server-description text-sm text-gray-500 line-clamp-1 overflow-hidden truncate break-all"
-      >
-      </p>
-      <p
-        class="server-owner text-xs font-medium mt-1 text-blue-500 uppercase truncate"
-      >
-      </p>
-    </div>
-
-    <div
-      class="shrink-0 flex flex-row md:flex-col justify-between md:items-end items-center gap-2 border-t md:border-t-0 pt-2 md:pt-0 border-white/5"
-    >
-      <p class="server-egg text-sm font-semibold text-white"></p>
-      <button
-        class="server-address-btn group/copy relative text-xs sm:text-sm text-gray-500 hover:text-white transition-all duration-300 cursor-pointer p-1 rounded"
-      >
-        <i class="ph ph-copy"></i>
-        <span class="address-label">[CLICK TO COPY IP]</span>
-        <span
-          class="copy-status absolute inset-0 flex items-center justify-center bg-green-500 text-white rounded opacity-0"
-          >Copied!</span
+      <div class="grow min-w-0 space-y-0.5">
+        <h4
+          class="server-name font-bold text-xs md:text-sm text-[rgb(var(--c-50))] truncate break-all"
         >
-      </button>
+        </h4>
+        <p
+          class="server-description text-xs text-[rgb(var(--c-400))] line-clamp-1 overflow-hidden truncate break-all"
+        >
+        </p>
+        <p
+          class="server-owner text-[0.6875rem] font-medium text-primary-500 uppercase truncate pt-0.5"
+        >
+        </p>
+      </div>
+
+      <div
+        class="shrink-0 flex flex-row md:flex-col justify-between md:items-end items-center gap-2 border-t md:border-t-0 pt-2 md:pt-0 border-hairline"
+      >
+        <p class="server-egg text-xs font-semibold text-[rgb(var(--c-50))]"></p>
+        <button
+          class="server-address-btn group/copy relative text-xs text-[rgb(var(--c-400))] hover:text-[rgb(var(--c-50))] transition-all duration-300 cursor-pointer p-1 rounded"
+        >
+          <i class="ph ph-copy"></i>
+          <span class="address-label text-[0.6875rem] font-mono"
+            >[CLICK TO COPY IP]</span
+          >
+          <span
+            class="copy-status absolute inset-0 flex items-center justify-center bg-emerald-500 text-white rounded text-[0.6875rem] font-semibold opacity-0"
+            >Copied!</span
+          >
+        </button>
+      </div>
     </div>
   </div>
-</div>
-<p class="text-sm opacity-50" id="server_counter">-</p>
-
-<hr class="border-zinc-800 my-6" />
-
-<div class="bg-zinc-800/30 p-4 rounded-lg transition-all duration-300">
-  <h3 class="font-bold text-lg mb-2">Visibility Settings</h3>
-  <p class="text-sm text-gray-500 mb-4">
-    Don't want your server shown here? Enter your Server UUID (found in your
-    Server Settings) below to hide or unhide it.
+  <p class="animate text-xs text-[rgb(var(--c-400))] font-mono" id="server_counter">
+    -
   </p>
 
-  <div class="flex gap-2">
-    <input
-      type="text"
-      autocomplete="off"
-      id="toggle-visibility-input"
-      placeholder="e.g. 550e8400-e29b-41d4-a716-446655440000"
-      class="w-full p-4 mt-5 border rounded-lg
-               bg-transparent
-             border-white/20
-             hover:bg-white/10
-               focus:outline-none
-             focus:border-white/40
-               focus:ring-2 focus:ring-white/20
-               focus:ring-offset-0
-               transition-all duration-300 ease-out"
-    />
-    <button
-      id="toggle-visibility-btn"
-      class="group w-50 p-4 mt-5 gap-3 flex items-center border rounded-lg hover:bg-white/10 border-white/20 transition-all duration-300 ease-in-out"
-    >
-      <span
-        class="w-full z-10 relative group-hover:dark:text-white text-center transition-color duration-300"
+  <hr class="animate" />
+
+  <div class="fi-section animate p-6 space-y-4">
+    <div class="space-y-1">
+      <h3 class="animate font-semibold text-sm text-[rgb(var(--c-50))]">
+        Visibility Settings
+      </h3>
+      <p class="animate text-xs text-[rgb(var(--c-400))] leading-relaxed">
+        Don't want your server shown here? Enter your Server UUID (found in your
+        Server Settings) below to hide or unhide it.
+      </p>
+    </div>
+
+    <div class="animate flex flex-col sm:flex-row gap-3">
+      <input
+        type="text"
+        autocomplete="off"
+        id="toggle-visibility-input"
+        placeholder="e.g. 550e8400-e29b-41d4-a716-446655440000"
+        class="fi-input animate w-full p-3 bg-[rgb(var(--c-900))] text-[rgb(var(--c-50))] border border-hairline focus:border-primary-500 focus:outline-none transition-colors text-xs"
+      />
+      <button
+        id="toggle-visibility-btn"
+        class="fi-btn animate shrink-0 flex items-center justify-center gap-2 bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors"
       >
-        Toggle Visibility
-      </span>
-    </button>
+        <span>Toggle Visibility</span>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -126,7 +126,6 @@
   ) as HTMLElement;
 
   const safeBtoa = (str: string): string => {
-    // Converts the string into UTF-8 bytes, then encodes those bytes to Base64
     const bytes = new TextEncoder().encode(str);
     const binString = String.fromCodePoint(...bytes);
     return btoa(binString);
@@ -221,7 +220,6 @@
     return clone;
   }
 
-  // Alert trigger displayer
   function triggerCustomAlert(
     title: string,
     description: string,
@@ -299,7 +297,6 @@
             overflow: "hidden",
           });
 
-          // Alphabetical insertion logic
           let inserted = false;
           const children = Array.from(container.children) as HTMLElement[];
           for (let child of children) {
@@ -333,7 +330,6 @@
         }
       }
 
-      // cleanup
       renderedIds.forEach((id) => {
         if (!incomingIds.has(id)) {
           const element = container.querySelector(
@@ -359,7 +355,6 @@
     }
   }
 
-  // --- Copy & Toggle Functions ---
   function copyToClipboard(text: string, btn: HTMLButtonElement): void {
     navigator.clipboard.writeText(text).then(() => {
       const status = btn.querySelector(".copy-status") as HTMLElement;
