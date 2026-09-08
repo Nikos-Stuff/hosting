@@ -45,7 +45,7 @@ import PageLayout from "@layouts/PageLayout.astro";
 
         <!-- Session ID Display Box -->
         <div
-          class="inline-flex items-center gap-2 rounded-[4px] bg-[rgb(var(--c-900))] px-3 py-2 text-xs font-mono text-[rgb(var(--c-300))] border border-hairline max-w-full overflow-hidden text-ellipsis"
+          class="inline-flex items-center gap-2 rounded-sm bg-[rgb(var(--c-900))] px-3 py-2 text-xs font-mono text-[rgb(var(--c-300))] border border-hairline max-w-full overflow-hidden text-ellipsis"
         >
           <span class="text-[rgb(var(--c-500))] select-none">Session:</span>
           <span id="session-display" class="truncate">Loading Session...</span>
@@ -56,7 +56,7 @@ import PageLayout from "@layouts/PageLayout.astro";
           <a
             href="https://panel.nikostuff.com"
             id="btn-action"
-            class="fi-btn group w-full p-3 gap-2 flex items-center justify-center border border-hairline rounded-[4px] bg-transparent text-[rgb(var(--c-50))] hover:bg-white/[0.03] transition-all duration-300 ease-in-out font-medium text-xs"
+            class="fi-btn group w-full p-3 gap-2 flex items-center justify-center border border-hairline rounded-sm bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-all duration-300 ease-in-out font-medium text-xs"
           >
             <span class="relative z-10 flex items-center gap-2">
               <i class="ph ph-arrow-circle-up-right text-sm"></i>
