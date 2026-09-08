@@ -36,48 +36,27 @@
       </div>
     </div>
 
-    <!-- Egg Selection -->
-    <div class="space-y-2" id="egg_dropdown">
-      <label
-        class="block animate text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+    <!-- Egg Selection Template -->
+    <div
+      hidden
+      id="egg_template"
+      data-egg_id="?"
+      class="flex h-auto w-28 flex-col items-center p-3 fi-btn hover:bg-white/5 hover:-translate-y-1 select-none transition-all duration-300 border-transparent bg-transparent rounded-xl group"
+    >
+      <figure
+        class="w-16 h-16 rounded-lg bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] overflow-hidden flex items-center justify-center shrink-0 shadow-inner group-hover:border-primary-500/50 transition-colors"
       >
-        Select Game / Application:
-      </label>
-
-      <div
-        id="egg_options"
-        class="hide_scrollbar animate h-96 overflow-auto fi-section fi-section-dark p-3"
+        <img
+          src=""
+          alt="Loading"
+          class="w-10 h-10 object-contain drop-shadow"
+        />
+      </figure>
+      <span
+        class="text-xs mt-2.5 text-center w-full whitespace-normal wrap-break-word leading-tight flex items-center justify-center min-h-10 font-medium text-[rgb(var(--c-50))] group-hover:text-white transition-colors"
       >
-        <div
-          class="p-2 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 justify-items-center items-start"
-        >
-          <div
-            hidden
-            id="egg_template"
-            data-egg_id="?"
-            class="flex h-auto w-24 flex-col items-center px-2 py-3 fi-btn hover:bg-white/3 select-none transition-all border-transparent bg-transparent"
-          >
-            <figure
-              class="w-16 h-16 fi-section overflow-hidden flex items-center justify-center shrink-0"
-            >
-              <img src="" alt="Loading" class="w-full h-full object-cover" />
-            </figure>
-            <span
-              class="text-xs mt-2 text-center w-full whitespace-normal wrap-break-word leading-tight flex items-center justify-center min-h-12 font-medium text-[rgb(var(--c-50))]"
-            >
-              Downloading...
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <a
-        href="https://forms.gle/KXNLmxLib8ERo9vT7"
-        target="_blank"
-        class="inline-block animate text-[0.6875rem] text-[rgb(var(--c-400))] hover:text-primary-500 transition-colors pt-1"
-      >
-        We're missing something? Let us know! →
-      </a>
+        Downloading...
+      </span>
     </div>
 
     <!-- Subplan Selection -->
@@ -208,7 +187,7 @@
               >
                 <div
                   id="boost_cpu_bar"
-                  class="absolute h-full bg-[rgb(var(--c-900))] opacity-60 transition-all duration-500 ease-in-out"
+                  class="absolute h-full bg-[rgb(var(--primary-500))] opacity-60 transition-all duration-500 ease-in-out"
                   style="width: 0%"
                 >
                 </div>
@@ -235,7 +214,7 @@
               >
                 <div
                   id="boost_ram_bar"
-                  class="absolute h-full bg-[rgb(var(--c-900))] opacity-60 transition-all duration-500 ease-in-out"
+                  class="absolute h-full bg-[rgb(var(--primary-500))] opacity-60 transition-all duration-500 ease-in-out"
                   style="width: 0%"
                 >
                 </div>
@@ -262,7 +241,7 @@
               >
                 <div
                   id="boost_ssd_bar"
-                  class="absolute h-full bg-[rgb(var(--c-900))] opacity-60 transition-all duration-500 ease-in-out"
+                  class="absolute h-full bg-[rgb(var(--primary-500))] opacity-60 transition-all duration-500 ease-in-out"
                   style="width: 0%"
                 >
                 </div>
@@ -292,7 +271,10 @@
             class="relative w-20 h-20 my-1"
             data-tooltip="-"
           >
-            <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90 transition-all duration-500 ease-in-out">
+            <svg
+              viewBox="0 0 100 100"
+              class="w-full h-full -rotate-90 transition-all duration-500 ease-in-out"
+            >
               <circle
                 cx="50"
                 cy="50"
