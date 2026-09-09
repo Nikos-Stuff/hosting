@@ -3,8 +3,6 @@ title: "Terms of Service for Hosting Service"
 date: "9/8/2026"
 ---
 
----
-
 ## 1) Definitions
 
 - **Service Provider:** Maciej Frączek, operating under **Niko’s Stuff**.  
