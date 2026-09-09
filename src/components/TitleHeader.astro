@@ -10,6 +10,12 @@ import website_icon from "@assets/hosting_icons/website.png";
 import terraria_icon from "@assets/hosting_icons/terraria.png";
 import ts6_icon from "@assets/hosting_icons/ts6.png";
 
+import minecraft_background from "@assets/hosting_icons/bg/minecraft_background.png";
+import hytale_background from "@assets/hosting_icons/bg/hytale_background.png";
+import discord_background from "@assets/hosting_icons/bg/discord_background.png";
+import website_background from "@assets/hosting_icons/bg/website_background.png";
+import terraria_background from "@assets/hosting_icons/bg/terraria_background.png";
+
 const posts = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => {
@@ -50,26 +56,31 @@ const carouselItems = [
   {
     label: "MINECRAFT SERVER",
     image: minecraft_icon,
+    backgroundImage: minecraft_background,
     colors: ["#166534", "#3f6212", "#14532d"],
   },
   {
     label: "HYTALE SERVER",
     image: hytale_icon,
+    backgroundImage: hytale_background,
     colors: ["#92400e", "#9a3412", "#a16207"],
   },
   {
     label: "DISCORD BOT",
     image: discord_icon,
+    backgroundImage: discord_background,
     colors: ["#3730A3", "#4338CA", "#312E81"],
   },
   {
     label: "WEBSITE",
     image: website_icon,
+    backgroundImage: website_background,
     colors: ["#155e75", "#1d4ed8", "#5b21b6"],
   },
   {
     label: "TERRARIA SERVER",
     image: terraria_icon,
+    backgroundImage: terraria_background,
     colors: ["#047857", "#3f6212", "#166534"],
   },
   {
@@ -86,12 +97,8 @@ const carouselItems = [
   style="opacity: 0"
   data-carousel-items={JSON.stringify(carouselItems)}
 >
-  <div
-    class="fi-section relative z-10 w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 p-4 sm:p-6 md:p-10 text-left"
-  >
-    <div
-      class="lg:col-span-6 flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-4"
-    >
+  <div class="fi-section relative z-10 w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 p-4 sm:p-6 md:p-10 text-left">
+    <div class="lg:col-span-6 flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-4">
       <div class="inline-flex items-center gap-2">
         <p
           id="subtitle"
@@ -106,10 +113,11 @@ const carouselItems = [
         class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[rgb(var(--c-50))] leading-tight"
       >
         Host your <br />
-        <span id="text_flip" class="transition-colors duration-300"
-          >MINECRAFT SERVER</span
-        >
-        <br />for free
+        <span id="text_flip" class="transition-colors duration-300">
+          MINECRAFT SERVER
+        </span>
+        <br />
+        for free
       </h1>
 
       <p class="text-xs sm:text-sm text-[rgb(var(--c-400))] max-w-md">
@@ -117,9 +125,7 @@ const carouselItems = [
         your console in seconds.
       </p>
 
-      <div
-        class="pt-2 sm:pt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 w-full"
-      >
+      <div class="pt-2 sm:pt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 w-full">
         <a
           href="https://panel.nikostuff.com"
           target="_blank"
@@ -138,28 +144,38 @@ const carouselItems = [
     </div>
 
     <!-- 3D Carousel Display -->
-    <div
-      class="hidden lg:flex lg:col-span-6 items-center justify-start w-full min-w-0"
-    >
-      <div
-        class="hero-3d-container relative w-full h-80 bg-[rgb(var(--c-900))] overflow-hidden rounded-md border border-hairline"
-      >
-        {
-          carouselItems.map((item, index) => (
-            <div
-              class={`hero-3d-slide absolute inset-0 w-full h-full p-4 box-border flex items-center justify-center ${index !== 0 ? "pointer-events-none opacity-0 invisible" : "z-10"}`}
-              data-label={item.label}
-            >
+    <div class="hidden lg:flex lg:col-span-6 items-center justify-start w-full min-w-0">
+      <div class="hero-3d-container relative w-full h-80 bg-[rgb(var(--c-900))] overflow-hidden rounded-md border border-hairline">
+        {carouselItems.map((item, index) => (
+          <div
+            class={`hero-3d-slide absolute inset-0 w-full h-full box-border flex items-center justify-center overflow-hidden rounded-md ${index !== 0 ? "pointer-events-none opacity-0 invisible" : "z-10"}`}
+            style={`background: linear-gradient(135deg, ${item.colors.join(", ")})`}
+            data-label={item.label}
+          >
+            {item.backgroundImage && (
+              <div class="hero-bg-layer absolute inset-0 w-full h-full pointer-events-none opacity-30 mix-blend-overlay overflow-hidden">
+                <Image
+                  loading="eager"
+                  src={item.backgroundImage}
+                  alt=""
+                  format="webp"
+                  widths={[320, 640, 1024, item.backgroundImage.width]}
+                  sizes="(max-width: 640px) 320px, (max-width: 1024px) 640px, 1024px"
+                  class="hero-bg-img w-full h-full object-cover filter blur-[1px]"
+                />
+              </div>
+            )}
+
+            <div class="hero-icon-wrapper relative z-10 w-full h-full p-6 flex items-center justify-center pointer-events-none">
               <Image
                 loading="eager"
                 src={item.image}
                 alt={`${item.label} placeholder`}
-                class="w-full h-full object-contain rounded-sm border border-hairline/50"
-                style={`background: linear-gradient(135deg, ${item.colors.join(", ")})`}
+                class="hero-icon-img max-w-full max-h-full object-contain filter drop-shadow-2xl"
               />
             </div>
-          ))
-        }
+          </div>
+        ))}
       </div>
     </div>
   </div>
@@ -167,14 +183,12 @@ const carouselItems = [
   <!-- Sub-Cards Container -->
   <div class="relative z-10 w-full max-w-7xl flex flex-col gap-4">
     <!-- Ko-fi Tip Progress Card -->
-    <div
-      class="fi-section p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-    >
+    <div class="fi-section p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div class="space-y-1 text-left">
         <div class="flex items-center gap-2 flex-wrap">
-          <span class="text-xs font-semibold text-[rgb(var(--c-50))]"
-            >Support Us!</span
-          >
+          <span class="text-xs font-semibold text-[rgb(var(--c-50))]">
+            Support Us!
+          </span>
         </div>
         <p class="text-xs text-[rgb(var(--c-400))]">
           If you like what we do, consider leaving a tip to help maintain our
@@ -182,9 +196,7 @@ const carouselItems = [
         </p>
       </div>
 
-      <div
-        class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto"
-      >
+      <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
         <!-- Progress bar with right-aligned value label -->
         <div class="flex items-center gap-2.5 w-full sm:w-64">
           <span
@@ -193,19 +205,14 @@ const carouselItems = [
           >
             0$
           </span>
-          <div
-            class="flex-1 bg-[rgb(var(--c-900))] border border-hairline rounded-full h-2 overflow-hidden"
-          >
+          <div class="flex-1 bg-[rgb(var(--c-900))] border border-hairline rounded-full h-2 overflow-hidden">
             <div
               id="tip_progress_bar"
               class="bg-primary-500 h-full rounded-full transition-all duration-500 ease-in-out"
               style="width: 0%;"
-            >
-            </div>
+            ></div>
           </div>
-          <span
-            class="text-xs font-mono font-medium text-[rgb(var(--c-400))] min-w-8 text-left"
-          >
+          <span class="text-xs font-mono font-medium text-[rgb(var(--c-400))] min-w-8 text-left">
             60$
           </span>
         </div>
@@ -222,54 +229,52 @@ const carouselItems = [
     </div>
 
     <!-- Latest Blog Post Card -->
-    {
-      latestPost && (
-        <div class="fi-section p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div class="space-y-1 text-left max-w-2xl">
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="text-[0.6563rem] font-semibold uppercase tracking-wider text-primary-500">
-                Latest Announcement
-              </span>
-              <span class="text-[0.6563rem] font-mono text-[rgb(var(--c-400))]">
-                {new Date(latestPost.data.date).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </span>
-            </div>
-
-            <h3 class="text-sm font-semibold text-[rgb(var(--c-50))]">
-              {latestPost.data.title}
-            </h3>
-
-            {contentExcerpt && (
-              <p class="text-xs text-[rgb(var(--c-400))] line-clamp-2 leading-relaxed">
-                {contentExcerpt}
-              </p>
-            )}
-
-            {latestPost.data.tags && latestPost.data.tags.length > 0 && (
-              <div class="flex items-center gap-1.5 pt-1 flex-wrap">
-                {latestPost.data.tags.map((tag) => (
-                  <span class="fi-badge bg-[rgb(var(--c-900))] text-[rgb(var(--c-300))] border border-hairline font-mono px-2 py-1">
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            )}
+    {latestPost && (
+      <div class="fi-section p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="space-y-1 text-left max-w-2xl">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-[0.6563rem] font-semibold uppercase tracking-wider text-primary-500">
+              Latest Announcement
+            </span>
+            <span class="text-[0.6563rem] font-mono text-[rgb(var(--c-400))]">
+              {new Date(latestPost.data.date).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </span>
           </div>
 
-          <a
-            href="/changelog/"
-            class="fi-btn w-full sm:w-auto shrink-0 bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors inline-flex items-center justify-center gap-2"
-          >
-            <i class="ph ph-rss text-sm" />
-            <span>View Changelog</span>
-          </a>
+          <h3 class="text-sm font-semibold text-[rgb(var(--c-50))]">
+            {latestPost.data.title}
+          </h3>
+
+          {contentExcerpt && (
+            <p class="text-xs text-[rgb(var(--c-400))] line-clamp-2 leading-relaxed">
+              {contentExcerpt}
+            </p>
+          )}
+
+          {latestPost.data.tags && latestPost.data.tags.length > 0 && (
+            <div class="flex items-center gap-1.5 pt-1 flex-wrap">
+              {latestPost.data.tags.map((tag) => (
+                <span class="fi-badge bg-[rgb(var(--c-900))] text-[rgb(var(--c-300))] border border-hairline font-mono px-2 py-1">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
-      )
-    }
+
+        <a
+          href="/changelog/"
+          class="fi-btn w-full sm:w-auto shrink-0 bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors inline-flex items-center justify-center gap-2"
+        >
+          <i class="ph ph-rss text-sm" />
+          <span>View Changelog</span>
+        </a>
+      </div>
+    )}
   </div>
 </div>
 
@@ -312,6 +317,54 @@ const carouselItems = [
 
     let currentIndex = 0;
     let isAnimating = false;
+    let idleTimeline: gsap.core.Timeline | null = null;
+
+    function playIdleAnimation(slide: HTMLElement) {
+      if (idleTimeline) {
+        idleTimeline.kill();
+      }
+
+      const bgImg = slide.querySelector(".hero-bg-img");
+      const iconImg = slide.querySelector(".hero-icon-img");
+
+      idleTimeline = gsap.timeline({ repeat: -1, yoyo: true });
+
+      if (bgImg) {
+        const bgX = (Math.random() - 0.5) * 20;
+        const bgY = (Math.random() - 0.5) * 16;
+
+        gsap.set(bgImg, { scale: 1.15, x: 0, y: 0 });
+        idleTimeline.to(
+          bgImg,
+          {
+            scale: 1.25,
+            x: bgX,
+            y: bgY,
+            duration: 6,
+            ease: "sine.inOut",
+          },
+          0,
+        );
+      }
+
+      if (iconImg) {
+        // Pick a random target angle (-6 to +6 deg) and random sign (left or right)
+        const randomSign = Math.random() < 0.5 ? -1 : 1;
+        const targetRotation = randomSign * (3 + Math.random() * 4); // Between 3deg and 7deg
+
+        // Smoothly animate float + rotation together straight from current neutral position
+        idleTimeline.to(
+          iconImg,
+          {
+            y: -12,
+            rotation: targetRotation,
+            duration: 2.2 + Math.random() * 0.6,
+            ease: "sine.inOut",
+          },
+          0,
+        );
+      }
+    }
 
     if (container && slides.length) {
       gsap.set(container, { perspective: 1200 });
@@ -339,6 +392,7 @@ const carouselItems = [
             zIndex: 10,
             pointerEvents: "auto",
           });
+          playIdleAnimation(slide);
         }
       });
     }
@@ -365,6 +419,16 @@ const carouselItems = [
 
       const currentSlide = slides[currentIndex];
       const nextSlide = slides[targetIndex];
+
+      if (idleTimeline) {
+        idleTimeline.kill();
+        idleTimeline = null;
+      }
+
+      const nextBg = nextSlide.querySelector(".hero-bg-img");
+      const nextIcon = nextSlide.querySelector(".hero-icon-img");
+      if (nextBg) gsap.set(nextBg, { scale: 1.15, x: 0, y: 0 });
+      if (nextIcon) gsap.set(nextIcon, { y: 0, rotation: 0 });
 
       gsap.set(currentSlide, { pointerEvents: "none" });
 
@@ -400,6 +464,7 @@ const carouselItems = [
           gsap.set(nextSlide, { zIndex: 10, pointerEvents: "auto" });
           currentIndex = targetIndex;
           isAnimating = false;
+          playIdleAnimation(nextSlide);
         },
       });
     }

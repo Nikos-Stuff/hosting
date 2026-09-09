@@ -55,9 +55,7 @@ const currentYear = new Date().getFullYear();
     </section>
 
     <!-- Brand row -->
-    <section
-      class="py-5 overflow-hidden whitespace-nowrap border-t border-hairline backdrop-blur-xl transition-all"
-    >
+    <section class="py-5 overflow-hidden whitespace-nowrap border-t border-hairline backdrop-blur-xl transition-all">
       <Container size="md">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div class="flex flex-col items-center sm:items-start">
@@ -74,14 +72,10 @@ const currentYear = new Date().getFullYear();
     </section>
 
     <!-- Links & Socials row -->
-    <section
-      class="py-5 overflow-hidden whitespace-nowrap border-t border-hairline"
-    >
+    <section class="py-5 overflow-hidden border-t border-hairline">
       <Container size="md">
         <div class="h-full grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div
-            class="order-2 sm:order-1 flex flex-col items-center justify-center sm:items-start"
-          >
+          <div class="order-2 sm:order-1 flex flex-col items-center justify-center sm:items-start">
             <div class="legal transition-all duration-300 ease-in-out">
               <a
                 href="https://dc.nikostuff.com"
@@ -105,6 +99,13 @@ const currentYear = new Date().getFullYear();
                 Privacy Policy
               </a>
             </div>
+
+            <!-- Game Disclaimer -->
+            <div class="text-[10px] text-[rgb(var(--c-400))] opacity-75 mt-3 max-w-sm text-center sm:text-left leading-relaxed">
+              NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED
+              WITH MOJANG OR MICROSOFT.
+            </div>
+
             <div class="text-xs font-mono text-[rgb(var(--c-400))] mt-2">
               &copy; {currentYear} | <PageVersion />
             </div>
@@ -112,22 +113,20 @@ const currentYear = new Date().getFullYear();
 
           <div class="order-1 sm:order-2 flex justify-center sm:justify-end">
             <div class="flex flex-wrap gap-1 items-center justify-center">
-              {
-                SOCIALS.map((SOCIAL) => (
-                  <a
-                    href={SOCIAL.HREF}
-                    target="_blank"
-                    aria-label={`${SITE.TITLE} on ${SOCIAL.NAME}`}
-                    class="group fi-btn size-10 rounded-full p-2 flex items-center justify-center bg-transparent border-hairline hover:bg-white/3 transition-colors"
-                  >
-                    <div class="size-full flex items-center justify-center fill-current group-hover:text-primary-500 transition-colors">
-                      <i
-                        class={`${SOCIAL.ICON} text-xl text-[rgb(var(--c-400))] group-hover:text-primary-500`}
-                      />
-                    </div>
-                  </a>
-                ))
-              }
+              {SOCIALS.map((SOCIAL) => (
+                <a
+                  href={SOCIAL.HREF}
+                  target="_blank"
+                  aria-label={`${SITE.TITLE} on ${SOCIAL.NAME}`}
+                  class="group fi-btn size-10 rounded-full p-2 flex items-center justify-center bg-transparent border-hairline hover:bg-white/3 transition-colors"
+                >
+                  <div class="size-full flex items-center justify-center fill-current group-hover:text-primary-500 transition-colors">
+                    <i
+                      class={`${SOCIAL.ICON} text-xl text-[rgb(var(--c-400))] group-hover:text-primary-500`}
+                    />
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
         </div>
