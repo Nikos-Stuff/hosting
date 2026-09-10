@@ -10,10 +10,10 @@ import HeaderIcon from "@components/web_icon.astro";
 <header id="header" class="fixed top-3 w-full h-16 z-40">
   <Container size="2xl">
     <div
-      class="relative h-full w-full backdrop-blur-md backdrop-saturate-200 backdrop-brightness-50 bg-[rgb(var(--c-800))]/60! shadow-xl px-4 mask-[linear-gradient(to_right,transparent_0%,black_5%,black_95%,transparent_100%)]"
+      class="relative h-full w-full backdrop-blur-md backdrop-saturate-200 backdrop-brightness-50 bg-[rgb(var(--c-800))]/60! shadow-xl px-2 md:px-4 mask-none md:mask-[linear-gradient(to_right,transparent_0%,black_5%,black_95%,transparent_100%)]"
     >
       <div
-        class="absolute left-15 top-1/2 -translate-y-1/2 flex gap-1 font-semibold transition-transform duration-300 hover:scale-105"
+        class="absolute left-4 md:left-15 top-1/2 -translate-y-1/2 flex gap-1 font-semibold transition-transform duration-300 hover:scale-105"
       >
         <a
           href="/"
@@ -46,7 +46,7 @@ import HeaderIcon from "@components/web_icon.astro";
         </nav>
       </div>
 
-      <div class="buttons absolute right-15 top-1/2 -translate-y-1/2 flex gap-2">
+      <div class="buttons absolute right-4 md:right-15 top-1/2 -translate-y-1/2 flex gap-2">
         <button
           data-tooltip="?"
           id="server-latency-pill"
@@ -66,6 +66,7 @@ import HeaderIcon from "@components/web_icon.astro";
     </div>
   </Container>
 </header>
+
 
 <style>
   #header-drawer-button > #drawer-open {
