@@ -8,21 +8,16 @@ import { SITE } from "@consts";
   <section
     id="hero_fade"
     class="snap-center grid w-full h-[20svh] place-items-center relative text-center overflow-hidden transition-all"
-  >
-  </section>
+  ></section>
 
   <div class="relative animate w-full max-w-7xl mx-auto px-4 md:px-8 space-y-12 pb-16">
     <!-- Modpack Converter Card Section -->
     <section class="fi-section p-6 md:p-10 space-y-6 text-left">
       <div class="space-y-1">
-        <span
-          class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-        >
+        <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
           Tools & Utilities
         </span>
-        <h2
-          class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
-        >
+        <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase">
           Modpack Converter
         </h2>
         <p class="animate text-xs text-[rgb(var(--c-400))]">
@@ -57,8 +52,9 @@ import { SITE } from "@consts";
           <span
             id="file_input_text"
             class="text-xs text-[rgb(var(--c-400))] font-mono"
-            >No file chosen</span
           >
+            No file chosen
+          </span>
         </label>
       </div>
 
@@ -68,19 +64,17 @@ import { SITE } from "@consts";
           id="convert_to_zip_btn"
           class="fi-btn group w-full p-4 gap-3 flex items-center border border-hairline rounded-sm bg-transparent hover:bg-white/3 transition-all duration-300 ease-in-out"
         >
-          <span
-            class="w-full z-10 relative group-hover:text-[rgb(var(--c-50))] text-center text-xs font-semibold text-[rgb(var(--c-200))] transition-colors duration-300"
-          >
+          <span class="w-full z-10 relative group-hover:text-[rgb(var(--c-50))] text-center text-xs font-semibold text-[rgb(var(--c-200))] transition-colors duration-300">
             Convert to ZIP server pack!
           </span>
         </button>
       </div>
 
       <p class="mb-6 mt-0">
-        <small class="text-[0.6875rem] text-[rgb(var(--c-400))] font-mono"
-          >Runs in your browser — no uploads. External download links may be
-          blocked by CORS.</small
-        >
+        <small class="text-[0.6875rem] text-[rgb(var(--c-400))] font-mono">
+          Runs in your browser — no uploads. External download links may be
+          blocked by CORS.
+        </small>
       </p>
 
       <!-- Modpack browser -->
@@ -92,19 +86,12 @@ import { SITE } from "@consts";
           hover:bg-white/3
           transition-all duration-300 ease-in-out hide_scrollbar"
       >
-        <div
-          class="template flex items-center justify-between font-mono text-xs text-[rgb(var(--c-300))]"
-        >
+        <div class="template flex items-center justify-between font-mono text-xs text-[rgb(var(--c-300))]">
           <div class="flex items-center gap-3 min-w-0">
-            <div
-              class="mod_circle h-2 w-2 rounded-full shrink-0 aspect-square bg-[rgb(var(--c-600))] animate-pulse"
-            >
-            </div>
+            <div class="mod_circle h-2 w-2 rounded-full shrink-0 aspect-square bg-[rgb(var(--c-600))] animate-pulse"></div>
             <span class="mod_name truncate min-w-0"> Mod Name </span>
           </div>
-          <span
-            class="mod_status text-right whitespace-nowrap ml-3 shrink-0 text-[rgb(var(--c-400))] font-mono"
-          >
+          <span class="mod_status text-right whitespace-nowrap ml-3 shrink-0 text-[rgb(var(--c-400))] font-mono">
             Status
           </span>
         </div>
@@ -129,28 +116,22 @@ import { SITE } from "@consts";
       <!-- Resources usage bars -->
       <div class="mt-4 flex gap-4">
         <div class="flex-1">
-          <div
-            class="w-full bg-[rgb(var(--c-700))] rounded-full h-0.5 overflow-hidden"
-          >
+          <div class="w-full bg-[rgb(var(--c-700))] rounded-full h-0.5 overflow-hidden">
             <div
               id="cpu_usage"
               class="bg-primary-500 h-0.5 rounded-full transition-all duration-500 ease-in-out"
               style="width: 0%"
-            >
-            </div>
+            ></div>
           </div>
         </div>
 
         <div class="flex-1">
-          <div
-            class="w-full bg-[rgb(var(--c-700))] rounded-full h-0.5 overflow-hidden"
-          >
+          <div class="w-full bg-[rgb(var(--c-700))] rounded-full h-0.5 overflow-hidden">
             <div
               id="progress_bar"
               class="bg-emerald-500 h-0.5 rounded-full transition-all duration-500 ease-in-out"
               style="width: 0%"
-            >
-            </div>
+            ></div>
           </div>
         </div>
       </div>
@@ -160,14 +141,10 @@ import { SITE } from "@consts";
   <!-- Modpack Browser Section -->
   <section class="fi-section mb-10 relative animate w-full max-w-7xl mx-auto px-4 md:px-8 space-y-12 pb-16 p-6 md:p-10 text-left">
     <div class="space-y-1">
-      <span
-        class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-      >
+      <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
         Discovery
       </span>
-      <h2
-        class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
-      >
+      <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase">
         Modpack Browser
       </h2>
       <p class="animate text-xs text-[rgb(var(--c-400))]">
@@ -204,22 +181,15 @@ import { SITE } from "@consts";
                transition-all duration-300 ease-in-out hide_scrollbar"
       >
         <!-- Template -->
-        <div
-          class="mdr_template group relative hidden flex-col h-auto border border-hairline rounded-sm overflow-hidden shrink-0"
-        >
+        <div class="mdr_template group relative hidden flex-col h-auto border border-hairline rounded-sm overflow-hidden shrink-0">
           <div
             class="mdr_template_image absolute inset-0 bg-cover bg-center blur-sm transition-transform duration-500 group-hover:scale-125 opacity-40"
             style="background-image: url('/imgs/plc.png');"
-          >
-          </div>
+          ></div>
           <div class="absolute inset-0 bg-black/60"></div>
 
-          <div
-            class="relative z-10 p-6 flex flex-col justify-center items-center text-center text-[rgb(var(--c-50))]"
-          >
-            <span
-              class="mdr_mod_name block font-bold text-xl mb-2 transition-all duration-300 group-hover:scale-105"
-            >
+          <div class="relative z-10 p-6 flex flex-col justify-center items-center text-center text-[rgb(var(--c-50))]">
+            <span class="mdr_mod_name block font-bold text-xl mb-2 transition-all duration-300 group-hover:scale-105">
               Mod Name
             </span>
 
@@ -233,15 +203,11 @@ import { SITE } from "@consts";
             </p>
 
             <div class="relative w-full">
-              <p
-                class="mdr_mod_description text-xs text-[rgb(var(--c-300))] opacity-90 transition-all duration-300 group-hover:opacity-0"
-              >
+              <p class="mdr_mod_description text-xs text-[rgb(var(--c-300))] opacity-90 transition-all duration-300 group-hover:opacity-0">
                 This is a short description.
               </p>
 
-              <p
-                class="click-to-convert absolute inset-0 opacity-0 transition-all duration-300 flex items-center justify-center group-hover:opacity-100 font-mono text-xs text-primary-400 font-semibold"
-              >
+              <p class="click-to-convert absolute inset-0 opacity-0 transition-all duration-300 flex items-center justify-center group-hover:opacity-100 font-mono text-xs text-primary-400 font-semibold">
                 Click to Convert
               </p>
             </div>
@@ -262,15 +228,11 @@ import { SITE } from "@consts";
           <div class="absolute inset-0 bg-black/40"></div>
 
           <div class="relative z-20 flex flex-col items-center space-y-2 p-2">
-            <p
-              class="mdr_loading_text animate-pulse text-[rgb(var(--c-50))] px-4 py-2 rounded-sm bg-[rgb(var(--c-800))] border border-hairline text-xs font-semibold text-center"
-            >
+            <p class="mdr_loading_text animate-pulse text-[rgb(var(--c-50))] px-4 py-2 rounded-sm bg-[rgb(var(--c-800))] border border-hairline text-xs font-semibold text-center">
               Loading modpacks…
             </p>
 
-            <p
-              class="text-[0.6875rem] text-[rgb(var(--c-400))] px-3 py-1 rounded-sm bg-white/3 animate-pulse text-center font-mono"
-            >
+            <p class="text-[0.6875rem] text-[rgb(var(--c-400))] px-3 py-1 rounded-sm bg-white/3 animate-pulse text-center font-mono">
               Stuck? Try another search query!
             </p>
           </div>
@@ -282,14 +244,10 @@ import { SITE } from "@consts";
   <!-- How to Use Section -->
   <section class="fi-section relative animate w-full max-w-7xl mx-auto px-4 md:px-8 space-y-12 pb-16 p-6 md:p-10 text-left">
     <div class="space-y-1">
-      <span
-        class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-      >
+      <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
         Guide
       </span>
-      <h2
-        class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
-      >
+      <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase">
         How to use
       </h2>
       <p class="font-bold text-xs text-[rgb(var(--c-400))] animate mb-2">
@@ -298,20 +256,20 @@ import { SITE } from "@consts";
       </p>
     </div>
 
-    <ol
-      class="list-decimal list-inside space-y-2 text-xs text-[rgb(var(--c-300))] animate marker:text-primary-500"
-    >
+    <ol class="list-decimal list-inside space-y-2 text-xs text-[rgb(var(--c-300))] animate marker:text-primary-500">
       <li class="pl-1">
-        Obtain a <code
-          class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono"
-          >.mrpack</code
-        > file from a Modrinth modpack page.
+        Obtain a{" "}
+        <code class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono">
+          .mrpack
+        </code>{" "}
+        file from a Modrinth modpack page.
       </li>
       <li class="pl-1">
-        Either upload the <code
-          class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono"
-          >.mrpack</code
-        > file using the "Choose File…" button, or paste the modpack URL into the
+        Either upload the{" "}
+        <code class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono">
+          .mrpack
+        </code>{" "}
+        file using the "Choose File…" button, or paste the modpack URL into the
         input field at the top.
       </li>
       <li class="pl-1">
@@ -327,32 +285,32 @@ import { SITE } from "@consts";
       </li>
       <li class="pl-1">
         If any client-only mods were removed, refer to the
-        <code
-          class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono"
-          >deleted_mods.txt</code
-        > file inside the ZIP for details.
+        <code class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono">
+          deleted_mods.txt
+        </code>{" "}
+        file inside the ZIP for details.
       </li>
     </ol>
 
-    <div
-      class="mt-6 text-xs text-[rgb(var(--c-400))] leading-relaxed animate border-t border-hairline pt-4 font-mono"
-    >
-      <strong class="text-[rgb(var(--c-200))] font-semibold">Note:</strong> This tool
-      runs entirely in your browser. No files are uploaded to any server, ensuring
-      your privacy and security. However, some external download links may be blocked
-      due to CORS restrictions. Also note that large modpacks may take longer to process.<br
-      />
-      <span class="block mt-2 text-[rgb(var(--c-300))]"
-        ><strong class="text-[rgb(var(--c-200))] font-semibold">Pro Tip:</strong
-        > You can include advanced search queries in the modpack browser, such as
-        <code
-          class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono"
-          >[version:1.20.4]</code
-        > or <code
-          class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono"
-          >[loader:fabric]</code
-        > to filter modpacks by Minecraft version or mod loader.</span
-      >
+    <div class="mt-6 text-xs text-[rgb(var(--c-400))] leading-relaxed animate border-t border-hairline pt-4 font-mono">
+      <strong class="text-[rgb(var(--c-200))] font-semibold">Note:</strong> This
+      tool runs entirely in your browser. No files are uploaded to any server,
+      ensuring your privacy and security. However, some external download links
+      may be blocked due to CORS restrictions. Also note that large modpacks may
+      take longer to process.
+      <br />
+      <span class="block mt-2 text-[rgb(var(--c-300))]">
+        <strong class="text-[rgb(var(--c-200))] font-semibold">Pro Tip:</strong>{" "}
+        You can include advanced search queries in the modpack browser, such as
+        <code class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono">
+          [version:1.20.4]
+        </code>{" "}
+        or{" "}
+        <code class="text-[rgb(var(--c-50))] bg-white/5 px-1 py-0.5 rounded font-mono">
+          [loader:fabric]
+        </code>{" "}
+        to filter modpacks by Minecraft version or mod loader.
+      </span>
     </div>
   </section>
 </PageLayout>
