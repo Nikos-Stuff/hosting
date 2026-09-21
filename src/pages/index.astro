@@ -50,9 +50,7 @@ const posts = (await getCollection("blog"))
     id="ping_analysis_popup"
     class="fixed inset-0 z-50 items-center justify-center hidden bg-black/50 backdrop-blur-md"
   >
-    <div
-      class="relative border border-white/10 bg-neutral-950 rounded-xl p-6 flex flex-col items-center justify-center w-104 min-h-88 shadow-2xl text-center overflow-hidden"
-    >
+    <div class="relative border border-white/10 bg-neutral-950 rounded-xl p-6 flex flex-col items-center justify-center w-104 min-h-88 shadow-2xl text-center overflow-hidden">
       <button
         id="close-ping-popup"
         class="absolute top-4 right-4 text-white/40 hover:text-white/80 transition-colors text-lg"
@@ -79,40 +77,46 @@ const posts = (await getCollection("blog"))
           id="popup-status-text"
           class="text-sm font-medium text-neutral-300 mb-6 flex items-center gap-1.5"
         >
-          <i class="ph ph-circle-notch animate-spin text-indigo-400"></i> Initializing...
+          <i class="ph ph-circle-notch animate-spin text-indigo-400"></i>{" "}
+          Initializing...
         </p>
 
-        <div
-          class="grid grid-cols-2 gap-3 w-full border border-white/5 bg-white/2 rounded-lg p-3 text-left text-xs mb-4"
-        >
+        <div class="grid grid-cols-2 gap-3 w-full border border-white/5 bg-white/2 rounded-lg p-3 text-left text-xs mb-4">
           <div class="flex items-center gap-1.5 text-white/60">
             <i class="ph ph-waveform text-neutral-400"></i>
-            <span
-              >Jitter: <strong id="val-jitter" class="text-white">--ms</strong
-              ></span
-            >
+            <span>
+              Jitter:{" "}
+              <strong id="val-jitter" class="text-white">
+                --ms
+              </strong>
+            </span>
           </div>
           <div class="flex items-center gap-1.5 text-white/60">
             <i class="ph ph-arrows-out text-neutral-400"></i>
-            <span
-              >Variance: <strong id="val-variance" class="text-white"
-                >--ms</strong
-              ></span
-            >
+            <span>
+              Variance:{" "}
+              <strong id="val-variance" class="text-white">
+                --ms
+              </strong>
+            </span>
           </div>
           <div class="flex items-center gap-1.5 text-white/60">
             <i class="ph ph-warning-circle text-neutral-400"></i>
-            <span
-              >Loss Rate: <strong id="val-loss" class="text-white">0%</strong
-              ></span
-            >
+            <span>
+              Loss Rate:{" "}
+              <strong id="val-loss" class="text-white">
+                0%
+              </strong>
+            </span>
           </div>
           <div class="flex items-center gap-1.5 text-white/60">
             <i class="ph ph-chart-bar text-neutral-400"></i>
-            <span
-              >Samples: <strong id="val-samples" class="text-white">0/10</strong
-              ></span
-            >
+            <span>
+              Samples:{" "}
+              <strong id="val-samples" class="text-white">
+                0/10
+              </strong>
+            </span>
           </div>
         </div>
       </div>
@@ -128,9 +132,7 @@ const posts = (await getCollection("blog"))
     id="hero_fade"
     class="snap-center grid w-full min-h-svh pt-16 place-items-start relative text-center overflow-x-hidden transition-all"
   >
-    <div
-      class="absolute top-0 bottom-0 -left-20 -right-20 pointer-events-none z-0 overflow-visible opacity-50 filter blur-[50px] flex items-center justify-center"
-    >
+    <div class="absolute top-0 bottom-0 -left-20 -right-20 pointer-events-none z-0 overflow-visible opacity-50 filter blur-[50px] flex items-center justify-center">
       <Image
         src={bg}
         loading="eager"
@@ -161,9 +163,7 @@ const posts = (await getCollection("blog"))
         class="animate-spin h-10 w-10 text-primary-500 fill-current"
         viewBox="0 -960 960 960"
       >
-        <path
-          d="M479.98-116q-74.81 0-141.26-27.84-66.44-27.84-116.74-78.14t-78.14-116.69Q116-405.06 116-480.15q0-75.09 28-141.47T222-738q50-50 116.6-78 66.59-28 141.4-28 7.93 0 12.96 4.77 5.04 4.78 5.04 12.58 0 7.81-5.04 12.73Q487.93-809 480-809q-136.75 0-232.88 96.17-96.12 96.18-96.12 233Q151-343 247.17-247q96.18 96 233 96Q617-151 713-247.12q96-96.13 96-232.88 0-7.98 4.96-12.99 4.95-5.01 12.76-5.01t12.54 5.04Q844-487.93 844-480q0 74.81-28 141.4Q788-272 738-222t-116.6 78q-66.61 28-141.42 28Z"
-        ></path>
+        <path d="M479.98-116q-74.81 0-141.26-27.84-66.44-27.84-116.74-78.14t-78.14-116.69Q116-405.06 116-480.15q0-75.09 28-141.47T222-738q50-50 116.6-78 66.59-28 141.4-28 7.93 0 12.96 4.77 5.04 4.78 5.04 12.58 0 7.81-5.04 12.73Q487.93-809 480-809q-136.75 0-232.88 96.17-96.12 96.18-96.12 233Q151-343 247.17-247q96.18 96 233 96Q617-151 713-247.12q96-96.13 96-232.88 0-7.98 4.96-12.99 4.95-5.01 12.76-5.01t12.54 5.04Q844-487.93 844-480q0 74.81-28 141.4Q788-272 738-222t-116.6 78q-66.61 28-141.42 28Z"></path>
       </svg>
 
       <div class="space-y-1">
@@ -176,12 +176,8 @@ const posts = (await getCollection("blog"))
         </p>
       </div>
 
-      <div
-        class="w-full bg-[rgb(var(--c-900))] border border-hairline rounded-sm p-3 text-left"
-      >
-        <p
-          class="text-[0.6875rem] font-semibold text-amber-400 flex items-center gap-1.5"
-        >
+      <div class="w-full bg-[rgb(var(--c-900))] border border-hairline rounded-sm p-3 text-left">
+        <p class="text-[0.6875rem] font-semibold text-amber-400 flex items-center gap-1.5">
           <span>⚠️</span> Check your e-mail for messages!
         </p>
       </div>
@@ -198,40 +194,29 @@ const posts = (await getCollection("blog"))
   <div class="relative">
     <!-- Hardware Section -->
     <section class="animate w-full max-w-7xl mx-auto py-12 px-4 md:px-8 mb-40">
-      <div
-        class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center min-h-100"
-      >
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center min-h-100">
         <!-- 3D Canvas Column -->
-        <div
-          class="lg:col-span-6 animate relative w-full h-80 md:h-96 lg:h-112.5"
-        >
+        <div class="lg:col-span-6 animate relative w-full h-80 md:h-96 lg:h-112.5">
           <canvas
             id="cpu_canvas"
             data-model-url={AMDCpuModel}
-            class="w-full h-full pointer-events-none"></canvas>
+            class="w-full h-full pointer-events-none"
+          ></canvas>
         </div>
 
         <!-- Details Column -->
-        <div
-          class="lg:col-span-6 flex flex-col justify-center items-center lg:items-start"
-        >
+        <div class="lg:col-span-6 flex flex-col justify-center items-center lg:items-start">
           <!-- Inner wrapper kept left-aligned, but centered via mx-auto on mobile -->
           <div class="w-full max-w-md text-left space-y-3 mx-auto lg:mx-0">
-            <span
-              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-            >
+            <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
               Infrastructure
             </span>
 
-            <h2
-              class="animate text-3xl md:text-5xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase leading-none"
-            >
+            <h2 class="animate text-3xl md:text-5xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase leading-none">
               Beefy Hardware
             </h2>
 
-            <p
-              class="animate text-xs md:text-sm text-[rgb(var(--c-400))] leading-relaxed"
-            >
+            <p class="animate text-xs md:text-sm text-[rgb(var(--c-400))] leading-relaxed">
               We are not messing around! Powered by top-of-the-line AMD CPUs to
               ensure maximum performance and low latency for your hosting
               experience.
@@ -242,33 +227,30 @@ const posts = (await getCollection("blog"))
               <div class="hl-health">
                 <div class="hl-health-row">
                   <span class="hl-dot hl-ok"></span>
-                  <span class="hl-health-name text-[rgb(var(--c-50))]"
-                    >Processor</span
-                  >
-                  <span
-                    class="hl-health-summary font-mono text-[rgb(var(--c-300))]"
-                    >AMD Ryzen / EPYC</span
-                  >
+                  <span class="hl-health-name text-[rgb(var(--c-50))]">
+                    Processor
+                  </span>
+                  <span class="hl-health-summary font-mono text-[rgb(var(--c-300))]">
+                    AMD Ryzen / EPYC
+                  </span>
                 </div>
                 <div class="hl-health-row">
                   <span class="hl-dot hl-ok"></span>
-                  <span class="hl-health-name text-[rgb(var(--c-50))]"
-                    >Memory</span
-                  >
-                  <span
-                    class="hl-health-summary font-mono text-[rgb(var(--c-300))]"
-                    >DDR5 ECC RAM</span
-                  >
+                  <span class="hl-health-name text-[rgb(var(--c-50))]">
+                    Memory
+                  </span>
+                  <span class="hl-health-summary font-mono text-[rgb(var(--c-300))]">
+                    DDR5 ECC RAM
+                  </span>
                 </div>
                 <div class="hl-health-row">
                   <span class="hl-dot hl-ok"></span>
-                  <span class="hl-health-name text-[rgb(var(--c-50))]"
-                    >Storage</span
-                  >
-                  <span
-                    class="hl-health-summary font-mono text-[rgb(var(--c-300))]"
-                    >Enterprise NVMe SSDs</span
-                  >
+                  <span class="hl-health-name text-[rgb(var(--c-50))]">
+                    Storage
+                  </span>
+                  <span class="hl-health-summary font-mono text-[rgb(var(--c-300))]">
+                    Enterprise NVMe SSDs
+                  </span>
                 </div>
               </div>
             </div>
@@ -280,14 +262,10 @@ const posts = (await getCollection("blog"))
     <!-- Benefits Grid Section -->
     <section class="animate w-full max-w-7xl mx-auto py-12 px-4 md:px-8">
       <div class="mb-8 text-left space-y-1">
-        <span
-          class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-        >
+        <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
           Why Choose Us
         </span>
-        <h2
-          class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]"
-        >
+        <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]">
           Okay! But is that even real?
         </h2>
       </div>
@@ -297,9 +275,7 @@ const posts = (await getCollection("blog"))
         <!-- Card 01 -->
         <div class="fi-section fi-section-hoverable animate p-5">
           <div class="flex items-start gap-4">
-            <span
-              class="text-base font-bold font-mono text-primary-500 shrink-0 mt-0.5"
-            >
+            <span class="text-base font-bold font-mono text-primary-500 shrink-0 mt-0.5">
               01
             </span>
             <div class="space-y-1 text-left">
@@ -317,9 +293,7 @@ const posts = (await getCollection("blog"))
         <!-- Card 02 -->
         <div class="fi-section fi-section-hoverable animate p-5">
           <div class="flex items-start gap-4">
-            <span
-              class="text-base font-bold font-mono text-primary-500 shrink-0 mt-0.5"
-            >
+            <span class="text-base font-bold font-mono text-primary-500 shrink-0 mt-0.5">
               02
             </span>
             <div class="space-y-1 text-left">
@@ -337,9 +311,7 @@ const posts = (await getCollection("blog"))
         <!-- Card 03 -->
         <div class="fi-section fi-section-hoverable animate p-5">
           <div class="flex items-start gap-4">
-            <span
-              class="text-base font-bold font-mono text-primary-500 shrink-0 mt-0.5"
-            >
+            <span class="text-base font-bold font-mono text-primary-500 shrink-0 mt-0.5">
               03
             </span>
             <div class="space-y-1 text-left">
@@ -357,9 +329,7 @@ const posts = (await getCollection("blog"))
         <!-- Card 04 -->
         <div class="fi-section fi-section-hoverable animate p-5">
           <div class="flex items-start gap-4">
-            <span
-              class="text-base font-bold font-mono text-primary-500 shrink-0 mt-0.5"
-            >
+            <span class="text-base font-bold font-mono text-primary-500 shrink-0 mt-0.5">
               04
             </span>
             <div class="space-y-1 text-left">
@@ -379,14 +349,10 @@ const posts = (await getCollection("blog"))
     <!-- Comparison Section -->
     <section class="animate w-full max-w-7xl mx-auto py-12 px-4 md:px-8 mb-40">
       <div class="mb-6 text-left space-y-1">
-        <span
-          class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-        >
+        <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
           Comparison
         </span>
-        <h2
-          class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]"
-        >
+        <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]">
           Our Hosting vs Other Solutions
         </h2>
         <p class="animate text-xs text-[rgb(var(--c-400))]">
@@ -421,9 +387,9 @@ const posts = (await getCollection("blog"))
               <!-- Row 2: Uptime -->
               <tr>
                 <th class="text-[rgb(var(--c-50))]">Uptime</th>
-                <td class="font-semibold text-primary-500"
-                  >24/7 Always Online</td
-                >
+                <td class="font-semibold text-primary-500">
+                  24/7 Always Online
+                </td>
                 <td class="text-[rgb(var(--c-300))]">Session-based</td>
                 <td class="text-[rgb(var(--c-300))]">Requires PC online</td>
                 <td class="text-[rgb(var(--c-300))]">Limited</td>
@@ -432,9 +398,9 @@ const posts = (await getCollection("blog"))
               <!-- Row 3: CPU -->
               <tr>
                 <th class="text-[rgb(var(--c-50))]">CPU</th>
-                <td class="font-mono font-semibold text-primary-500"
-                  >Ryzen 5 / 7 / 9</td
-                >
+                <td class="font-mono font-semibold text-primary-500">
+                  Ryzen 5 / 7 / 9
+                </td>
                 <td class="text-[rgb(var(--c-300))]">Shared / limited</td>
                 <td class="text-[rgb(var(--c-300))]">Your own PC</td>
                 <td class="text-[rgb(var(--c-300))]">Low-end VPS</td>
@@ -487,9 +453,7 @@ const posts = (await getCollection("blog"))
       class="animate w-full max-w-7xl mx-auto pt-32 pb-12 px-4 md:px-8"
     >
       <div class="relative w-full">
-        <div
-          class="animate absolute -top-32 md:-top-40 left-1/2 -translate-x-1/2 pointer-events-none z-0"
-        >
+        <div class="animate absolute -top-32 md:-top-40 left-1/2 -translate-x-1/2 pointer-events-none z-0">
           <Image
             src={steve}
             alt="Steve Minecraft character peeking"
@@ -498,33 +462,22 @@ const posts = (await getCollection("blog"))
         </div>
 
         <div class="fi-section relative z-10 p-8 md:p-12 text-center">
-          <div
-            class="flex flex-col items-center justify-center text-center space-y-3"
-          >
-            <span
-              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-            >
+          <div class="flex flex-col items-center justify-center text-center space-y-3">
+            <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
               Next Steps
             </span>
 
-            <h2
-              class="animate text-2xl md:text-4xl font-bold tracking-tight text-[rgb(var(--c-50))]"
-            >
+            <h2 class="animate text-2xl md:text-4xl font-bold tracking-tight text-[rgb(var(--c-50))]">
               Okay! You convinced me. What's next?
             </h2>
 
-            <p
-              class="animate text-xs md:text-sm text-[rgb(var(--c-400))] max-w-lg leading-relaxed"
-            >
+            <p class="animate text-xs md:text-sm text-[rgb(var(--c-400))] max-w-lg leading-relaxed">
               Getting started is easy! Use our simple setup desk below to set up
               your free game server in minutes.
             </p>
 
             <div class="animate pt-2">
-              <a
-                href="#calculator"
-                class="fi-btn inline-flex items-center justify-center px-4 py-2 text-xs font-medium rounded-md bg-primary-500 text-white hover:bg-[rgb(var(--primary-600))] border border-transparent transition-colors"
-              >
+              <a href="#calculator" class="fi-btn ns-button-primary">
                 Configure Server
               </a>
             </div>
@@ -541,12 +494,9 @@ const posts = (await getCollection("blog"))
       <!-- Notices Container -->
       <div class="space-y-4">
         <!-- Notice 01: Reworking how servers work / locations are managed -->
-        <div
-          class="fi-section animate relative overflow-hidden border border-amber-500/20 bg-amber-500/10 p-4 sm:p-5 text-left transition-colors"
-        >
+        <div class="fi-section animate relative overflow-hidden border border-amber-500/20 bg-amber-500/10 p-4 sm:p-5 text-left transition-colors">
           <div class="flex items-start gap-3.5">
-            <i class="ph ph-hard-drives text-amber-400 text-xl shrink-0 mt-0.5"
-            ></i>
+            <i class="ph ph-hard-drives text-amber-400 text-xl shrink-0 mt-0.5"></i>
             <div class="space-y-1">
               <h3 class="text-sm font-semibold text-[rgb(var(--c-50))]">
                 Plan & Infrastructure Update
@@ -557,9 +507,7 @@ const posts = (await getCollection("blog"))
                 free nodes are being set up and will be available separately
                 soon.
               </p>
-              <p
-                class="text-[0.6875rem] font-medium text-[rgb(var(--c-400))] pt-1"
-              >
+              <p class="text-[0.6875rem] font-medium text-[rgb(var(--c-400))] pt-1">
                 Thanks for your patience & support!
               </p>
             </div>
@@ -567,12 +515,9 @@ const posts = (await getCollection("blog"))
         </div>
 
         <!-- Notice 02: Account Verification -->
-        <div
-          class="fi-section animate relative overflow-hidden border border-amber-500/20 bg-amber-500/10 p-4 sm:p-5 text-left transition-colors"
-        >
+        <div class="fi-section animate relative overflow-hidden border border-amber-500/20 bg-amber-500/10 p-4 sm:p-5 text-left transition-colors">
           <div class="flex items-start gap-3.5">
-            <i class="ph ph-shield-check text-amber-400 text-xl shrink-0 mt-0.5"
-            ></i>
+            <i class="ph ph-shield-check text-amber-400 text-xl shrink-0 mt-0.5"></i>
             <div class="space-y-1">
               <h3 class="text-sm font-semibold text-[rgb(var(--c-50))]">
                 Account Verification Required
@@ -582,9 +527,7 @@ const posts = (await getCollection("blog"))
                 resources. This helps us stop bot abuse and ensure high
                 performance for real users.
               </p>
-              <span
-                class="inline-block text-[0.6875rem] font-mono font-semibold text-amber-300 pt-0.5"
-              >
+              <span class="inline-block text-[0.6875rem] font-mono font-semibold text-amber-300 pt-0.5">
                 $0.00 charge — verification only.
               </span>
             </div>
@@ -597,14 +540,10 @@ const posts = (await getCollection("blog"))
         <!-- Setup Desk Section -->
         <div class="space-y-4">
           <div class="space-y-1">
-            <span
-              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-            >
+            <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
               Configuration
             </span>
-            <h2
-              class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]"
-            >
+            <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]">
               Setup Desk
             </h2>
             <p class="animate text-xs text-[rgb(var(--c-400))]">
@@ -620,14 +559,10 @@ const posts = (await getCollection("blog"))
         <!-- Requirement Estimator Section -->
         <div class="space-y-4">
           <div class="space-y-1">
-            <span
-              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-            >
+            <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
               Planning
             </span>
-            <h2
-              class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]"
-            >
+            <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]">
               Requirement Estimator
             </h2>
           </div>
@@ -640,19 +575,13 @@ const posts = (await getCollection("blog"))
         <!-- Interest Form Section -->
         <div class="space-y-4">
           <div class="space-y-1 max-w-2xl">
-            <span
-              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-            >
+            <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
               Feedback
             </span>
-            <h2
-              class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]"
-            >
+            <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]">
               Liked the idea? Share your interest!
             </h2>
-            <p
-              class="animate text-xs text-[rgb(var(--c-400))] leading-relaxed pt-1"
-            >
+            <p class="animate text-xs text-[rgb(var(--c-400))] leading-relaxed pt-1">
               To provide a good place to host your servers for free for your
               friends or small communities, please fill out the interest form
               below. It helps us understand demand and plan future capacity!
@@ -662,7 +591,7 @@ const posts = (await getCollection("blog"))
           <a
             href="https://forms.gle/M6DXeg3NzyFWBsn17"
             target="_blank"
-            class="fi-btn animate w-full sm:w-auto shrink-0 bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors inline-flex items-center justify-center gap-2"
+            class="fi-btn ns-button-icon animate"
           >
             <i class="ph ph-microphone-stage text-sm"></i>
             <span>Share your interest</span>
@@ -678,15 +607,11 @@ const posts = (await getCollection("blog"))
     >
       <div class="fi-section p-6 md:p-10 space-y-6 text-left hidden">
         <div class="space-y-1">
-          <span
-            class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-          >
+          <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
             Realtime Metrics
           </span>
 
-          <h2
-            class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]"
-          >
+          <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))]">
             Server Availability Tracker
           </h2>
 
@@ -708,9 +633,7 @@ const posts = (await getCollection("blog"))
     >
       <div class="relative w-full">
         <!-- Peeking Terraria Bunny (Locked proportionally to the top-right border) -->
-        <div
-          class="animate absolute -top-18 sm:-top-24 md:-top-30 right-6 sm:right-10 md:right-16 pointer-events-none z-0"
-        >
+        <div class="animate absolute -top-18 sm:-top-24 md:-top-30 right-6 sm:right-10 md:right-16 pointer-events-none z-0">
           <Image
             src={terraria_bunny}
             alt="Terraria bunny peeking"
@@ -721,15 +644,11 @@ const posts = (await getCollection("blog"))
         <!-- Community Hub Content Box -->
         <div class="fi-section relative z-10 p-6 md:p-10 space-y-6 text-left">
           <div class="space-y-1">
-            <span
-              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-            >
+            <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
               Ecosystem
             </span>
 
-            <h2
-              class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
-            >
+            <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase">
               Community Hub
             </h2>
 
@@ -751,9 +670,7 @@ const posts = (await getCollection("blog"))
       class="animate w-full max-w-7xl mx-auto pt-16 pb-12 px-4 md:px-8 mb-12.5"
     >
       <div class="relative w-full">
-        <div
-          class="animate absolute -top-20 sm:-top-32 md:-top-44 left-6 sm:left-10 md:left-16 pointer-events-none z-0"
-        >
+        <div class="animate absolute -top-20 sm:-top-32 md:-top-44 left-6 sm:left-10 md:left-16 pointer-events-none z-0">
           <Image
             src={villager}
             alt="Villager peeking"
@@ -764,15 +681,11 @@ const posts = (await getCollection("blog"))
         <!-- Other Solutions Content Box -->
         <div class="fi-section relative z-10 p-6 md:p-10 space-y-6 text-left">
           <div class="space-y-1">
-            <span
-              class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-            >
+            <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
               Ecosystem
             </span>
 
-            <h2
-              class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
-            >
+            <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase">
               Other cool solutions
             </h2>
 
@@ -795,17 +708,11 @@ const posts = (await getCollection("blog"))
 
               <div class="absolute inset-0 bg-black/50"></div>
 
-              <div
-                class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 animate"
-              >
-                <h3
-                  class="text-xl font-bold text-[rgb(var(--c-50))] mb-1.5 animate"
-                >
+              <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 animate">
+                <h3 class="text-xl font-bold text-[rgb(var(--c-50))] mb-1.5 animate">
                   SquidServers
                 </h3>
-                <p
-                  class="text-xs text-[rgb(var(--c-300))] mb-4 leading-relaxed animate"
-                >
+                <p class="text-xs text-[rgb(var(--c-300))] mb-4 leading-relaxed animate">
                   Self-host your own server in minutes. <br />
                   No port forwarding. No complex setup. All owned by you.
                 </p>
@@ -813,7 +720,7 @@ const posts = (await getCollection("blog"))
                   <a
                     href="https://squidservers.com"
                     target="_blank"
-                    class="fi-btn group inline-flex items-center gap-2 bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors"
+                    class="fi-btn ns-button-icon animate group"
                   >
                     <span class="relative z-10">Check it out</span>
                     <svg
@@ -845,9 +752,7 @@ const posts = (await getCollection("blog"))
             </div>
 
             <!-- Playit.gg Card -->
-            <div
-              class="relative w-full h-52 overflow-hidden fi-section fi-section-dark animate"
-            >
+            <div class="relative w-full h-52 overflow-hidden fi-section fi-section-dark animate">
               <Image
                 src={playit_gg}
                 alt="Playit background"
@@ -856,17 +761,11 @@ const posts = (await getCollection("blog"))
 
               <div class="absolute inset-0 bg-black/50"></div>
 
-              <div
-                class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 animate"
-              >
-                <h3
-                  class="text-xl font-bold text-[rgb(var(--c-50))] mb-1.5 animate"
-                >
+              <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 animate">
+                <h3 class="text-xl font-bold text-[rgb(var(--c-50))] mb-1.5 animate">
                   playit.gg
                 </h3>
-                <p
-                  class="text-xs text-[rgb(var(--c-300))] mb-4 leading-relaxed animate"
-                >
+                <p class="text-xs text-[rgb(var(--c-300))] mb-4 leading-relaxed animate">
                   playit.gg is a global proxy that allows anyone to host a
                   server without port forwarding.
                 </p>
@@ -874,7 +773,7 @@ const posts = (await getCollection("blog"))
                   <a
                     href="https://playit.gg"
                     target="_blank"
-                    class="fi-btn group inline-flex items-center gap-2 bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors"
+                    class="fi-btn ns-button-icon animate group"
                   >
                     <span class="relative z-10">Check it out</span>
                     <svg
@@ -916,15 +815,11 @@ const posts = (await getCollection("blog"))
     >
       <div class="fi-section p-6 md:p-10 space-y-6 text-left">
         <div class="space-y-1">
-          <span
-            class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-          >
+          <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
             Support & Information
           </span>
 
-          <h2
-            class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
-          >
+          <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase">
             FAQ
           </h2>
 
@@ -1010,15 +905,11 @@ const posts = (await getCollection("blog"))
     >
       <div class="fi-section p-6 md:p-10 space-y-6 text-left">
         <div class="space-y-1">
-          <span
-            class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-          >
+          <span class="animate text-[0.6563rem] font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]">
             Updates & News
           </span>
 
-          <h2
-            class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase"
-          >
+          <h2 class="animate text-2xl md:text-3xl font-bold tracking-tight text-[rgb(var(--c-50))] uppercase">
             Changelog
           </h2>
 
@@ -1029,13 +920,11 @@ const posts = (await getCollection("blog"))
 
         <div class="pt-2">
           <ul class="space-y-4">
-            {
-              posts.map((post) => (
-                <li>
-                  <BlogSummary entry={post} />
-                </li>
-              ))
-            }
+            {posts.map((post) => (
+              <li>
+                <BlogSummary entry={post} />
+              </li>
+            ))}
           </ul>
         </div>
       </div>

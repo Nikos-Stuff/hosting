@@ -1,5 +1,4 @@
 ---
-
 ---
 
 <div class="space-y-4">
@@ -12,42 +11,26 @@
       class="server-item fi-section p-4 border-b border-hairline flex flex-col md:flex-row md:items-center gap-4 hover:bg-white/3 transition-colors cursor-default rounded-none!"
       style="display: none;"
     >
-      <div
-        class="server-icon-container shrink-0 flex items-center justify-center w-10 h-10 fi-section bg-[rgb(var(--c-900))] rounded-sm"
-      >
+      <div class="server-icon-container shrink-0 flex items-center justify-center w-10 h-10 fi-section bg-[rgb(var(--c-900))] rounded-sm">
         <i class="ph ph-hard-drives text-xl text-[rgb(var(--c-400))]"></i>
       </div>
 
       <div class="grow min-w-0 space-y-0.5">
-        <h4
-          class="server-name font-bold text-xs md:text-sm text-[rgb(var(--c-50))] truncate break-all"
-        >
-        </h4>
-        <p
-          class="server-description text-xs text-[rgb(var(--c-400))] line-clamp-1 overflow-hidden truncate break-all"
-        >
-        </p>
-        <p
-          class="server-owner text-[0.6875rem] font-medium text-primary-500 uppercase truncate pt-0.5"
-        >
-        </p>
+        <h4 class="server-name font-bold text-xs md:text-sm text-[rgb(var(--c-50))] truncate break-all"></h4>
+        <p class="server-description text-xs text-[rgb(var(--c-400))] line-clamp-1 overflow-hidden truncate break-all"></p>
+        <p class="server-owner text-[0.6875rem] font-medium text-primary-500 uppercase truncate pt-0.5"></p>
       </div>
 
-      <div
-        class="shrink-0 flex flex-row md:flex-col justify-between md:items-end items-center gap-2 border-t md:border-t-0 pt-2 md:pt-0 border-hairline"
-      >
+      <div class="shrink-0 flex flex-row md:flex-col justify-between md:items-end items-center gap-2 border-t md:border-t-0 pt-2 md:pt-0 border-hairline">
         <p class="server-egg text-xs font-semibold text-[rgb(var(--c-50))]"></p>
-        <button
-          class="server-address-btn group/copy relative text-xs text-[rgb(var(--c-400))] hover:text-[rgb(var(--c-50))] transition-all duration-300 cursor-pointer p-1 rounded"
-        >
+        <button class="server-address-btn group/copy relative text-xs text-[rgb(var(--c-400))] hover:text-[rgb(var(--c-50))] transition-all duration-300 cursor-pointer p-1 rounded">
           <i class="ph ph-copy"></i>
-          <span class="address-label text-[0.6875rem] font-mono"
-            >[CLICK TO COPY IP]</span
-          >
-          <span
-            class="copy-status absolute inset-0 flex items-center justify-center bg-emerald-500 text-white rounded text-[0.6875rem] font-semibold opacity-0"
-            >Copied!</span
-          >
+          <span class="address-label text-[0.6875rem] font-mono">
+            [CLICK TO COPY IP]
+          </span>
+          <span class="copy-status absolute inset-0 flex items-center justify-center bg-emerald-500 text-white rounded text-[0.6875rem] font-semibold opacity-0">
+            Copied!
+          </span>
         </button>
       </div>
     </div>
@@ -73,18 +56,19 @@
     </div>
 
     <div class="animate flex flex-col sm:flex-row gap-3">
-      <div class="animate fi-input-wrp w-full">
+      <!-- Added max-w-xs or max-w-sm to constrain width on desktop -->
+      <div class="animate fi-input-wrp w-full sm:max-w-xs">
         <input
           type="text"
           autocomplete="off"
           id="toggle-visibility-input"
           placeholder="e.g. 550e8400-e29b-41d4-a716-446655440000"
-          class="fi-input w-full p-3 bg-[rgb(var(--c-900))] text-[rgb(var(--c-50))] border border-hairline focus:border-primary-500 focus:outline-none transition-colors text-xs"
+          class="fi-input animate ns-input"
         />
       </div>
       <button
         id="toggle-visibility-btn"
-        class="fi-btn animate shrink-0 flex items-center justify-center gap-2 bg-transparent text-[rgb(var(--c-50))] hover:bg-white/3 transition-colors"
+        class="fi-btn ns-button animate whitespace-nowrap"
       >
         <span>Toggle Visibility</span>
       </button>

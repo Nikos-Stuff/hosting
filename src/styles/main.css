@@ -1143,3 +1143,38 @@ body, .fi-body {
     width: 65%;
   }
 }*/
+
+/* Tailwind shortcuts */
+@layer components {
+  .ns-input {
+    @apply w-full p-3 border border-hairline focus:border-primary-500 focus:outline-none transition-colors text-xs;
+
+    background-color: rgb(var(--c-900));
+    color: rgb(var(--c-50));
+  }
+
+  .ns-button {
+      @apply bg-transparent hover:bg-white/5 transition-colors w-full sm:w-auto;
+
+
+      color: rgb(var(--c-50));
+  }
+
+  .ns-button-primary {
+      @apply bg-primary-500 text-white transition-colors w-full sm:w-auto;
+
+      &:hover {
+        background-color: rgb(var(--primary-600));
+      }
+  }
+
+  .ns-button-icon {
+      @apply inline-flex items-center justify-center gap-2 w-full sm:w-auto shrink-0 bg-transparent transition-colors;
+
+      color: rgb(var(--c-50));
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.03); /* matches hover:bg-white/3 */
+      }
+  }
+}
