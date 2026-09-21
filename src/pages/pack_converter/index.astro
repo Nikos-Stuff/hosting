@@ -28,7 +28,7 @@ import { SITE } from "@consts";
 
       <div class="space-y-4 animate pt-2" id="calculator">
         <!-- URL input -->
-        <div class="relative" id="url_input_div">
+        <div class="relative fi-input-wrp animate" id="url_input_div">
           <input
             id="url_input"
             type="text"
@@ -153,21 +153,12 @@ import { SITE } from "@consts";
     </div>
 
     <!-- Modpack search input -->
-    <div class="mb-3 animate">
+    <div class="mb-3 fi-input-wrp animate">
       <input
         id="modrint_search"
         type="text"
         placeholder="Search modpacks…"
-        class="w-full p-4 border border-hairline rounded-sm
-            bg-transparent
-            text-[rgb(var(--c-50))]
-            placeholder:text-[rgb(var(--c-500))]
-            hover:bg-white/3
-            focus:outline-none
-            focus:border-primary-500
-            focus:ring-2 focus:ring-primary-500/20
-            focus:ring-offset-0
-            transition-all duration-300 ease-out"
+        class="fi-input animate w-full p-3 bg-[rgb(var(--c-900))] text-[rgb(var(--c-50))] border border-hairline focus:border-primary-500 focus:outline-none transition-colors text-xs"
       />
     </div>
 
@@ -222,13 +213,13 @@ import { SITE } from "@consts";
           <img
             src="/imgs/plc.png"
             alt="Loading Meme"
-            class="random_loading_meme absolute inset-0 w-full h-full object-contain animate-pulse opacity-20 filter blur-sm"
+            class="random_loading_meme absolute inset-0 w-full h-full object-contain opacity-20 filter"
           />
 
           <div class="absolute inset-0 bg-black/40"></div>
 
           <div class="relative z-20 flex flex-col items-center space-y-2 p-2">
-            <p class="mdr_loading_text animate-pulse text-[rgb(var(--c-50))] px-4 py-2 rounded-sm bg-[rgb(var(--c-800))] border border-hairline text-xs font-semibold text-center">
+            <p class="mdr_loading_text animate-bounce text-[rgb(var(--c-50))] px-4 py-2 rounded-sm bg-[rgb(var(--c-800))] border border-hairline text-xs font-semibold text-center">
               Loading modpacks…
             </p>
 
