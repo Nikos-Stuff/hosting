@@ -1,5 +1,5 @@
 ---
-title: "Release Notes: v1.2.1"
+title: "v1.2.1"
 date: "September 22, 2026"
 time: "00:00"
 draft: false
