@@ -1,0 +1,260 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  category: string;
+  title: string;
+  description: string;
+  linkHref: string;
+  linkText?: string;
+  imageSrc: ImageMetadata;
+  imageAlt: string;
+  tooltip?: string;
+  isDefaultExpanded?: boolean;
+}
+
+const {
+  category,
+  title,
+  description,
+  linkHref,
+  linkText = "Check it out",
+  imageSrc,
+  imageAlt,
+  tooltip,
+  isDefaultExpanded = false,
+} = Astro.props;
+---
+
+<!-- Mobile view -->
+<div
+  class="md:hidden relative w-full h-52 overflow-hidden fi-section fi-section-dark animate shrink-0"
+  data-tooltip={tooltip}
+>
+  <Image
+    src={imageSrc}
+    alt={imageAlt}
+    format="webp"
+    widths={[320, 640, 960, 1200]}
+    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+    class="absolute inset-0 w-full h-full object-cover object-[center_10%] filter blur-xs opacity-60 pointer-events-none"
+  />
+  <div class="absolute inset-0 bg-black/50 pointer-events-none"></div>
+
+  <div class="relative z-10 w-full h-full flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+    <h3 class="text-xl font-bold text-[rgb(var(--c-50))] mb-1.5 whitespace-nowrap">
+      {title}
+    </h3>
+    <p class="text-xs text-[rgb(var(--c-300))] mb-4 leading-relaxed max-w-sm">
+      <Fragment set:html={description} />
+    </p>
+    <div>
+      <a
+        href={linkHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="fi-btn ns-button-icon group/btn inline-flex items-center gap-2"
+      >
+        <span class="relative z-10">{linkText}</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="stroke-current z-10"
+        >
+          <line
+            x1="5"
+            y1="12"
+            x2="19"
+            y2="12"
+            class="scale-x-0 group-hover/btn:scale-x-100 translate-x-4 group-hover/btn:translate-x-1 transition-all duration-300 ease-in-out origin-left"
+          ></line>
+          <polyline
+            points="12 5 19 12 12 19"
+            class="translate-x-0 group-hover/btn:translate-x-1 transition-all duration-300 ease-in-out"
+          ></polyline>
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Desktop view -->
+<div
+  class="desktop-expandable-card hidden md:block relative w-16 h-52 overflow-hidden fi-section fi-section-dark animate shrink-0"
+  data-default={isDefaultExpanded ? "true" : "false"}
+  data-tooltip={tooltip}
+>
+  <Image
+    src={imageSrc}
+    alt={imageAlt}
+    format="webp"
+    widths={[320, 640, 960, 1200]}
+    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+    class="absolute inset-0 w-full h-full object-cover object-[center_10%] filter blur-xs opacity-60 pointer-events-none"
+  />
+  <div class="absolute inset-0 bg-black/50 pointer-events-none"></div>
+
+  <!-- Sidebar Label -->
+  <div class="sidebar-label flex absolute inset-y-0 left-0 w-16 z-20 items-center justify-center pointer-events-none">
+    <span class="uppercase tracking-widest font-bold text-xs text-[rgb(var(--c-300))] whitespace-nowrap -rotate-90 origin-center">
+      {category}
+    </span>
+  </div>
+
+  <!-- Content Layer -->
+  <div class="card-content relative z-10 w-full h-full flex flex-col items-center justify-center text-center px-6 overflow-hidden opacity-0 pointer-events-none">
+    <div class="w-88 max-w-full flex flex-col items-center justify-center">
+      <h3 class="text-xl font-bold text-[rgb(var(--c-50))] mb-1.5 whitespace-nowrap">
+        {title}
+      </h3>
+      <p class="text-xs text-[rgb(var(--c-300))] mb-4 leading-relaxed max-w-sm">
+        <Fragment set:html={description} />
+      </p>
+      <div>
+        <a
+          href={linkHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="fi-btn ns-button-icon group/btn inline-flex items-center gap-2"
+        >
+          <span class="relative z-10">{linkText}</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="stroke-current z-10"
+          >
+            <line
+              x1="5"
+              y1="12"
+              x2="19"
+              y2="12"
+              class="scale-x-0 group-hover/btn:scale-x-100 translate-x-4 group-hover/btn:translate-x-1 transition-all duration-300 ease-in-out origin-left"
+            ></line>
+            <polyline
+              points="12 5 19 12 12 19"
+              class="translate-x-0 group-hover/btn:translate-x-1 transition-all duration-300 ease-in-out"
+            ></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import gsap from "gsap";
+
+  const initAccordion = () => {
+    const cards = document.querySelectorAll<HTMLElement>(
+      ".desktop-expandable-card",
+    );
+    if (cards.length === 0) return;
+
+    const container = cards[0]?.parentElement;
+    if (!container) return;
+
+    const defaultCard =
+      Array.from(cards).find((card) => card.dataset.default === "true") ||
+      cards[0];
+
+    const ctx = gsap.context(() => {
+      const expandCard = (targetCard: HTMLElement) => {
+        cards.forEach((card) => {
+          const content = card.querySelector<HTMLElement>(".card-content");
+          const label = card.querySelector<HTMLElement>(".sidebar-label");
+
+          if (card === targetCard) {
+            gsap.to(card, {
+              flex: 1,
+              duration: 0.35,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+
+            if (content) {
+              gsap.to(content, {
+                opacity: 1,
+                pointerEvents: "auto",
+                duration: 0.2,
+                overwrite: "auto",
+              });
+            }
+
+            if (label) {
+              gsap.to(label, {
+                opacity: 0,
+                duration: 0.15,
+                overwrite: "auto",
+              });
+            }
+          } else {
+            gsap.to(card, {
+              flex: "0 0 4rem",
+              width: "4rem",
+              duration: 0.35,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+
+            if (content) {
+              gsap.to(content, {
+                opacity: 0,
+                pointerEvents: "none",
+                duration: 0.15,
+                overwrite: "auto",
+              });
+            }
+
+            if (label) {
+              gsap.to(label, {
+                opacity: 1,
+                duration: 0.2,
+                overwrite: "auto",
+              });
+            }
+          }
+        });
+      };
+
+      cards.forEach((card) => {
+        card.addEventListener("mouseenter", () => expandCard(card));
+      });
+
+      container.addEventListener("mouseleave", () => expandCard(defaultCard));
+
+      expandCard(defaultCard);
+    }, container);
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        ctx.revert();
+      },
+      { once: true },
+    );
+  };
+
+  const run = () => requestAnimationFrame(initAccordion);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run);
+  } else {
+    run();
+  }
+
+  document.addEventListener("astro:page-load", run);
+</script>

@@ -6,6 +6,7 @@ import DynamicTitle from "@components/TitleHeader.astro";
 import Accordion from "@components/Accordion.astro";
 import Calculator from "@components/Hosting_Calc.astro";
 import AvailabilityTracker from "@components/AvailabilityTracker.astro";
+import ExpandableCard from "@components/ExpandableCard.astro";
 
 import { Image } from "astro:assets";
 
@@ -673,173 +674,36 @@ const posts = (await getCollection("blog"))
             </p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-            <!-- SquidServers Card -->
-            <div
-              class="relative w-full h-52 overflow-hidden fi-section fi-section-dark animate"
-              data-tooltip="*squids not included"
-            >
-              <Image
-                src={squid_servers}
-                alt="SquidServers background"
-                class="absolute inset-0 w-full h-full object-cover filter blur-sm opacity-60"
-              />
+          <div class="flex flex-col md:flex-row gap-4 w-full">
+            <ExpandableCard
+              category="SOFTWARE"
+              title="DeepslateMC"
+              description="DeepslateMC is a Minecraft server software built as a fork of Leaf. It integrates custom features directly into the engine."
+              linkHref="https://deepslatemc.de"
+              imageSrc={deepslatemc}
+              imageAlt="DeepslateMC background"
+              tooltip="fluffy server software :3"
+              isDefaultExpanded={true}
+            />
 
-              <div class="absolute inset-0 bg-black/50"></div>
+            <ExpandableCard
+              category="HOSTING"
+              title="SquidServers"
+              description="Self-host your own server in minutes. <br /> No port forwarding. No complex setup. All owned by you."
+              linkHref="https://squidservers.com"
+              imageSrc={squid_servers}
+              imageAlt="SquidServers background"
+              tooltip="*squids not included"
+            />
 
-              <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 animate">
-                <h3 class="text-xl font-bold text-[rgb(var(--c-50))] mb-1.5 animate">
-                  SquidServers
-                </h3>
-                <p class="text-xs text-[rgb(var(--c-300))] mb-4 leading-relaxed animate">
-                  Self-host your own server in minutes. <br />
-                  No port forwarding. No complex setup. All owned by you.
-                </p>
-                <div class="animate">
-                  <a
-                    href="https://squidservers.com"
-                    target="_blank"
-                    class="fi-btn ns-button-icon animate group"
-                  >
-                    <span class="relative z-10">Check it out</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke-width="2.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="stroke-current z-10"
-                    >
-                      <line
-                        x1="5"
-                        y1="12"
-                        x2="19"
-                        y2="12"
-                        class="scale-x-0 group-hover:scale-x-100 translate-x-4 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
-                      ></line>
-                      <polyline
-                        points="12 5 19 12 12 19"
-                        class="translate-x-0 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
-                      ></polyline>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <!-- Playit.gg Card -->
-            <div class="relative w-full h-52 overflow-hidden fi-section fi-section-dark animate">
-              <Image
-                src={playit_gg}
-                alt="Playit background"
-                class="absolute inset-0 w-full h-full object-cover filter blur-sm opacity-60"
-              />
-
-              <div class="absolute inset-0 bg-black/50"></div>
-
-              <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 animate">
-                <h3 class="text-xl font-bold text-[rgb(var(--c-50))] mb-1.5 animate">
-                  playit.gg
-                </h3>
-                <p class="text-xs text-[rgb(var(--c-300))] mb-4 leading-relaxed animate">
-                  playit.gg is a global proxy that allows anyone to host a
-                  server without port forwarding.
-                </p>
-                <div class="animate">
-                  <a
-                    href="https://playit.gg"
-                    target="_blank"
-                    class="fi-btn ns-button-icon animate group"
-                  >
-                    <span class="relative z-10">Check it out</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke-width="2.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="stroke-current z-10"
-                    >
-                      <line
-                        x1="5"
-                        y1="12"
-                        x2="19"
-                        y2="12"
-                        class="scale-x-0 group-hover:scale-x-100 translate-x-4 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
-                      ></line>
-                      <polyline
-                        points="12 5 19 12 12 19"
-                        class="translate-x-0 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
-                      ></polyline>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <!-- DeepslateMC Card -->
-            <div
-              class="relative w-full h-52 overflow-hidden fi-section fi-section-dark animate"
-              data-tooltip="fluffy server software :3"
-            >
-              <Image
-                src={deepslatemc}
-                alt="DeepslateMC background"
-                class="absolute inset-0 w-full h-full object-cover filter blur-sm opacity-60"
-              />
-
-              <div class="absolute inset-0 bg-black/50"></div>
-
-              <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6 animate">
-                <h3 class="text-xl font-bold text-[rgb(var(--c-50))] mb-1.5 animate">
-                  DeepslateMC
-                </h3>
-                <p class="text-xs text-[rgb(var(--c-300))] mb-4 leading-relaxed animate">
-                  DeepslateMC is a Minecraft server software built as a fork of
-                  Leaf. It integrates custom features and deep configuration
-                  options directly into the core engine, reducing the need for
-                  everyday plugins.
-                </p>
-                <div class="animate">
-                  <a
-                    href="https://deepslatemc.de"
-                    target="_blank"
-                    class="fi-btn ns-button-icon animate group"
-                  >
-                    <span class="relative z-10">Check it out</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke-width="2.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="stroke-current z-10"
-                    >
-                      <line
-                        x1="5"
-                        y1="12"
-                        x2="19"
-                        y2="12"
-                        class="scale-x-0 group-hover:scale-x-100 translate-x-4 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
-                      ></line>
-                      <polyline
-                        points="12 5 19 12 12 19"
-                        class="translate-x-0 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
-                      ></polyline>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
+            <ExpandableCard
+              category="PROXY"
+              title="playit.gg"
+              description="playit.gg is a global proxy that allows anyone to host a server without port forwarding."
+              linkHref="https://playit.gg"
+              imageSrc={playit_gg}
+              imageAlt="Playit background"
+            />
           </div>
         </div>
       </div>
