@@ -61,7 +61,10 @@
       const offsetY = 18;
       const margin = 8;
 
+      // Ensure DOM has calculated true dimensions
       const rect = tooltip.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
       const vw = window.innerWidth;
       const vh = window.innerHeight;
 
@@ -140,15 +143,25 @@
       fadeTimeout = window.setTimeout(() => {
         tooltip.innerHTML = text;
 
-        // Measure and position immediately on text injection
+        // Force DOM layout recalculation synchronously before measuring dimensions
+        void tooltip.offsetHeight;
+
+        // Recalculate target coordinates with freshly painted dimensions
         updateTargetPosition();
 
-        // Snap directly to position on first render to prevent sweeping across the screen
+        // Snap positions instantly without lerp delay
         currentX = targetX;
         currentY = targetY;
         tooltip.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
 
-        tooltip.classList.replace("opacity-0", "opacity-100");
+        // Double check on the next frame in case web fonts/styles shifted layout
+        requestAnimationFrame(() => {
+          updateTargetPosition();
+          currentX = targetX;
+          currentY = targetY;
+          tooltip.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+          tooltip.classList.replace("opacity-0", "opacity-100");
+        });
       }, 150);
     });
 
