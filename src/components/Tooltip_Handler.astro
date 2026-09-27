@@ -27,19 +27,13 @@
     let fadeTimeout: number | undefined;
     let tooltipCorner: Corner = "tl";
 
+    let lastMouseX = 0;
+    let lastMouseY = 0;
     let targetX = 0;
     let targetY = 0;
     let currentX = 0;
     let currentY = 0;
     const speed = 0.08;
-
-    function animate() {
-      currentX += (targetX - currentX) * speed;
-      currentY += (targetY - currentY) * speed;
-      tooltip.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-      requestAnimationFrame(animate);
-    }
-    requestAnimationFrame(animate);
 
     function setTooltipCorner(corner: Corner) {
       if (tooltipCorner === corner) return;
@@ -58,6 +52,55 @@
       tooltip.classList.add(cornerClasses[corner]);
       tooltipCorner = corner;
     }
+
+    // Extracted target position calculation so it can be called anywhere
+    function updateTargetPosition() {
+      if (!hoveredEl) return;
+
+      const offsetX = 14;
+      const offsetY = 18;
+      const margin = 8;
+
+      const rect = tooltip.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      let x = lastMouseX + offsetX;
+      let y = lastMouseY + offsetY;
+      let xSide: "l" | "r" = "l";
+      let ySide: "t" | "b" = "t";
+
+      // Flip Horizontal
+      if (x + rect.width + margin > vw) {
+        x = lastMouseX - rect.width - margin;
+        xSide = "r";
+      }
+
+      // Flip Vertical
+      if (y + rect.height + margin > vh) {
+        y = lastMouseY - rect.height - margin;
+        ySide = "b";
+      }
+
+      targetX = Math.max(margin, Math.min(x, vw - rect.width - margin));
+      targetY = Math.max(margin, Math.min(y, vh - rect.height - margin));
+
+      const cornerKey = `${ySide}${xSide}` as Corner;
+      setTooltipCorner(cornerKey);
+    }
+
+    function animate() {
+      // Re-evaluate bounds continuously when visible
+      if (hoveredEl) {
+        updateTargetPosition();
+      }
+
+      currentX += (targetX - currentX) * speed;
+      currentY += (targetY - currentY) * speed;
+      tooltip.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
 
     function hideTooltip() {
       hoveredEl = null;
@@ -81,6 +124,8 @@
       if (!text) return;
 
       hoveredEl = el;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
 
       if (observedEl !== el) {
         if (observedEl) io.unobserve(observedEl);
@@ -93,50 +138,24 @@
       tooltip.classList.replace("opacity-100", "opacity-0");
 
       fadeTimeout = window.setTimeout(() => {
-        // tooltip.textContent = text;
-        // respect html in tooltip text
         tooltip.innerHTML = text;
+
+        // Measure and position immediately on text injection
+        updateTargetPosition();
+
+        // Snap directly to position on first render to prevent sweeping across the screen
+        currentX = targetX;
+        currentY = targetY;
+        tooltip.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+
         tooltip.classList.replace("opacity-0", "opacity-100");
       }, 150);
     });
 
-    let rafId: number | null = null;
     document.addEventListener("pointermove", (e: PointerEvent) => {
       if (!hoveredEl) return;
-      if (rafId) cancelAnimationFrame(rafId);
-
-      rafId = requestAnimationFrame(() => {
-        const offsetX = 14;
-        const offsetY = 18;
-        const margin = 8;
-
-        const rect = tooltip.getBoundingClientRect();
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-
-        let x = e.clientX + offsetX;
-        let y = e.clientY + offsetY;
-        let xSide: "l" | "r" = "l";
-        let ySide: "t" | "b" = "t";
-
-        // Flip Horizontal
-        if (x + rect.width + margin > vw) {
-          x = e.clientX - rect.width - margin;
-          xSide = "r";
-        }
-
-        // Flip Vertical
-        if (y + rect.height + margin > vh) {
-          y = e.clientY - rect.height - margin;
-          ySide = "b";
-        }
-
-        targetX = Math.max(margin, Math.min(x, vw - rect.width - margin));
-        targetY = Math.max(margin, Math.min(y, vh - rect.height - margin));
-
-        const cornerKey = `${ySide}${xSide}` as Corner;
-        setTooltipCorner(cornerKey);
-      });
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
     });
 
     document.addEventListener("pointerout", (e: PointerEvent) => {
