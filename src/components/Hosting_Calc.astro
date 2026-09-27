@@ -536,51 +536,41 @@
     let scrollLeft = 0;
     let hasMoved = false;
 
+    // Velocity tracking variables
+    let lastX = 0;
+    let lastTime = 0;
+    let velocityX = 0;
+
     track.addEventListener("mousedown", (e) => {
       isDown = true;
       hasMoved = false;
 
-      // Change cursor strictly on drag start
+      // Visual drag setup
       track.classList.add("cursor-grabbing");
-      track.classList.remove(
-        "cursor-grab",
-        "scroll-smooth",
-        "snap-x",
-        "snap-mandatory",
-      );
+      track.classList.remove("scroll-smooth", "snap-x", "snap-mandatory");
 
       startX = e.pageX - track.offsetLeft;
       scrollLeft = track.scrollLeft;
+
+      // Reset velocity tracker
+      lastX = e.pageX;
+      lastTime = performance.now();
+      velocityX = 0;
     });
-
-    const handleDragEnd = () => {
-      if (!isDown) return;
-      isDown = false;
-
-      track.classList.remove("cursor-grabbing");
-      track.classList.add("cursor-grab");
-
-      // Calculate nearest card offset for smooth snap finish
-      const firstChild = track.firstElementChild as HTMLElement | null;
-      const itemWidth = firstChild ? firstChild.offsetWidth + 12 : 124; // 12px gap-3
-      const targetScroll = Math.round(track.scrollLeft / itemWidth) * itemWidth;
-
-      // Smoothly animate snap positioning to nearest item
-      track.classList.add("scroll-smooth");
-      track.scrollTo({ left: targetScroll, behavior: "smooth" });
-
-      // Restore CSS snap rules after smooth glide finishes
-      setTimeout(() => {
-        track.classList.add("snap-x", "snap-mandatory");
-      }, 300);
-    };
-
-    track.addEventListener("mouseleave", handleDragEnd);
-    track.addEventListener("mouseup", handleDragEnd);
 
     track.addEventListener("mousemove", (e) => {
       if (!isDown) return;
       e.preventDefault();
+
+      const now = performance.now();
+      const dt = now - lastTime;
+
+      if (dt > 0) {
+        // Calculate instantaneous velocity (pixels per millisecond)
+        velocityX = (e.pageX - lastX) / dt;
+        lastX = e.pageX;
+        lastTime = now;
+      }
 
       const x = e.pageX - track.offsetLeft;
       const walk = x - startX;
@@ -592,7 +582,42 @@
       track.scrollLeft = scrollLeft - walk;
     });
 
-    // Guard: Prevent triggering card clicks during drag operations
+    const handleDragEnd = () => {
+      if (!isDown) return;
+      isDown = false;
+
+      track.classList.remove("cursor-grabbing");
+
+      const firstChild = track.firstElementChild as HTMLElement | null;
+      const itemWidth = firstChild ? firstChild.offsetWidth + 12 : 124; // 12px gap-3
+
+      // Project distance based on release velocity (flick power multiplier)
+      const momentumDistance = velocityX * -280;
+      const targetRawScroll = track.scrollLeft + momentumDistance;
+
+      // Snap target scroll to nearest card index
+      const snappedScroll = Math.max(
+        0,
+        Math.min(
+          Math.round(targetRawScroll / itemWidth) * itemWidth,
+          track.scrollWidth - track.clientWidth,
+        ),
+      );
+
+      // Smoothly glide and snap to final destination
+      track.classList.add("scroll-smooth");
+      track.scrollTo({ left: snappedScroll, behavior: "smooth" });
+
+      // Restore native CSS snap points after transition completes
+      setTimeout(() => {
+        track.classList.add("snap-x", "snap-mandatory");
+      }, 350);
+    };
+
+    track.addEventListener("mouseleave", handleDragEnd);
+    track.addEventListener("mouseup", handleDragEnd);
+
+    // Prevent item selection if user dragged instead of tapped
     track.addEventListener(
       "click",
       (e) => {
@@ -1062,7 +1087,7 @@
         // Create Carousel Track
         const carouselTrack = document.createElement("div");
         carouselTrack.className =
-          "hide_scrollbar flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory py-1 cursor-grab select-none";
+          "hide_scrollbar flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory py-1 select-none";
 
         // Arrow navigation
         btnLeft.addEventListener("click", () => {
