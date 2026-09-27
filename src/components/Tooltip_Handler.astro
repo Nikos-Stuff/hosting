@@ -53,7 +53,6 @@
       tooltipCorner = corner;
     }
 
-    // Extracted target position calculation so it can be called anywhere
     function updateTargetPosition() {
       if (!hoveredEl) return;
 
@@ -61,7 +60,6 @@
       const offsetY = 18;
       const margin = 8;
 
-      // Ensure DOM has calculated true dimensions
       const rect = tooltip.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
 
@@ -93,7 +91,6 @@
     }
 
     function animate() {
-      // Re-evaluate bounds continuously when visible
       if (hoveredEl) {
         updateTargetPosition();
       }
@@ -126,6 +123,7 @@
       const text = el.dataset.tooltip;
       if (!text) return;
 
+      const isFirstShow = !hoveredEl;
       hoveredEl = el;
       lastMouseX = e.clientX;
       lastMouseY = e.clientY;
@@ -143,25 +141,17 @@
       fadeTimeout = window.setTimeout(() => {
         tooltip.innerHTML = text;
 
-        // Force DOM layout recalculation synchronously before measuring dimensions
+        // Force browser layout flush so bounding dimensions update
         void tooltip.offsetHeight;
-
-        // Recalculate target coordinates with freshly painted dimensions
         updateTargetPosition();
 
-        // Snap positions instantly without lerp delay
-        currentX = targetX;
-        currentY = targetY;
-        tooltip.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-
-        // Double check on the next frame in case web fonts/styles shifted layout
-        requestAnimationFrame(() => {
-          updateTargetPosition();
+        // Snap starting coordinates only if appearing from a hidden state
+        if (isFirstShow) {
           currentX = targetX;
           currentY = targetY;
-          tooltip.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-          tooltip.classList.replace("opacity-0", "opacity-100");
-        });
+        }
+
+        tooltip.classList.replace("opacity-0", "opacity-100");
       }, 150);
     });
 
