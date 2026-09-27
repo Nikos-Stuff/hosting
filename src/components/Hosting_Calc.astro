@@ -79,7 +79,7 @@
 
       <div
         id="egg_options"
-        class="hide_scrollbar animate max-h-128 overflow-y-auto fi-section fi-section-dark p-3 space-y-4"
+        class="hide_scrollbar animate h-96 overflow-y-auto fi-section fi-section-dark p-3 space-y-4"
       >
         <!-- Template Element -->
         <div
@@ -530,6 +530,61 @@
   // Track if we have already alerted the user to prevent continuous alert spamming
   let isCurrentlyRateLimited = false;
 
+  function enableMouseDragScroll(track: HTMLElement) {
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    let hasMoved = false;
+
+    track.addEventListener("mousedown", (e) => {
+      isDown = true;
+      hasMoved = false;
+      track.classList.add("cursor-grabbing");
+      track.classList.remove("cursor-grab", "snap-x", "snap-mandatory"); // Disable snap during active drag for smooth movement
+      startX = e.pageX - track.offsetLeft;
+      scrollLeft = track.scrollLeft;
+    });
+
+    track.addEventListener("mouseleave", () => {
+      if (!isDown) return;
+      isDown = false;
+      track.classList.remove("cursor-grabbing");
+      track.classList.add("cursor-grab", "snap-x", "snap-mandatory"); // Re-enable snapping when mouse leaves
+    });
+
+    track.addEventListener("mouseup", () => {
+      if (!isDown) return;
+      isDown = false;
+      track.classList.remove("cursor-grabbing");
+      track.classList.add("cursor-grab", "snap-x", "snap-mandatory"); // Re-enable snap to snap to nearest card
+    });
+
+    track.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - track.offsetLeft;
+      const walk = (x - startX) * 1.25; // Drag speed multiplier
+
+      if (Math.abs(walk) > 5) {
+        hasMoved = true; // Mark as a drag operation if moved beyond threshold
+      }
+
+      track.scrollLeft = scrollLeft - walk;
+    });
+
+    // Prevent accidental option selection when dragging across cards
+    track.addEventListener(
+      "click",
+      (e) => {
+        if (hasMoved) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+      },
+      true,
+    );
+  }
+
   function setSelectedEggOption(selectedOption: Element) {
     eggOptions?.querySelectorAll(".egg_option").forEach((option) => {
       if (!(option instanceof HTMLElement)) return;
@@ -931,7 +986,6 @@
       );
       if (!categoriesWrapper || !eggTemplate) return;
 
-      // Clear existing dynamic content
       categoriesWrapper.innerHTML = "";
 
       const eggs = Object.values(data).filter(
@@ -964,20 +1018,19 @@
           "text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]";
         headerTitle.textContent = category;
 
-        // Nav buttons (Scroll Left / Right)
         const navControls = document.createElement("div");
         navControls.className = "flex items-center gap-1.5";
 
         const btnLeft = document.createElement("button");
         btnLeft.type = "button";
         btnLeft.className =
-          "p-1 text-xs rounded bg-white/5 hover:bg-white/10 text-[rgb(var(--c-300))] transition-colors";
+          "p-1 text-xs rounded bg-white/5 hover:bg-white/10 text-[rgb(var(--c-300))] transition-colors select-none";
         btnLeft.innerHTML = '<i class="ph ph-caret-left"></i>';
 
         const btnRight = document.createElement("button");
         btnRight.type = "button";
         btnRight.className =
-          "p-1 text-xs rounded bg-white/5 hover:bg-white/10 text-[rgb(var(--c-300))] transition-colors";
+          "p-1 text-xs rounded bg-white/5 hover:bg-white/10 text-[rgb(var(--c-300))] transition-colors select-none";
         btnRight.innerHTML = '<i class="ph ph-caret-right"></i>';
 
         navControls.appendChild(btnLeft);
@@ -986,18 +1039,22 @@
         header.appendChild(headerTitle);
         header.appendChild(navControls);
 
+        // Create Draggable Carousel Track
         const carouselTrack = document.createElement("div");
         carouselTrack.className =
-          "hide_scrollbar flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory py-1";
+          "hide_scrollbar flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory py-1 cursor-grab select-none";
 
+        // Attach button scroll handlers
         btnLeft.addEventListener("click", () => {
-          carouselTrack.scrollBy({ left: -200, behavior: "smooth" });
+          carouselTrack.scrollBy({ left: -220, behavior: "smooth" });
         });
         btnRight.addEventListener("click", () => {
-          carouselTrack.scrollBy({ left: 200, behavior: "smooth" });
+          carouselTrack.scrollBy({ left: 220, behavior: "smooth" });
         });
 
-        // 4. Populate Carousel Cards
+        // Enable drag scrolling on track
+        enableMouseDragScroll(carouselTrack);
+
         const sortedEggs = grouped[category].sort((a, b) =>
           a.name.localeCompare(b.name),
         );
@@ -1022,6 +1079,7 @@
           if (img) {
             img.src = egg.image || "/imgs/plc.png";
             img.alt = egg.name || "";
+            //img.setAttribute("draggable", "false"); Disable browser native image dragging
           }
 
           const label = eggOption.querySelector("span");
