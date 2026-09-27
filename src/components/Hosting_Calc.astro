@@ -539,40 +539,60 @@
     track.addEventListener("mousedown", (e) => {
       isDown = true;
       hasMoved = false;
+
+      // Change cursor strictly on drag start
       track.classList.add("cursor-grabbing");
-      track.classList.remove("cursor-grab", "snap-x", "snap-mandatory"); // Disable snap during active drag for smooth movement
+      track.classList.remove(
+        "cursor-grab",
+        "scroll-smooth",
+        "snap-x",
+        "snap-mandatory",
+      );
+
       startX = e.pageX - track.offsetLeft;
       scrollLeft = track.scrollLeft;
     });
 
-    track.addEventListener("mouseleave", () => {
+    const handleDragEnd = () => {
       if (!isDown) return;
       isDown = false;
-      track.classList.remove("cursor-grabbing");
-      track.classList.add("cursor-grab", "snap-x", "snap-mandatory"); // Re-enable snapping when mouse leaves
-    });
 
-    track.addEventListener("mouseup", () => {
-      if (!isDown) return;
-      isDown = false;
       track.classList.remove("cursor-grabbing");
-      track.classList.add("cursor-grab", "snap-x", "snap-mandatory"); // Re-enable snap to snap to nearest card
-    });
+      track.classList.add("cursor-grab");
+
+      // Calculate nearest card offset for smooth snap finish
+      const firstChild = track.firstElementChild as HTMLElement | null;
+      const itemWidth = firstChild ? firstChild.offsetWidth + 12 : 124; // 12px gap-3
+      const targetScroll = Math.round(track.scrollLeft / itemWidth) * itemWidth;
+
+      // Smoothly animate snap positioning to nearest item
+      track.classList.add("scroll-smooth");
+      track.scrollTo({ left: targetScroll, behavior: "smooth" });
+
+      // Restore CSS snap rules after smooth glide finishes
+      setTimeout(() => {
+        track.classList.add("snap-x", "snap-mandatory");
+      }, 300);
+    };
+
+    track.addEventListener("mouseleave", handleDragEnd);
+    track.addEventListener("mouseup", handleDragEnd);
 
     track.addEventListener("mousemove", (e) => {
       if (!isDown) return;
       e.preventDefault();
-      const x = e.pageX - track.offsetLeft;
-      const walk = (x - startX) * 1.25; // Drag speed multiplier
 
-      if (Math.abs(walk) > 5) {
-        hasMoved = true; // Mark as a drag operation if moved beyond threshold
+      const x = e.pageX - track.offsetLeft;
+      const walk = x - startX;
+
+      if (Math.abs(walk) > 4) {
+        hasMoved = true;
       }
 
       track.scrollLeft = scrollLeft - walk;
     });
 
-    // Prevent accidental option selection when dragging across cards
+    // Guard: Prevent triggering card clicks during drag operations
     track.addEventListener(
       "click",
       (e) => {
@@ -1039,20 +1059,27 @@
         header.appendChild(headerTitle);
         header.appendChild(navControls);
 
-        // Create Draggable Carousel Track
+        // Create Carousel Track
         const carouselTrack = document.createElement("div");
         carouselTrack.className =
           "hide_scrollbar flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory py-1 cursor-grab select-none";
 
-        // Attach button scroll handlers
+        // Arrow navigation
         btnLeft.addEventListener("click", () => {
-          carouselTrack.scrollBy({ left: -220, behavior: "smooth" });
-        });
-        btnRight.addEventListener("click", () => {
-          carouselTrack.scrollBy({ left: 220, behavior: "smooth" });
+          const firstChild =
+            carouselTrack.firstElementChild as HTMLElement | null;
+          const step = firstChild ? (firstChild.offsetWidth + 12) * 2 : 240;
+          carouselTrack.scrollBy({ left: -step, behavior: "smooth" });
         });
 
-        // Enable drag scrolling on track
+        btnRight.addEventListener("click", () => {
+          const firstChild =
+            carouselTrack.firstElementChild as HTMLElement | null;
+          const step = firstChild ? (firstChild.offsetWidth + 12) * 2 : 240;
+          carouselTrack.scrollBy({ left: step, behavior: "smooth" });
+        });
+
+        // Drag behavior handler
         enableMouseDragScroll(carouselTrack);
 
         const sortedEggs = grouped[category].sort((a, b) =>
@@ -1079,7 +1106,7 @@
           if (img) {
             img.src = egg.image || "/imgs/plc.png";
             img.alt = egg.name || "";
-            //img.setAttribute("draggable", "false"); Disable browser native image dragging
+            img.setAttribute("draggable", "false");
           }
 
           const label = eggOption.querySelector("span");
