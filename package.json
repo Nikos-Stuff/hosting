@@ -35,7 +35,7 @@
     "solid-js": "^1.9.15",
     "tailwind-merge": "^3.7.0",
     "tailwindcss": "^4.3.3",
-    "three": "^0.186.0",
+    "three": "^0.186.1",
     "typescript": "^6.0.3"
   },
   "devDependencies": {
