@@ -187,12 +187,12 @@
     <div class="flex animate justify-center my-4">
       <div class="w-full max-w-90 h-19.5 flex items-center justify-center">
         <div
-          class="cf-turnstile"
-          data-sitekey="0x4AAAAAACBNatxTQCTb20u7"
+          class="h-captcha"
+          data-sitekey="707ceaa8-8d34-4fee-bb02-930e579641aa"
           data-theme="dark"
           data-size="normal"
-          data-callback="onTurnstileSuccess"
-          data-expired-callback="onTurnstileExpired"
+          data-callback="onHCaptchaSuccess"
+          data-expired-callback="onHCaptchaExpired"
           style="min-height:78px;"
         ></div>
       </div>
@@ -517,7 +517,7 @@
     client_email: "",
     location: "",
     subplan: "",
-    turnstile_token: "",
+    hcaptcha_token: "",
   };
 
   const AVAILABILITY_RADIUS = 42;
@@ -1000,13 +1000,13 @@
   });
 
   // ------------------------------
-  // Cloudflare Turnstile callbacks
+  // hCaptcha callbacks
   // ------------------------------
-  (window as any).onTurnstileSuccess = (token: string) => {
-    data_storage.turnstile_token = token || "";
+  (window as any).onHCaptchaSuccess = (token: string) => {
+    data_storage.hcaptcha_token = token || "";
   };
-  (window as any).onTurnstileExpired = () => {
-    data_storage.turnstile_token = "";
+  (window as any).onHCaptchaExpired = () => {
+    data_storage.hcaptcha_token = "";
   };
 
   // ------------------------------
@@ -1293,7 +1293,7 @@
       );
     }
 
-    if ((window as any).turnstile?.reset) (window as any).turnstile.reset();
+    if ((window as any).hcaptcha?.reset) (window as any).hcaptcha.reset();
   });
 
   // ------------------------------
