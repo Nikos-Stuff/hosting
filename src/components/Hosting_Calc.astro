@@ -101,26 +101,28 @@
             Downloading...
           </span>
 
-          <!-- Segmented Ease Score Bar directly under title -->
+          <!-- Segmented Ease Score Bar -->
           <div
-            class="ease-score-wrapper w-full mt-1.5 space-y-0.5"
-            data-tooltip="Ease Score: 10/10 means beginner-friendly with minimal configuration required."
+            class="ease-score-wrapper w-full mt-2 space-y-1"
+            data-tooltip="Ease Score: 10/10 indicates beginner-friendly, zero-config deployment."
           >
-            <div class="flex items-center justify-between text-[0.55rem] font-mono text-[rgb(var(--c-400))] px-0.5">
+            <div class="flex items-center justify-between text-[0.6rem] font-mono text-[rgb(var(--c-400))] px-0.5">
               <span>Ease</span>
               <span class="ease-score-text font-semibold">0/10</span>
             </div>
-            <div class="ease-segments flex gap-0.5 w-full h-1.5 p-0.5 bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] rounded">
-              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
-              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
-              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
-              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
-              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
-              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
-              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
-              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
-              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
-              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
+
+            <!-- Track Container -->
+            <div class="ease-segments flex gap-0.5 w-full h-1.5 items-center justify-between bg-[rgb(var(--c-900))] border border-[rgb(var(--c-200))] rounded px-0.5">
+              <div class="ease-segment flex-1 h-1 rounded-sm transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 h-1 rounded-sm transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 h-1 rounded-sm transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 h-1 rounded-sm transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 h-1 rounded-sm transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 h-1 rounded-sm transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 h-1 rounded-sm transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 h-1 rounded-sm transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 h-1 rounded-sm transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 h-1 rounded-sm transition-colors duration-300"></div>
             </div>
           </div>
         </div>
@@ -1171,28 +1173,29 @@
           }
 
           const segments = eggOption.querySelectorAll(".ease-segment");
-          const colorClasses = [
-            "bg-rose-500",
-            "bg-amber-400",
-            "bg-emerald-400",
-            "bg-[rgb(var(--c-800))]",
-          ];
+          let activeColorClass = "bg-emerald-400";
+          if (score <= 3) {
+            activeColorClass = "bg-rose-500";
+          } else if (score <= 7) {
+            activeColorClass = "bg-amber-400";
+          }
 
           segments.forEach((segment, index) => {
             if (!(segment instanceof HTMLElement)) return;
 
-            segment.classList.remove(...colorClasses);
+            // Clear previous active state classes
+            segment.classList.remove(
+              "bg-rose-500",
+              "bg-amber-400",
+              "bg-emerald-400",
+            );
 
             if (index < score) {
-              if (score <= 3) {
-                segment.classList.add("bg-rose-500");
-              } else if (score <= 7) {
-                segment.classList.add("bg-amber-400");
-              } else {
-                segment.classList.add("bg-emerald-400");
-              }
+              segment.classList.add(activeColorClass);
+              segment.style.backgroundColor = ""; // Clear inline style if active
             } else {
-              segment.classList.add("bg-[rgb(var(--c-800))]");
+              // Inactive segments use --c-200 dark hairline contrast color so they stay visible against --c-900 background
+              segment.style.backgroundColor = "rgb(var(--c-200))";
             }
           });
 
