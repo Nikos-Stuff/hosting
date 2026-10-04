@@ -86,7 +86,7 @@
           hidden
           id="egg_template"
           data-egg_id="?"
-          class="flex-none flex h-auto w-28 flex-col items-center p-3 fi-btn hover:bg-white/5 hover:-translate-y-1 select-none transition-all duration-300 border-transparent bg-transparent rounded-xl group snap-start"
+          class="flex-none flex h-auto w-32 flex-col items-center p-3 fi-btn hover:bg-white/5 hover:-translate-y-1 select-none transition-all duration-300 border-transparent bg-transparent rounded-xl group snap-start"
         >
           <figure class="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] overflow-hidden flex items-center justify-center shrink-0 shadow-inner group-hover:border-primary-500/50 transition-colors">
             <img
@@ -95,7 +95,31 @@
               class="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow"
             />
           </figure>
-          <span class="text-[0.7rem] sm:text-xs mt-2.5 text-center w-full wrap-break-word leading-tight flex items-center justify-center min-h-10 font-medium text-[rgb(var(--c-50))] group-hover:text-white transition-colors">
+
+          <!-- Segmented Ease Score Bar (0-10) -->
+          <div
+            class="ease-score-wrapper w-full mt-2 space-y-0.5"
+            data-tooltip="Ease Score: 10/10 means beginner-friendly with minimal configuration required."
+          >
+            <div class="flex items-center justify-between text-[0.55rem] font-mono text-[rgb(var(--c-400))] px-0.5">
+              <span>Ease</span>
+              <span class="ease-score-text font-semibold">0/10</span>
+            </div>
+            <div class="ease-segments flex gap-0.5 w-full h-1.5 p-0.5 bg-[rgb(var(--c-900))] border border-[rgb(var(--c-800))] rounded">
+              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
+              <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
+            </div>
+          </div>
+
+          <span class="text-[0.7rem] sm:text-xs mt-1.5 text-center w-full wrap-break-word leading-tight flex items-center justify-center min-h-8 font-medium text-[rgb(var(--c-50))] group-hover:text-white transition-colors">
             Downloading...
           </span>
         </div>
@@ -589,7 +613,7 @@
       track.classList.remove("cursor-grabbing");
 
       const firstChild = track.firstElementChild as HTMLElement | null;
-      const itemWidth = firstChild ? firstChild.offsetWidth + 12 : 124; // 12px gap-3
+      const itemWidth = firstChild ? firstChild.offsetWidth + 12 : 140;
 
       // Project distance based on release velocity (flick power multiplier)
       const momentumDistance = velocityX * -280;
@@ -773,8 +797,6 @@
 
     elementsArray.forEach((el) => {
       const subplanName = el.dataset.subplan_name;
-      // Example rule: if it's a free location, only allow the "free" subplan.
-      // Or if it's a paid location, disallow the "free" subplan. Adjust this logic to fit your exact requirements!
       const isAllowed = isFreeLocation
         ? subplanName === "free"
         : subplanName !== "free";
@@ -1018,6 +1040,7 @@
     name: string;
     desc: string;
     image: string;
+    easeScore?: number;
   };
 
   async function fetchEggs() {
@@ -1093,14 +1116,14 @@
         btnLeft.addEventListener("click", () => {
           const firstChild =
             carouselTrack.firstElementChild as HTMLElement | null;
-          const step = firstChild ? (firstChild.offsetWidth + 12) * 2 : 240;
+          const step = firstChild ? (firstChild.offsetWidth + 12) * 2 : 280;
           carouselTrack.scrollBy({ left: -step, behavior: "smooth" });
         });
 
         btnRight.addEventListener("click", () => {
           const firstChild =
             carouselTrack.firstElementChild as HTMLElement | null;
-          const step = firstChild ? (firstChild.offsetWidth + 12) * 2 : 240;
+          const step = firstChild ? (firstChild.offsetWidth + 12) * 2 : 280;
           carouselTrack.scrollBy({ left: step, behavior: "smooth" });
         });
 
@@ -1134,8 +1157,43 @@
             img.setAttribute("draggable", "false");
           }
 
-          const label = eggOption.querySelector("span");
+          const label = eggOption.querySelector("span:not(.ease-score-text)");
           if (label) label.textContent = egg.name || "";
+
+          // Populate segment bar with color resets
+          const rawScore = Number(egg.easeScore) || 0;
+          const score = Math.max(0, Math.min(10, Math.round(rawScore)));
+
+          const scoreText = eggOption.querySelector(".ease-score-text");
+          if (scoreText) {
+            scoreText.textContent = `${score}/10`;
+          }
+
+          const segments = eggOption.querySelectorAll(".ease-segment");
+          const colorClasses = [
+            "bg-rose-500",
+            "bg-amber-400",
+            "bg-emerald-400",
+            "bg-[rgb(var(--c-800))]",
+          ];
+
+          segments.forEach((segment, index) => {
+            if (!(segment instanceof HTMLElement)) return;
+
+            segment.classList.remove(...colorClasses);
+
+            if (index < score) {
+              if (score <= 3) {
+                segment.classList.add("bg-rose-500");
+              } else if (score <= 7) {
+                segment.classList.add("bg-amber-400");
+              } else {
+                segment.classList.add("bg-emerald-400");
+              }
+            } else {
+              segment.classList.add("bg-[rgb(var(--c-800))]");
+            }
+          });
 
           eggOption.addEventListener("click", () => {
             if (eggOption.classList.contains("pointer-events-none")) return;
