@@ -96,9 +96,14 @@
             />
           </figure>
 
-          <!-- Segmented Ease Score Bar (0-10) -->
+          <!-- Title directly under image -->
+          <span class="egg-title-text text-[0.7rem] sm:text-xs mt-2 text-center w-full wrap-break-word leading-tight flex items-center justify-center min-h-8 font-medium text-[rgb(var(--c-50))] group-hover:text-white transition-colors">
+            Downloading...
+          </span>
+
+          <!-- Segmented Ease Score Bar directly under title -->
           <div
-            class="ease-score-wrapper w-full mt-2 space-y-0.5"
+            class="ease-score-wrapper w-full mt-1.5 space-y-0.5"
             data-tooltip="Ease Score: 10/10 means beginner-friendly with minimal configuration required."
           >
             <div class="flex items-center justify-between text-[0.55rem] font-mono text-[rgb(var(--c-400))] px-0.5">
@@ -118,10 +123,6 @@
               <div class="ease-segment flex-1 rounded-[1px] bg-[rgb(var(--c-800))] transition-colors duration-300"></div>
             </div>
           </div>
-
-          <span class="text-[0.7rem] sm:text-xs mt-1.5 text-center w-full wrap-break-word leading-tight flex items-center justify-center min-h-8 font-medium text-[rgb(var(--c-50))] group-hover:text-white transition-colors">
-            Downloading...
-          </span>
         </div>
 
         <!-- Dynamic Category Sections & Carousels will be injected here -->
@@ -1157,8 +1158,8 @@
             img.setAttribute("draggable", "false");
           }
 
-          const label = eggOption.querySelector("span:not(.ease-score-text)");
-          if (label) label.textContent = egg.name || "";
+          const titleLabel = eggOption.querySelector(".egg-title-text");
+          if (titleLabel) titleLabel.textContent = egg.name || "";
 
           // Populate segment bar with color resets
           const rawScore = Number(egg.easeScore) || 0;
