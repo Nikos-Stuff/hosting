@@ -60,6 +60,22 @@ import HeaderIcon from "@components/web_icon.astro";
           <span class="text-[10px] sm:text-xs ml-0.5">ms</span>
         </button>
 
+        <!-- Total Startups Pill -->
+        <div
+          data-tooltip="Total server startups executed"
+          id="server-startups-pill"
+          class="flex items-center justify-center bg-sky-500/10 border border-sky-500/20 text-xs font-mono font-medium px-2 sm:px-2.5 py-1.5 rounded-lg text-sky-300 transition-all duration-300 hover:bg-sky-500/20"
+        >
+          <i class="ph ph-rocket text-sky-400 text-sm sm:mr-1.5"></i>
+          <span class="hidden sm:inline">Startups:</span>
+          <span
+            id="server-startups-count"
+            class="ml-0.5 sm:ml-1 font-bold tabular-nums inline-block min-w-[2ch] text-right"
+          >
+            0
+          </span>
+        </div>
+
         <!-- Active Users Pill -->
         <div
           data-tooltip="Active registered accounts"
@@ -193,11 +209,13 @@ import HeaderIcon from "@components/web_icon.astro";
 
   // Active Users & Ping Monitoring Logic
   const pill = document.getElementById("active-users-count");
+  const startupsPill = document.getElementById("server-startups-count");
   const pingSpan = document.getElementById("average-ping");
   const locations = document.getElementById("location_options");
   const latencyPill = document.getElementById("server-latency-pill");
 
   let currentUsers = Number(pill?.textContent) || 0;
+  let currentStartups = Number(startupsPill?.textContent) || 0;
   let currentPing = Number(pingSpan?.textContent) || 0;
   let pingRunning = false;
   let modalAbortController = new AbortController();
@@ -279,18 +297,47 @@ import HeaderIcon from "@components/web_icon.astro";
       signal?.addEventListener("abort", onAbort);
     });
 
-  const updateActiveUsers = async () => {
-    if (!pill) return;
+  const updateGlobalStats = async () => {
+    if (!pill && !startupsPill) return;
+
     try {
-      const { active_users } = await fetchJSON(
-        "https://api.nikostuff.com/HostingPelicanData?active_users",
-      );
-      if (active_users !== currentUsers) {
-        animateValue(pill, currentUsers, active_users, 500);
-        currentUsers = active_users;
+      const [userData, statsData] = await Promise.all([
+        pill
+          ? fetchJSON(
+              "https://api.nikostuff.com/HostingPelicanData?active_users",
+            )
+          : Promise.resolve(null),
+        startupsPill
+          ? fetchJSON(
+              "https://api.nikostuff.com/HostingPelicanData?global_stats",
+            )
+          : Promise.resolve(null),
+      ]);
+
+      // Update Active Users Pill
+      if (
+        userData?.active_users !== undefined &&
+        userData.active_users !== currentUsers
+      ) {
+        animateValue(pill!, currentUsers, userData.active_users, 500);
+        currentUsers = userData.active_users;
+      }
+
+      // Update Server Startups Pill
+      if (
+        typeof statsData?.server_startups === "number" &&
+        statsData.server_startups !== currentStartups
+      ) {
+        animateValue(
+          startupsPill!,
+          currentStartups,
+          statsData.server_startups,
+          500,
+        );
+        currentStartups = statsData.server_startups;
       }
     } catch (e: any) {
-      triggerCustomAlert("Failed to update status", e, "warn");
+      triggerCustomAlert("Failed to update server stats", e, "warn");
     }
   };
 
@@ -434,9 +481,9 @@ import HeaderIcon from "@components/web_icon.astro";
     }
   };
 
-  if (pill) {
-    updateActiveUsers();
-    setInterval(updateActiveUsers, 60000);
+  if (pill || startupsPill) {
+    updateGlobalStats();
+    setInterval(updateGlobalStats, 60000);
   }
 
   if (pingSpan) {
