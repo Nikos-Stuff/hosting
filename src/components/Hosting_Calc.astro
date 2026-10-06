@@ -2,24 +2,44 @@
   <div class="space-y-6">
     <!-- Location Selection -->
     <div class="space-y-2" id="location_dropdown">
-      <label
-        for="location_options"
-        class="block animate text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
-      >
-        Choose Location:
-      </label>
+      <div class="flex items-center justify-between mb-2">
+        <label
+          for="location_options"
+          class="block animate text-xs font-semibold uppercase tracking-wider text-[rgb(var(--c-400))]"
+        >
+          Choose Location:
+        </label>
+
+        <!-- Filter Toggle (Paid | Free) -->
+        <div class="inline-flex rounded-lg bg-[rgb(var(--c-900))] p-1 border border-[rgb(var(--c-800))]">
+          <button
+            type="button"
+            id="tab_paid_locations"
+            class="location-tab px-3 py-1 text-xs font-semibold rounded-md transition-colors bg-amber-500/20 text-amber-400"
+            onclick="switchLocationTab('paid')"
+          >
+            Paid Tiers
+          </button>
+          <button
+            type="button"
+            id="tab_free_locations"
+            class="location-tab px-3 py-1 text-xs font-semibold rounded-md transition-colors text-[rgb(var(--c-400))] hover:text-white"
+            onclick="switchLocationTab('free')"
+          >
+            Free Tiers
+          </button>
+        </div>
+      </div>
+
       <div
         id="location_options"
-        class="hide_scrollbar animate max-h-64 overflow-auto fi-section fi-section-dark p-3 space-y-4"
+        class="hide_scrollbar animate max-h-64 overflow-auto fi-section fi-section-dark p-3"
       >
         <!-- PAID SECTION -->
-        <div>
-          <span class="text-[0.625rem] font-bold uppercase tracking-wider text-[rgb(var(--c-400))] block mb-2 px-1">
-            Paid Tiers
-          </span>
+        <div id="section_paid_locations">
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div
-              class="relative px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent"
+              class="relative px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent cursor-pointer"
               data-location_name="europe"
               data-tooltip="Ryzen 9 5950X based servers located in Europe"
             >
@@ -35,18 +55,15 @@
                 Ping: 0ms
               </span>
             </div>
-            <!-- future premium stuff ther -->
+            <!-- future premium stuff here -->
           </div>
         </div>
 
         <!-- FREE SECTION -->
-        <div>
-          <span class="text-[0.625rem] font-bold uppercase tracking-wider text-[rgb(var(--c-400))] block mb-2 px-1">
-            Free Tiers
-          </span>
+        <div id="section_free_locations" class="hidden">
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div
-              class="relative px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent"
+              class="relative px-3 py-4 fi-btn hover:bg-white/3 transition-all duration-200 text-center select-none flex flex-col items-center justify-center border-transparent bg-transparent cursor-pointer"
               data-location_name="europe_free"
               data-tooltip="Xeon Gold based free servers located in Europe"
             >
@@ -62,7 +79,7 @@
                 Ping: 0ms
               </span>
             </div>
-            <!-- future free stuff ther -->
+            <!-- future free stuff here -->
           </div>
         </div>
       </div>
@@ -732,6 +749,49 @@
     }
   }
 
+  // Defined globally so inline HTML onclick handlers can reach it
+  function switchLocationTab(tier: "paid" | "free") {
+    const paidSection = document.getElementById("section_paid_locations");
+    const freeSection = document.getElementById("section_free_locations");
+    const paidTab = document.getElementById("tab_paid_locations");
+    const freeTab = document.getElementById("tab_free_locations");
+
+    if (!paidSection || !freeSection || !paidTab || !freeTab) return;
+
+    if (tier === "paid") {
+      paidSection.classList.remove("hidden");
+      freeSection.classList.add("hidden");
+
+      paidTab.className =
+        "location-tab px-3 py-1 text-xs font-semibold rounded-md transition-colors bg-amber-500/20 text-amber-400";
+      freeTab.className =
+        "location-tab px-3 py-1 text-xs font-semibold rounded-md transition-colors text-[rgb(var(--c-400))] hover:text-white";
+
+      // Auto-select first item in paid section
+      const firstPaidItem = paidSection.querySelector("[data-location_name]");
+      if (firstPaidItem instanceof HTMLElement) {
+        firstPaidItem.click();
+      }
+    } else {
+      freeSection.classList.remove("hidden");
+      paidSection.classList.add("hidden");
+
+      freeTab.className =
+        "location-tab px-3 py-1 text-xs font-semibold rounded-md transition-colors bg-emerald-500/20 text-emerald-400";
+      paidTab.className =
+        "location-tab px-3 py-1 text-xs font-semibold rounded-md transition-colors text-[rgb(var(--c-400))] hover:text-white";
+
+      // Auto-select first item in free section
+      const firstFreeItem = freeSection.querySelector("[data-location_name]");
+      if (firstFreeItem instanceof HTMLElement) {
+        firstFreeItem.click();
+      }
+    }
+  }
+
+  // Attach function to global window scope so onclick="switchLocationTab(...)" works
+  (window as any).switchLocationTab = switchLocationTab;
+
   // ------------------------------
   // DYNAMIC EGG RESTRICTION / BLUR HANDLER
   // ------------------------------
@@ -1194,7 +1254,7 @@
               segment.classList.add(activeColorClass);
               segment.style.backgroundColor = ""; // Clear inline style if active
             } else {
-              // Inactive segments use --c-200 dark hairline contrast color so they stay visible against --c-900 background
+              // Inactive segments use --c-200 dark hairline contrast color
               segment.style.backgroundColor = "rgb(var(--c-200))";
             }
           });
@@ -1222,9 +1282,6 @@
   // ------------------------------
   // LOCATION PICKER SELECT
   // ------------------------------
-  // ------------------------------
-  // LOCATION PICKER SELECT
-  // ------------------------------
   locationOptions
     ?.querySelectorAll("[data-location_name]")
     .forEach((option) => {
@@ -1235,7 +1292,7 @@
         data_storage.location = option.getAttribute("data-location_name") || "";
         setSelectedLocationOption(option);
 
-        // Apply the blur/disable logic for subplans based on the location
+        // Apply subplan rules based on location selection
         applySubplanRestrictions(data_storage.location);
 
         updateSpecsAndCost(false);
@@ -1370,20 +1427,21 @@
       setSelectedLocationOption(defaultLocation);
     }
 
+    // Set a valid default subplan for Paid tier location (e.g. 'friends')
     const defaultSubplan = subplanOptions?.querySelector(
-      '[data-subplan_name="free"]',
+      '[data-subplan_name="friends"]',
     );
     if (defaultSubplan) {
-      data_storage.subplan = "free";
+      data_storage.subplan = "friends";
       setSelectedSubplanOption(defaultSubplan);
     }
 
-    // Apply initial subplan restrictions based on the default location
+    // Apply initial subplan restrictions based on default location
     applySubplanRestrictions(data_storage.location);
 
     await fetchEggs();
 
-    // Automatically select the first available/unlocked egg by default if none selected
+    // Automatically select first available egg if none is selected
     const firstAvailableEgg = eggOptions?.querySelector(
       ".egg_option:not(.pointer-events-none)",
     );
